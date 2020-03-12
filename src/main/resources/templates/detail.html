@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>页面详情</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
+    <link rel="stylesheet" href="../static/css/me.css" >
+    <link rel="stylesheet" href="../static/css/layui.css">
+</head>
+<body>
+<!--导航栏-->
+<!--inverter反转，segment片段-->
+<nav class="ui inverted attached segment">
+    <div class="ui container">
+        <div class="ui inverted secondary stackable menu">
+            <h2 class="ui teal header item">Blog</h2>
+            <!--m-item无样式作用，用于js绑定-->
+            <a href="#" class="item m-mobile-hide m-item"><i class="home icon"></i>首页</a>
+            <a href="#" class="item m-mobile-hide m-item"><i class="idea icon"></i>分类</a>
+            <a href="#" class="item m-mobile-hide m-item"><i class="tag icon"></i>标签</a>
+            <a href="#" class="item m-mobile-hide m-item"><i class="info icon"></i>关于我</a>
+            <div class="righ item m-mobile-hide m-item-search">
+                <div class="ui icon input inverted">
+                    <input type="text" placeholder="Search....">
+                    <i class="search link icon"></i>
+
+                </div>
+            </div>
+
+            <div class="right item  m-mobile-hide">
+                <div>
+                    <p>你好，用户</p>
+                </div>
+                <a href="http://www.baidu.com" style="padding-left: 10px">
+                    <img src="../static/images/user.jpg" alt="" class="ui avatar image">
+                </a>
+            </div>
+            <!--手机端自适应右上角菜单按钮-->
+            <div class="ui inverted secondary m-mobile-show m-right-top menu ">
+                <a href="#" class="ui black icon button" id="mobile-btn">
+                    <i class="sidebar icon"></i>
+                </a>
+                <a href="#" class="ui black icon button" id="mobile-btn1">
+                    <i class="search link icon"></i>
+                </a>
+                <a href="#" class="ui black icon button" id="mobile-btn2">
+                    <img src="../static/images/user.jpg" alt="" class="ui avatar image">
+                </a>
+            </div>
+
+
+
+        </div>
+    </div>
+</nav>
+
+<!--中间内容-->
+<div class="m-container-small m-padded-tb-big">
+    <div class="ui container">
+        <!--头部信息-->
+        <div class="ui top attached segment">
+            <!--horizontal link list 横形列表-->
+            <div class="ui horizontal link list">
+                <div class="item">
+                    <!--avatar圆形图片-->
+                    <img src="../static/images/user.jpg" alt="" class="ui avatar image m-pic-avatar">
+                    <div class="content"><a href="#" class="header">用户</a></div>
+
+                </div>
+                <div class="item">
+                    <i class="calendar icon"></i> 2020-2-27
+                </div>
+                <div class="item">
+                    <i class="university icon"></i> 旭日大楼
+                </div>
+
+            </div>
+        </div>
+        <!--图片区域-->
+        <div class="ui attached segment">
+            <img src="../static/images/chengxiao.jpg" alt="" class="ui fluid rounded image">
+        </div>
+        <!--内容区域-->
+        <div class="ui attached padded segment">
+            <div class="ui right aligned basic segment">
+                <div class="ui orange basic label">失物招领</div>
+            </div>
+            <!--正文区域-->
+            <h2 class="ui center aligned header">捡到一部手机</h2>
+            <br>
+            <div id="content" class="typo  typo-selection js-toc-content m-padded-lr-responsive m-padded-tb-large">
+                本人与2020/2/29号早上第三节课下课后，于旭日大楼305捡到手机一部，图片如上，请失主按照下列信息及时联系我
+            </div>
+            <!--标签-->
+            <!--<div class="m-padded-lr-responsive">-->
+                <!--<div class="ui basic teal left pointing label">方法论</div>-->
+            <!--</div>-->
+        </div>
+        <!--作者信息-->
+        <div class="ui attached positive message">
+            <div class="ui middle aligned grid">
+                <div class="eleven wide column">
+                    <ui class="list">
+                        <li>作者：用户</li>
+                        <li>时间：2020/2/29</li>
+                        <li>手机号：18344594609</li>
+                        <li>微信联系：右侧二维码</li>
+                    </ui>
+                </div>
+                <div class="five wide column">
+                    <img src="../static/images/wx.jpg" alt="" class="ui right floated rounded bordered image" style="width: 110px">
+                </div>
+            </div>
+
+        </div>
+        <!--留言区域-->
+        <div class="ui bottom attached segment">
+            <!--评论信息-->
+            <div class="ui teal segment">
+                <div class="ui threaded comments">
+                    <h3 class="ui dividing header">Comments</h3>
+                    <div class="comment">
+                        <a class="avatar">
+                            <img src="../static/images/user.jpg">
+                        </a>
+                        <div class="content">
+                            <a class="author">Matt</a>
+                            <div class="metadata">
+                                <span class="date">Today at 5:42PM</span>
+                            </div>
+                            <div class="text">
+                                How artistic!
+                            </div>
+                            <div class="actions">
+                                <a class="reply">回复</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="comment">
+                        <a class="avatar">
+                            <img src="../static/images/user.jpg">
+                        </a>
+                        <div class="content">
+                            <a class="author">Elliot Fu</a>
+                            <div class="metadata">
+                                <span class="date">Yesterday at 12:30AM</span>
+                            </div>
+                            <div class="text">
+                                <p>This has been very useful for my research. Thanks as well!</p>
+                            </div>
+                            <div class="actions">
+                                <a class="reply">回复</a>
+                            </div>
+                        </div>
+                        <div class="comments">
+                            <div class="comment">
+                                <a class="avatar">
+                                    <img src="../static/images/user.jpg">
+                                </a>
+                                <div class="content">
+                                    <a class="author">Jenny Hess</a>
+                                    <div class="metadata">
+                                        <span class="date">Just now</span>
+                                    </div>
+                                    <div class="text">
+                                        Elliot you are always so right :)
+                                    </div>
+                                    <div class="actions">
+                                        <a class="reply">回复</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="comment">
+                        <a class="avatar">
+                            <img src="../static/images/user.jpg">
+                        </a>
+                        <div class="content">
+                            <a class="author">Joe Henderson</a>
+                            <div class="metadata">
+                                <span class="date">5 days ago</span>
+                            </div>
+                            <div class="text">
+                                Dude, this is awesome. Thanks so much
+                            </div>
+                            <div class="actions">
+                                <a class="reply">回复</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--发表评论区域-->
+            <div class="ui form">
+                <div class="field">
+                    <textarea name="content" placeholder="请输入评论信息..."></textarea>
+                </div>
+                <div class="field">
+                        <div class="ui grid">
+                            <div class="ui eight wide column">
+
+                            </div>
+                            <div class="ui right aligned eight wide column">
+                                <button class="ui  teal button m-mobile-wide"><i class="edit icon"></i>发布</button>
+                            </div>
+
+                        </div>
+
+
+                </div>
+              <!--  <div class="fields">
+
+                    <div class="right aligned field  m-margin-bottom-small m-mobile-wide">
+                        <button class="ui teal button m-mobile-wide"><i class="edit icon"></i>发布</button>
+                    </div>
+                </div>-->
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!--底部-->
+<!--vertical垂直-->
+<footer class="ui inverted segment vertical segment m-padded-tb-massive">
+    <div class="ui container center aligned">
+        <!--grid布局，共分16份,divided分割线-->
+        <div class="ui inverted stackable divided grid">
+            <div class="three wide column">
+                <div class="ui inverted link list">
+                    <div class="item">
+                        <img src="../static/images/hzu.jpg" alt="" class="ui rounded image" style="width: 110px"/>
+                    </div>
+                </div>
+
+            </div>
+            <div class="three wide column">
+                <h4 class="ui inverted header m-text-spaced m-opacity-mini">最新资讯</h4>
+                <div class="ui inverted link list">
+                    <a href="" class="item">用户故事</a>
+                    <a href="" class="item">用户故事</a>
+                    <a href="" class="item">用户故事</a>
+                </div>
+            </div>
+
+            <div class="three wide column">
+
+                <h4 class="ui inverted header m-text-spaced m-opacity-mini">最新资讯</h4>
+                <div class="ui inverted link list">
+                    <a href="" class="item">用户故事</a>
+                    <a href="" class="item">用户故事</a>
+                    <a href="" class="item">用户故事</a>
+                </div>
+            </div>
+
+            <div class="seven wide column">
+                <h4 class="ui inverted header m-text-spaced m-opacity-mini">最新资讯</h4>
+                <p class="m-text-spaced m-opacity-mini">这是一个校园社区</p>
+
+            </div>
+
+        </div>
+
+        <div class="ui inverted section divider"></div>
+        <p class="m-text-thin m-text-spaced m-opacity-mini">Copyright © 2019 - 2020 Xiehao Designed by Xiehao</p>
+
+    </div>
+
+</footer>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+<script src="../static/layui.js"></script>
+<script>
+
+
+    // 手机端右上角按钮点击事件
+    $('#mobile-btn').click(function () {
+        $('.m-item').toggleClass('m-mobile-hide');
+    });
+
+    $('#mobile-btn1').click(function () {
+        $('.m-item-search').toggleClass('m-mobile-hide');
+    });
+
+</script>
+</body>
+</html>

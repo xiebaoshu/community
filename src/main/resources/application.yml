@@ -1,0 +1,28 @@
+spring:
+  thymeleaf:
+    cache:false
+  autoconfigure:
+#   \u6392\u9664\u9ED8\u8BA4\u7684\u56FE\u7247\u4E0A\u4F20\u8BBE\u7F6E\uFF0C\u5728springweb\u914D\u7F6E\u81EA\u5B9A\u4E49\u7684\u4E0A\u4F20\u56FE\u7247\u8BBE\u7F6E
+    exclude:  org.springframework.boot.autoconfigure.web.servlet.MultipartAutoConfiguration
+
+  datasource:
+#  \u6570\u636E\u6E90\u57FA\u672C\u914D\u7F6E
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/community?useUnicode=true&characterEncoding=utf-8&serverTimezone=GMT%2B8
+    username: root
+    password: 123456
+    type: com.alibaba.druid.pool.DruidDataSource
+#\u6570\u636E\u6E90\u5176\u4ED6\u914D\u7F6E
+    initialSize: 5
+    minIdle: 5
+    maxActive: 20
+    maxWait: 60000
+    timeBetweenEvictionRunsMillis: 60000
+    minEvictableIdleTimeMillis: 300000
+    validationQuery: SELECT 1 FROM DUAL
+    testWhileIdle: true
+    testOnBorrow: false
+    testOnReturn: false
+    poolPreparedStatements: true
+
+
