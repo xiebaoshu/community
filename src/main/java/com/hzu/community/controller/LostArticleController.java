@@ -1,19 +1,24 @@
 package com.hzu.community.controller;
-import com.hzu.community.bean.Area;
-import com.hzu.community.bean.ItemCategory;
-import com.hzu.community.bean.LostArticle;
-import com.hzu.community.bean.UserInfo;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import com.hzu.community.bean.*;
 import com.hzu.community.dto.ImageHolder;
 import com.hzu.community.dto.LostArticleExecution;
 import com.hzu.community.enums.LostArticleEnum;
 import com.hzu.community.exceptions.LostArticleException;
+import com.hzu.community.mapper.LostArticleMapper;
 import com.hzu.community.service.AreaService;
+import com.hzu.community.service.ArticleCategoryService;
 import com.hzu.community.service.ItemCategoryService;
 import com.hzu.community.service.LostArticleService;
 import com.hzu.community.util.HttpServletRequestUtil;
+import com.sun.net.httpserver.Authenticator;
+import org.apache.catalina.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
+import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -26,32 +31,39 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 @Controller
-@RequestMapping("/lostArticle")
+@RequestMapping("/lost")
 public class LostArticleController {
     @Autowired
     AreaService areaService;
     @Autowired
     ItemCategoryService itemCategoryService;
-
+    @Autowired
+    ArticleCategoryService articleCategoryService;
     @Autowired
     LostArticleService lostArticleService;
+    @Autowired
+    LostArticleMapper lostArticleMapper;
 
-//    获取初始化信息
+    //    获取失物招领新增页面初始化信息
     @GetMapping("/add")
     public String toAddPage(Map<String,Object> modelMap){
 
         List<Area> areaList = new ArrayList<>();
         List<ItemCategory> itemCategoryList = new ArrayList<>();
+        List<ArticleCategory> articleCategoryList = new ArrayList<>();
         try {
             areaList = areaService.getAreaList();
             itemCategoryList = itemCategoryService.getItemCategoryist();
+            articleCategoryList = articleCategoryService.getArticleCategories(1);
 //            将需要初始化的数据放进去map
             modelMap.put("areaList",areaList);
             modelMap.put("itemCategoryList",itemCategoryList);
+            modelMap.put("articleCategoryList",articleCategoryList);
             modelMap.put("init",true);
         }catch (Exception e){
             modelMap.put("init",false);
@@ -62,9 +74,11 @@ public class LostArticleController {
     }
 
 
-    @PostMapping("/add")
-    public String add(HttpServletRequest request,RedirectAttributes attributes){
-
+//    失物招领新增页面数据处理,并加入数据库
+    @RequestMapping(value="/add",method = RequestMethod.POST)
+    @ResponseBody
+    public Map<String,Object> add(HttpServletRequest request){
+        Map<String,Object> modelMap = new HashMap<>();
         UserInfo user = new UserInfo();
         user.setUserId(1);
         user.setUserName("谢豪");
@@ -74,14 +88,16 @@ public class LostArticleController {
         LostArticle lostArticle = null;
         String lostArticleStr = HttpServletRequestUtil.getString(request, "lostArticleStr");
 
-       try {
+        try {
 
-           lostArticle = mapper.readValue(lostArticleStr, LostArticle.class);
-           System.out.println(lostArticle);
-           //将页面提交的lostArticle信息传入
-       } catch (Exception e){
-           System.out.println(e.getMessage());
-       }
+            lostArticle = mapper.readValue(lostArticleStr, LostArticle.class);
+
+            //将页面提交的lostArticle信息传入
+        } catch (Exception e){
+            modelMap.put("success",false);
+            modelMap.put("errMsg",e.getMessage());
+            return modelMap;
+        }
 
 
         CommonsMultipartFile articleImg = null;
@@ -89,60 +105,106 @@ public class LostArticleController {
                 request.getSession().getServletContext());
         //获取上传的图片文件，需要pom.xml配置commons-fileupload，需在springweb配置文件上传解析器multipartResolver
         if(commonsMultipartResolver.isMultipart(request)){
-            System.out.println(commonsMultipartResolver.isMultipart(request));
+
             MultipartHttpServletRequest MultipartHttpServletRequest = (MultipartHttpServletRequest) request;
             articleImg = (CommonsMultipartFile) MultipartHttpServletRequest.getFile("lostArticleImg");
         }else{
-           /* attributes.addFlashAttribute("insert", "提交失败");
-            attributes.addFlashAttribute("errMsg", "上传图片不能为空");
-            return "redirect:/success";*/
-            System.out.println("上传图片不能为空");
+            modelMap.put("success",false);
+            modelMap.put("errMsg","无法获取图片文件流");
+            return modelMap;
         }
 
 //        新增失物招领
-        if (lostArticle !=null && articleImg !=null){
+        if (lostArticle != null && articleImg != null){
             UserInfo owner = (UserInfo) request.getSession().getAttribute("user");
             lostArticle.setUserInfo(owner);
             LostArticleExecution le;
-           try {
-               //将文件转化为文件流，和获取文件名。方法都是CommonsMultipartFile函数包的，
-               ImageHolder imageHolder = new ImageHolder(articleImg.getOriginalFilename(),articleImg.getInputStream());
+            try {
+                //将文件转化为文件流，和获取文件名。方法都是CommonsMultipartFile函数包的，
+                ImageHolder imageHolder = new ImageHolder(articleImg.getOriginalFilename(),articleImg.getInputStream());
 //               调用service添加帖子信息和图片信息
-               le = lostArticleService.saveArticle(lostArticle,imageHolder);
-               System.out.println(le.getState());
-               System.out.println(LostArticleEnum.SUCCESS.getState());
-               if(le.getState() == LostArticleEnum.SUCCESS.getState()){
-                   attributes.addFlashAttribute("insert", "提交成功");
-                   System.out.println(le.getState());
-                   System.out.println(LostArticleEnum.SUCCESS.getState());
-               }else{
-                   attributes.addFlashAttribute("insert", "提交失败");
-                   attributes.addFlashAttribute("errMsg", "execeution错误");
-               }
-           }catch(LostArticleException e){
+                le = lostArticleService.saveArticle(lostArticle,imageHolder);
+
+                if(le.getState() == LostArticleEnum.SUCCESS.getState()){
+                    modelMap.put("success",true);
+
+                }else{
+                    modelMap.put("success",false);
+                    modelMap.put("errMsg","添加失败，请检查数据");
+                    return modelMap;
+                }
+            }catch(LostArticleException e){
 //               处理service层抛出的异常
-               attributes.addFlashAttribute("insert", "提交失败");
-               attributes.addFlashAttribute("errMsg", "service抛出错误");
-           }catch(IOException e){
-               attributes.addFlashAttribute("insert", "提交失败");
-               attributes.addFlashAttribute("errMsg", "IOException");
-           }
-            return "redirect:/success";
-
-
-        }else {
-            if (articleImg ==null){
-                attributes.addFlashAttribute("insert", "提交失败");
-                attributes.addFlashAttribute("errMsg", "后台获取图片失败");
-                return "redirect:/success";
-            }else {
-                attributes.addFlashAttribute("insert", "提交失败");
-                attributes.addFlashAttribute("errMsg", "后台获取帖子信息失败");
-                return "redirect:/success";
+                modelMap.put("success",false);
+                modelMap.put("errMsg",e.getMessage());
+                return modelMap;
+            }catch(IOException e){
+                modelMap.put("success",false);
+                modelMap.put("errMsg",e.getMessage());
+                return modelMap;
             }
+            return modelMap;
+
+
+        }else{
+            modelMap.put("success",false);
+            modelMap.put("errMsg","信息不全");
+            return modelMap;
 
         }
 
+    }
+
+    @GetMapping("")
+    public String lostArticleList(Model model,
+                                  HttpServletRequest request,
+                                  @RequestParam(name = "page", defaultValue = "1") Integer page,
+                                  @RequestParam(name = "search", required = false) String search,
+                                  @RequestParam(name = "item", required = false) Integer item,
+                                  @RequestParam(name = "area", required = false) Integer area,
+                                  @RequestParam(name = "category", required = false) Integer category,
+                                  @RequestParam(name = "date", required = false) Integer date
+                                  ){
+//        初始化信息
+        List<Area> areaList = areaService.getAreaList();
+        model.addAttribute("areaList",areaList);
+        List<ItemCategory> itemCategoryList = itemCategoryService.getItemCategoryist();
+        model.addAttribute("itemCategoryList",itemCategoryList);
+//        取出失物招领子类别
+        List<ArticleCategory> articleCategories = articleCategoryService.getArticleCategories(1);
+        model.addAttribute("articleCategories",articleCategories);
+//        返回查询条件，使页面下拉菜单选中
+        model.addAttribute("areaCondition",area);
+        model.addAttribute("itemCondition",item);
+        model.addAttribute("dateCondition",date);
+        model.addAttribute("categoryCondition",category);
+//        封装查询条件，并作为参数查询
+
+
+        LostArticle lostArticle = new LostArticle();
+        UserInfo owner = (UserInfo) request.getSession().getAttribute("user");
+        lostArticle.setUserInfo(owner);
+
+        ArticleCategory articleCategory = new ArticleCategory();
+        articleCategory.setArticleCategoryId(category);
+        lostArticle.setArticleCategory(articleCategory);
+
+
+
+        Area area1 = new Area();
+        area1.setAreaId(area);
+        lostArticle.setArea(area1);
+
+        ItemCategory itemCategory = new ItemCategory();
+        itemCategory.setItemCategoryId(item);
+        lostArticle.setItemCategory(itemCategory);
+        PageHelper.startPage(page,1);
+        List<LostArticle> list = new ArrayList<>();
+        list=lostArticleMapper.getArticleList(lostArticle,date);
+//        开启分页，并使用pageHelp插件进行分页和返回数据，pageHelp插件需要先配置pom和yml。
+        PageInfo<LostArticle> pageInfo = new PageInfo<>(list);
+        model.addAttribute("pageInfo",pageInfo);
+        return "lost";
     }
 
 

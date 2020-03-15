@@ -2,17 +2,15 @@ package com.hzu.community.mapper;
 
 import com.hzu.community.bean.Area;
 import com.hzu.community.bean.ArticleCategory;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.ResultMap;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
-
+@Mapper
 public interface ArticleCategoryMapper {
-   /* @Select("select * from article_category where article_category_id=#{id}")
-    @ResultMap("com.hzu.community.bean.ArticleCategory")
-    public ArticleCategory findArticleCategoryByid(@Param("id") int id);*/
+
+    @Select("select * from article_category where article_category_id=#{id}")
+
+    public ArticleCategory findArticleCategoryById(@Param("id") int id);
 
     @Select("<script> " +
             "SELECT * " +

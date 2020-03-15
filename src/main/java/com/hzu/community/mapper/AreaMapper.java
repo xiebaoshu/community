@@ -14,7 +14,6 @@ public interface AreaMapper {
     @Select("select * from area")
     public List<Area> getArea();
 
-   /* @Select("select * from area where area_id=#{id}")
-    @ResultMap("com.hzu.community.bean.Area")
-    public Area findAreaByid(@Param("id") int id);*/
+    @Select("select * from area where area_id=#{id}")
+    public Area findAreaById(@Param("id") int id);
 }

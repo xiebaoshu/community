@@ -24,12 +24,21 @@ $(function () {
         formData.append('lostArticleStr',JSON.stringify(lostArticle));//将lostArticle转化为JSON字符串并传入
 
         $.ajax({
-            url:"/lostArticle/add",
+            url:"/lost/add",
             type:'POST',
             data:formData,
             contentType:false,
             processData:false,
-            cache:false
+            cache:false,
+            success:function (data) {
+                if(data.success){
+                    alert('提交成功');
+                    window.location.href = '/admin/lost';
+                }else{
+                    alert('提交失败'+data.errMsg);
+                }
+
+            }
 
         });
 

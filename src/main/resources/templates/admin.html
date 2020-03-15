@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -80,27 +80,81 @@
                     </div>
                     <!--已发布信息区域-->
                     <div class="ui segment">
-                        <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
-                            <ul class="layui-tab-title">
-                                <li class="layui-this">失物招领</li>
-                                <li>二手交易</li>
-                                <li>校园互助</li>
-                                <li>兼职信息</li>
-                                <li style="display:none!important;">校园公告</li>
-                                <li style="display:none!important;">企业信息</li>
-                                <li>我的回复</li>
-                            </ul>
-                            <div class="layui-tab-content" style="height: 100px;">
-                                <div class="layui-tab-item layui-show">您没有发布的失物招领</div>
-                                <div class="layui-tab-item">您没有发布的二手交易</div>
-                                <div class="layui-tab-item">您没有发布的校园互助</div>
-                                <div class="layui-tab-item">您没有发布的兼职信息</div>
-                                <div class="layui-tab-item">您没有发布的校园公告</div>
-                                <div class="layui-tab-item">您没有发布的企业信息</div>
-                                <div class="layui-tab-item">没有人回复你的信息</div>
-                            </div>
+
+                        <div class="ui menu stackable">
+                            <a th:class="${parCategory}=='lost'?'active item':'item'"
+                               th:href="@{/admin/lost}"
+                                >
+                                <i class="privacy icon"></i> 失物招领
+                            </a>
+                            <a th:class="${parCategory}=='second'?'active item':'item'"
+                                   th:href="@{/admin/second}">
+                                <i class="shop icon"></i> 二手交易
+                            </a>
+                            <a th:class="${parCategory}=='help'?'active item':'item'"
+                               th:href="@{/admin/help}">
+                                <i class="exchange icon"></i> 校园互助
+                            </a>
+                            <a th:class="${parCategory}=='job'?'active item':'item'"
+                               th:href="@{/admin/job}">
+                                <i class="money icon"></i> 兼职信息
+                            </a>
+                            <a th:class="${parCategory}=='university'?'active item':'item'"
+                               th:href="@{/admin/university}">
+                                <i class="student icon"></i> 校园公告
+                            </a>
+                            <a th:class="${parCategory}=='business'?'active item':'item'"
+                               th:href="@{/admin/business}">
+                                <i class="travel icon"></i> 企业信息
+                            </a>
+
+
                         </div>
+
+                        <table class="ui celled stackable table">
+                            <thead class="m-mobile-hide">
+                            <tr>
+
+                                <th>标题</th>
+                                <th>操作</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="list:${pageInfo.getList()}">
+
+                                <td th:text="${list.articleTitle}">文章标题</td>
+                                <td>
+                                    <a th:href="@{/lost/add/}+${list.lostArticleId}" class="ui mini teal basic button">编辑</a>
+                                    <a href="#" class="ui mini red basic button">删除</a>
+                                </td>
+                            </tr>
+                            </tbody>
+                            <tfoot>
+                            <tr>
+                                <th colspan="6">
+                                    <div class="ui mini pagination menu">
+                                        <a class="item"
+                                           th:href="@{'/admin/'+${parCategory}(page=${pageInfo.pageNum - 1})}"
+                                           th:style="${pageInfo.pageNum - 1}<=0?'pointer-events: none;':'pointer-events:true'">
+                                            上一页
+                                        </a>
+                                        <a class="item"
+                                           th:href="@{'/admin/'+${parCategory}(page=${pageInfo.pageNum + 1})}"
+                                           th:style="${pageInfo.pageNum + 1}>${pageInfo.pages}?'pointer-events: none;':'pointer-events:true'"
+                                        >
+                                            下一页
+                                        </a>
+                                    </div>
+                                    <a href="#" class="ui mini right floated teal basic button">新增</a>
+                                </th>
+                            </tr>
+                            </tfoot>
+                        </table>
                     </div>
+
+
+
+
                 </div>
                 <!--右边列表-->
                 <div class="five wide column">

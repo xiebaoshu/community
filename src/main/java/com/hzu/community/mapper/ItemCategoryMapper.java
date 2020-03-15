@@ -11,9 +11,8 @@ import java.util.List;
 
 @Mapper
 public interface ItemCategoryMapper {
-   /* @Select("select * from item_category where item_category_id=#{id}")
-    @ResultMap("com.hzu.community.bean.ItemCategory")
-    public ItemCategory findItemCategoryByid(@Param("id") int id);*/
+    @Select("select * from item_category where item_category_id=#{id}")
+    public ItemCategory findItemCategoryById(@Param("id") int id);
 
     @Select("select * from item_category")
     public List<ItemCategory> getItemCategoty();

@@ -1,5 +1,7 @@
 package com.hzu.community;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.hzu.community.bean.*;
 import com.hzu.community.mapper.AreaMapper;
 import com.hzu.community.mapper.ArticleCategoryMapper;
@@ -12,6 +14,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import javax.validation.constraints.Null;
 import java.text.SimpleDateFormat;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -42,7 +45,7 @@ class CommunityApplicationTests {
     }
     @Test
     void lostArticleMapperTest(){
-        LostArticle lostArticle = new LostArticle();
+       /* LostArticle lostArticle = new LostArticle();
         Area area = new Area();
         area.setAreaId(1);
         ArticleCategory articleCategory = new ArticleCategory();
@@ -52,6 +55,7 @@ class CommunityApplicationTests {
         UserInfo userInfo = new UserInfo();
         userInfo.setUserId(1);
         lostArticle.setArea(area);
+        lostArticle.setPhone("141231");
         lostArticle.setArticleCategory(articleCategory);
         lostArticle.setItemCategory(itemCategory);
         lostArticle.setUserInfo(userInfo);
@@ -62,7 +66,30 @@ class CommunityApplicationTests {
 
         Date date=new Date();
         lostArticle.setCreateTime(date);
-        lostArticleMapper.addLostArticle(lostArticle);
+        lostArticleMapper.addLostArticle(lostArticle);*/
+        UserInfo userInfo = new UserInfo();
+        userInfo.setUserId(1);
+        LostArticle lostArticle = new LostArticle();
+        lostArticle.setUserInfo(userInfo);
+        // 开启分页
+        PageHelper.startPage(1, 10);
+        List<LostArticle> list = new ArrayList<>();
+        list=lostArticleMapper.getArticleList(lostArticle,30);
+        PageInfo<LostArticle> articlePageInfo = new PageInfo<>(list);
+        for (int i = 0; i < articlePageInfo.getList().size(); i++) {
+            System.out.println(articlePageInfo.getList().get(i).getArticleTitle());
+        }
+
+
+
+
+
+
+
+
+
+
+
 
 
     }

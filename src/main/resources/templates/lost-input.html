@@ -60,8 +60,8 @@
 <div  class="m-container-small m-padded-tb-big">
     <div class="ui container">
 
-        <form action="/lostArticle/add" method="post" class="ui form">
-            <div class="required field">
+        <div  class="ui form">
+            <div class="field">
                 <div class="ui left labeled input">
                     <div class="ui teal basic label">
                         <div class="text">标题</div>
@@ -82,8 +82,11 @@
                             <i class="dropdown icon"></i>
                             <div class="default text m-text-color">分类</div>
                             <div class="menu">
-                                <div class="item" data-value="2">寻物启事</div>
-                                <div class="item" data-value="3">招领启事</div>
+                                <!--<div class="item" data-value="2">寻物启事</div>-->
+                                <!--<div class="item" data-value="3">招领启事</div>-->
+                                <div class="item"  th:each="articleCategory:${articleCategoryList}"
+                                     th:data-value="${articleCategory.articleCategoryId}"
+                                     th:text="${articleCategory.articleCategoryName}">寻物启事</div>
 
                             </div>
                         </div>
@@ -188,7 +191,7 @@
 
 
 
-        </form>
+        </div>
     </div>
 
 </div>
@@ -203,6 +206,7 @@
                     <div class="item">
                         <img src="../static/images/hzu.jpg" alt="" class="ui rounded image" style="width: 110px"/>
                     </div>
+
                 </div>
 
             </div>

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -72,35 +72,47 @@
                               </div>
                               <!--pc端过滤条件-->
                               <div class="right aligned column m-mobile-hide">
+                                <form name="condition" action="/lost" method="get">
+                                    <input type="text" name="category" style="display: none" th:value="${categoryCondition}">
 
-
-                                  <select class="ui dropdown">
-                                      <option value="">时间</option>
-                                      <option value="1">三天内</option>
-                                      <option value="2">一周内</option>
-                                      <option value="3">一月内</option>
-
-
-                                  </select>
-
-                                  <select class="ui dropdown">
-                                      <option value="">区域</option>
-                                      <option value="1">旭日大楼</option>
-                                      <option value="2">操场</option>
-                                      <option value="3">饭堂</option>
+                                  <select class="ui dropdown" name="date" onchange="document.condition.submit()">
+                                      <option value="" >时间</option>
+                                      <option value="3" th:selected="${dateCondition}==3"><a href="#">三天内</a></option>
+                                      <option value="7" th:selected="${dateCondition}==7">一周内</option>
+                                      <option value="30" th:selected="${dateCondition}==30">一月内</option>
 
 
                                   </select>
 
-                                  <select class="ui dropdown">
+                                  <select class="ui dropdown" name="area" onchange="document.condition.submit()">
+                                      <option value="" >区域</option>
+                                      <option
+                                      th:each="area:${areaList}"
+                                      th:text="${area.getAreaName()}"
+                                      th:value="${area.getAreaId()}"
+                                      th:selected="${area.areaId}==${areaCondition}"
+
+                                      ></option>
+                                      <!--<option value="2">操场</option>-->
+                                      <!--<option value="3">饭堂</option>-->
+
+
+                                  </select>
+
+                                  <select class="ui dropdown" name="item" onchange="document.condition.submit()">
                                       <option value="">类型</option>
-                                      <option value="1">电子产品</option>
-                                      <option value="2">ID卡</option>
-                                      <option value="3">现金</option>
+                                      <option
+                                      th:each="item:${itemCategoryList}"
+                                      th:text="${item.getItemCategoryName()}"
+                                      th:value="${item.getItemCategoryId()}"
+                                      th:selected="${item.getItemCategoryId()}==${itemCondition}"
+                                      ></option>
+                                      <!--<option value="2">ID卡</option>-->
+                                      <!--<option value="3">现金</option>-->
 
 
                                   </select>
-
+                                </form>
 
 
                               </div>
@@ -110,34 +122,42 @@
                       <div class="ui attached segment m-mobile-show">
                           <div class="aligned">
 
-
-                              <select class="ui dropdown">
-                                  <option value="">时间</option>
-                                  <option value="1">三天内</option>
-                                  <option value="2">一周内</option>
-                                  <option value="3">一月内</option>
-
-
-                              </select>
-
-                              <select class="ui dropdown">
-                                  <option value="">区域</option>
-                                  <option value="1">旭日大楼</option>
-                                  <option value="2">操场</option>
-                                  <option value="3">饭堂</option>
+                            <form name="mobCondition" action="/lost" method="get">
+                                <input type="text" name="category" style="display: none" th:value="${categoryCondition}">
+                              <select name="date" class="ui dropdown" onchange="document.mobCondition.submit()">
+                                  <option value="" >时间</option>
+                                  <option value="3" th:selected="${dateCondition}==3"><a href="#">三天内</a></option>
+                                  <option value="7" th:selected="${dateCondition}==7">一周内</option>
+                                  <option value="30" th:selected="${dateCondition}==30">一月内</option>
 
 
                               </select>
 
-                              <select class="ui dropdown">
+                              <select name="area" class="ui dropdown" onchange="document.mobCondition.submit()">
+                                  <option
+                                          th:each="area:${areaList}"
+                                          th:text="${area.getAreaName()}"
+                                          th:value="${area.getAreaId()}"
+                                          th:selected="${area.areaId}==${areaCondition}"
+
+                                  ></option>
+
+
+                              </select>
+
+                              <select name="item" class="ui dropdown" onchange="document.mobCondition.submit()">
                                   <option value="">类型</option>
-                                  <option value="1">电子产品</option>
-                                  <option value="2">ID卡</option>
-                                  <option value="3">现金</option>
+                                  <option
+                                          th:each="item:${itemCategoryList}"
+                                          th:text="${item.getItemCategoryName()}"
+                                          th:value="${item.getItemCategoryId()}"
+                                          th:selected="${item.getItemCategoryId()}==${itemCondition}"
+                                  ></option>
 
 
                               </select>
 
+                            </form>
 
 
                           </div>
@@ -150,7 +170,7 @@
                       <div class="ui attached segment">
 
                           <div class="ui segment padded vertical m-padded-tb-large">
-                              <!--vertical垂直-->
+                              <!--vertical垂直，reversed显示顺序反转-->
                               <div class="ui mobile reversed stackable grid">
                                   <div class="eleven wide column">
                                       <h3 class="ui header">失物招领1</h3>
@@ -408,11 +428,35 @@
                       <div class="ui bottom attached segment">
 
 
-                          <!--<fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">-->
-                          <!--<legend>总页数大于页码总数</legend>-->
-                          <!--</fieldset>-->
+                          <div class="ui pagination  menu">
+                              <a class="item"
+                              th:href="@{/lost(page=${pageInfo.getFirstPage()},category=${categoryCondition},date=${dateCondition},area=${areaCondition},item=${itemCondition})}">
+                                  首页
+                              </a>
+                              <a class="icon item"
+                              th:href="@{/lost(page=${pageInfo.getPrePage()},category=${categoryCondition},date=${dateCondition},area=${areaCondition},item=${itemCondition})}"
+                              th:if="${pageInfo.hasPreviousPage}">
+                                  <i class="left arrow icon"></i>
+                              </a>
+                              <a class="active item"
+                              th:each="page:${pageInfo.getNavigatepageNums()}"
+                              th:text="${page}"
+                              th:class="${page}==${pageInfo.getPageNum()}?'active item':'item'"
+                              th:href="@{/lost(page=${page},category=${categoryCondition},date=${dateCondition},area=${areaCondition},item=${itemCondition})}">
+                                  1
+                              </a>
 
-                          <div id="demo1"></div>
+
+                              <a class="icon item"
+                              th:href="@{/lost(page=${pageInfo.getNextPage()},category=${categoryCondition},date=${dateCondition},area=${areaCondition},item=${itemCondition})}"
+                              th:if="${pageInfo.hasNextPage}">
+                                  <i class="right arrow icon"></i>
+                              </a>
+                              <a class="item"
+                                 th:href="@{/lost(page=${pageInfo.getLastPage()},category=${categoryCondition},date=${dateCondition},area=${areaCondition},item=${itemCondition})}">
+                                  尾页
+                              </a>
+                          </div>
 
                       </div>
 
@@ -475,18 +519,22 @@
                               </div>
                           </div>
                           <div class="ui teal segment">
-                              <a href="#" target="_blank" class="ui teal basic left pointing label m-margin-tb-tiny">
-                                  丢失 <div class="detail">23</div>
+                              <a href="#" target="_self" class="ui teal basic left pointing label m-margin-tb-tiny"
+                                th:each="category:${articleCategories}"
+                                 th:href="@{/lost(category=${category.getArticleCategoryId()},date=${dateCondition},area=${areaCondition},item=${itemCondition})}"
+                              >
+                                  <span th:text="${category.articleCategoryName}">寻物启事</span>
+                                  <div class="detail" th:text="23">23</div>
                               </a>
-                              <a href="#" target="_blank" class="ui teal basic left pointing label m-margin-tb-tiny">
-                                  捡到 <div class="detail">23</div>
-                              </a>
-                              <a href="#" target="_blank" class="ui teal basic left pointing label m-margin-tb-tiny">
-                                  丢失已找回 <div class="detail">23</div>
-                              </a>
-                              <a href="#" target="_blank" class="ui teal basic left pointing label m-margin-tb-tiny">
-                                  捡到已返还 <div class="detail">23</div>
-                              </a>
+                              <!--<a href="#" target="_blank" class="ui teal basic left pointing label m-margin-tb-tiny">-->
+                                  <!--捡到 <div class="detail">23</div>-->
+                              <!--</a>-->
+                              <!--<a href="#" target="_blank" class="ui teal basic left pointing label m-margin-tb-tiny">-->
+                                  <!--丢失已找回 <div class="detail">23</div>-->
+                              <!--</a>-->
+                              <!--<a href="#" target="_blank" class="ui teal basic left pointing label m-margin-tb-tiny">-->
+                                  <!--捡到已返还 <div class="detail">23</div>-->
+                              <!--</a>-->
 
                           </div>
                       </div>
@@ -585,22 +633,6 @@
     <script src="../static/layui.js"></script>
 
     <script>
-        // 调用分页
-        layui.use(['laypage', 'layer'], function(){
-            var laypage = layui.laypage
-                ,layer = layui.layer;
-
-
-            //总页数大于页码总数
-            laypage.render({
-                elem: 'demo1'
-                ,count: 200 //数据总数
-                ,jump: function(obj){
-                    console.log(obj)
-                }
-            });
-
-        });
 
        // 手机端右上角按钮点击事件
         $('#mobile-btn').click(function () {
