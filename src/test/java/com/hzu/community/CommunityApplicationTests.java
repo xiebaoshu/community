@@ -6,6 +6,7 @@ import com.hzu.community.bean.*;
 import com.hzu.community.mapper.AreaMapper;
 import com.hzu.community.mapper.ArticleCategoryMapper;
 import com.hzu.community.mapper.LostArticleMapper;
+import com.hzu.community.mapper.UserInfoMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -26,6 +27,8 @@ class CommunityApplicationTests {
     ArticleCategoryMapper articleCategoryMapper;
     @Autowired
     LostArticleMapper lostArticleMapper;
+    @Autowired
+    UserInfoMapper userInfoMapper;
     @Test
     void areaMapperTest(){
         List<Area> areaList = areaMapper.getArea();
@@ -67,10 +70,9 @@ class CommunityApplicationTests {
         Date date=new Date();
         lostArticle.setCreateTime(date);
         lostArticleMapper.addLostArticle(lostArticle);*/
-        UserInfo userInfo = new UserInfo();
-        userInfo.setUserId(1);
+
         LostArticle lostArticle = new LostArticle();
-        lostArticle.setUserInfo(userInfo);
+
         // 开启分页
         PageHelper.startPage(1, 10);
         List<LostArticle> list = new ArrayList<>();
@@ -92,6 +94,12 @@ class CommunityApplicationTests {
 
 
 
+    }
+    @Test
+    void userMapperTest(){
+
+        UserInfo user = userInfoMapper.findUserInfoById(1);
+        System.out.println(user.getUserName());
     }
 
 }

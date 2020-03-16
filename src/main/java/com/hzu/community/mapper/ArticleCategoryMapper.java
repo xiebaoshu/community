@@ -10,7 +10,7 @@ public interface ArticleCategoryMapper {
 
     @Select("select * from article_category where article_category_id=#{id}")
 
-    public ArticleCategory findArticleCategoryById(@Param("id") int id);
+    public ArticleCategory findArticleCategoryById(@Param("id") Integer id);
 
     @Select("<script> " +
             "SELECT * " +

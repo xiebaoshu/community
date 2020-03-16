@@ -15,5 +15,5 @@ public interface AreaMapper {
     public List<Area> getArea();
 
     @Select("select * from area where area_id=#{id}")
-    public Area findAreaById(@Param("id") int id);
+    public Area findAreaById(@Param("id") Integer id);
 }

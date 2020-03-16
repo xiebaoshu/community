@@ -7,6 +7,7 @@ import com.hzu.community.dto.LostArticleExecution;
 import com.hzu.community.enums.LostArticleEnum;
 import com.hzu.community.exceptions.LostArticleException;
 import com.hzu.community.mapper.LostArticleMapper;
+import com.hzu.community.mapper.UserInfoMapper;
 import com.hzu.community.service.AreaService;
 import com.hzu.community.service.ArticleCategoryService;
 import com.hzu.community.service.ItemCategoryService;
@@ -48,6 +49,8 @@ public class LostArticleController {
     LostArticleService lostArticleService;
     @Autowired
     LostArticleMapper lostArticleMapper;
+    @Autowired
+    UserInfoMapper userInfoMapper;
 
     //    获取失物招领新增页面初始化信息
     @GetMapping("/add")
@@ -79,10 +82,7 @@ public class LostArticleController {
     @ResponseBody
     public Map<String,Object> add(HttpServletRequest request){
         Map<String,Object> modelMap = new HashMap<>();
-        UserInfo user = new UserInfo();
-        user.setUserId(1);
-        user.setUserName("谢豪");
-        request.getSession().setAttribute("user", user);
+
 
         ObjectMapper mapper = new ObjectMapper();
         LostArticle lostArticle = null;
@@ -116,6 +116,7 @@ public class LostArticleController {
 
 //        新增失物招领
         if (lostArticle != null && articleImg != null){
+//            从session获取数据
             UserInfo owner = (UserInfo) request.getSession().getAttribute("user");
             lostArticle.setUserInfo(owner);
             LostArticleExecution le;
@@ -164,6 +165,7 @@ public class LostArticleController {
                                   @RequestParam(name = "area", required = false) Integer area,
                                   @RequestParam(name = "category", required = false) Integer category,
                                   @RequestParam(name = "date", required = false) Integer date
+
                                   ){
 //        初始化信息
         List<Area> areaList = areaService.getAreaList();
@@ -178,18 +180,19 @@ public class LostArticleController {
         model.addAttribute("itemCondition",item);
         model.addAttribute("dateCondition",date);
         model.addAttribute("categoryCondition",category);
+        model.addAttribute("searchCondition",search);
+
+        // 从session获取用户信息，并返回给前台显示在页面上
+
+        UserInfo user = (UserInfo) request.getSession().getAttribute("user");
+        model.addAttribute("user",user);
+
 //        封装查询条件，并作为参数查询
-
-
         LostArticle lostArticle = new LostArticle();
-        UserInfo owner = (UserInfo) request.getSession().getAttribute("user");
-        lostArticle.setUserInfo(owner);
 
         ArticleCategory articleCategory = new ArticleCategory();
         articleCategory.setArticleCategoryId(category);
         lostArticle.setArticleCategory(articleCategory);
-
-
 
         Area area1 = new Area();
         area1.setAreaId(area);
@@ -198,10 +201,13 @@ public class LostArticleController {
         ItemCategory itemCategory = new ItemCategory();
         itemCategory.setItemCategoryId(item);
         lostArticle.setItemCategory(itemCategory);
-        PageHelper.startPage(page,1);
+
+        lostArticle.setArticleTitle(search);
+        //开启分页，并使用pageHelp插件进行分页和返回数据，pageHelp插件需要先配置pom和yml。
+        PageHelper.startPage(page,10);
         List<LostArticle> list = new ArrayList<>();
         list=lostArticleMapper.getArticleList(lostArticle,date);
-//        开启分页，并使用pageHelp插件进行分页和返回数据，pageHelp插件需要先配置pom和yml。
+
         PageInfo<LostArticle> pageInfo = new PageInfo<>(list);
         model.addAttribute("pageInfo",pageInfo);
         return "lost";

@@ -34,10 +34,7 @@ public class AdminController {
 
                             ){
 //        获取session中的用户数据
-        UserInfo user = new UserInfo();
-        user.setUserId(1);
-        user.setUserName("谢豪");
-        request.getSession().setAttribute("user", user);
+
         UserInfo owner = (UserInfo) request.getSession().getAttribute("user");
 //        设置当前页和每页的数据数量
         PageHelper.startPage(page,3);
