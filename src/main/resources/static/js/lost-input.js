@@ -1,4 +1,5 @@
 $(function () {
+
     $('#submit').click(function(){
         var lostArticle = {};
         

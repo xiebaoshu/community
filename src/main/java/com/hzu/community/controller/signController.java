@@ -10,17 +10,37 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @Controller
 public class signController {
+    static Boolean hasUser;
     @Autowired
     UserInfoMapper userInfoMapper;
     @GetMapping("/")
-    public String signPage(){
+    public String signPage(HttpServletRequest request){
+        hasUser =false;
+//       通过cookies判断用户是否登陆
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null && cookies.length != 0){
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals("userId")) {
+                     hasUser = true;
+                    break;
+                }
+            }
+        }
+        if(hasUser){
+            // 如果已登陆跳转到展示页
+            return "redirect:/lost";
+        }else{
+            return "sign";
+        }
 
-        return "sign";
+
     }
     @PostMapping(value = "/")
     public String sign(@RequestParam(name = "username") String username,

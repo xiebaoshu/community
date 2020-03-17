@@ -1,7 +1,7 @@
 package com.hzu.community.enums;
 
 public enum LostArticleEnum {
-    SUCCESS(1,"操作成功"),
+    SUCCESS(1,"操作成功"),UPDATE_WRONG(-3,"更新失败"),
     NULL_IMG(-1,"ShopId为空"),NULL_Article(-2,"Article信息为空");
     private int state;
     private String stateInfo;

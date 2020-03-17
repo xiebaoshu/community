@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>更新失物招领文章</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.css">
+    <link rel="stylesheet" href="../static/css/me.css" >
+
+</head>
+<body>
+<!--导航栏-->
+<!--inverter反转，segment片段-->
+<nav class="ui inverted attached segment">
+    <div class="ui container">
+        <div class="ui inverted secondary stackable menu">
+            <h2 class="ui teal header item">Blog</h2>
+            <!--m-item无样式作用，用于js绑定-->
+            <a href="#" class="item m-mobile-hide m-item"><i class="home icon"></i>首页</a>
+            <a href="#" class="item m-mobile-hide m-item"><i class="idea icon"></i>分类</a>
+            <a href="#" class="item m-mobile-hide m-item"><i class="tag icon"></i>标签</a>
+            <a href="#" class="item m-mobile-hide m-item"><i class="info icon"></i>关于我</a>
+            <div class="righ item m-mobile-hide m-item-search">
+                <div class="ui icon input inverted">
+                    <input type="text" placeholder="Search....">
+                    <i class="search link icon"></i>
+
+                </div>
+            </div>
+
+            <div class="right item  m-mobile-hide">
+                <div>
+                    <p>你好，用户</p>
+                </div>
+                <a href="http://www.baidu.com" style="padding-left: 10px">
+                    <img src="../static/images/user.jpg" alt="" class="ui avatar image">
+                </a>
+            </div>
+            <!--手机端自适应右上角菜单按钮-->
+            <div class="ui inverted secondary m-mobile-show m-right-top menu ">
+                <a href="#" class="ui black icon button" id="mobile-btn">
+                    <i class="sidebar icon"></i>
+                </a>
+                <a href="#" class="ui black icon button" id="mobile-btn1">
+                    <i class="search link icon"></i>
+                </a>
+                <a href="#" class="ui black icon button" id="mobile-btn2">
+                    <img src="../static/images/user.jpg" alt="" class="ui avatar image">
+                </a>
+            </div>
+
+
+
+        </div>
+    </div>
+</nav>
+
+<!--中间内容-->
+
+<div  class="m-container-small m-padded-tb-big">
+    <div class="ui container">
+
+        <div  class="ui form">
+            <div class="field">
+                <div class="ui left labeled input">
+                    <div class="ui teal basic label">
+                        <div class="text">标题</div>
+                    </div>
+                    <input type="text" name="article_title" id="article_title" placeholder="请输入标题" th:value="${lostArticle.articleTitle}">
+                </div>
+            </div>
+
+            <div class="field">
+                <textarea name="article_content" placeholder="请输入内容" id="article_content" th:text="${lostArticle.articleContent}"></textarea>
+            </div>
+            <div class="two fields">
+                <div class="field">
+                    <div class="ui left labeled action input">
+                        <label class="ui compact teal basic label">分类</label>
+                        <div class="ui fluid selection dropdown">
+                            <input type="hidden" name="article_category_id" id="article_category_id"
+                            th:value="${lostArticle.articleCategory.articleCategoryId}">
+                            <i class="dropdown icon"></i>
+                            <div class="default text m-text-color">分类</div>
+                            <div class="menu">
+                                <!--<div class="item" data-value="2">寻物启事</div>-->
+                                <!--<div class="item" data-value="3">招领启事</div>-->
+                                <div class="item"
+                                     th:each="articleCategory:${articleCategoryList}"
+                                     th:data-value="${articleCategory.articleCategoryId}"
+                                     th:text="${articleCategory.articleCategoryName}"
+
+                                >寻物启事</div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="field">
+                    <div class="ui left labeled action input">
+                        <label class="ui compact teal basic label">时间</label>
+                        <input type="date" name="create_time" id="create_time" placeholder="时间" class="m-text-color"
+                         th:value="${#dates.format(lostArticle.createTime, 'yyyy-MM-dd')}">
+                    </div>
+                </div>
+            </div>
+            <div class="two fields">
+
+                <div class="field">
+                    <div class="ui left labeled action input">
+                        <label class="ui compact teal basic label">地点</label>
+                        <div class="ui fluid selection dropdown">
+                            <input type="hidden" name="area_id" id="area_id"
+                            th:value="${lostArticle.area.areaId}">
+                            <i class="dropdown icon"></i>
+                            <div class="default text m-text-color">地点</div>
+                            <div class="menu">
+                                <!--<div class="item" data-value="1">旭日大楼</div>-->
+                                <!--<div class="item" data-value="2">操场</div>-->
+                                <!--<div class="item" data-value="2">饭堂</div>-->
+                                <div class="item"
+                                     th:data-value="${area.areaId}"
+                                     th:each="area:${areaList}"
+                                     th:text="${area.areaName}"
+                                     th:selected="${lostArticle.area.areaId}==${area.areaId}?'${lostArticle.area.areaId}':''">
+                                    旭日大楼
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="field">
+                    <div class="ui left labeled action input">
+                        <label class="ui compact teal basic label">物品类型</label>
+                        <div class="ui fluid selection dropdown">
+                            <input type="hidden" name="item_category_id" id="item_category_id"
+                            th:value="${lostArticle.itemCategory.itemCategoryId}">
+                            <i class="dropdown icon"></i>
+                            <div class="default text m-text-color">物品类型</div>
+                            <div class="menu">
+                                <!--<div class="item" data-value="1">电子产品</div>-->
+                                <!--<div class="item" data-value="2">ID卡</div>-->
+                                <!--<div class="item" data-value="3">现金</div>-->
+                                <div class="item" th:text="${itemCategory.itemCategoryName}"
+                                     th:data-value="${itemCategory.itemCategoryId}"
+                                     th:each="itemCategory:${itemCategoryList}"
+                                     th:selected="${lostArticle.itemCategory.itemCategoryId}==${itemCategory.itemCategoryId}?'${lostArticle.itemCategory.itemCategoryId}':''"
+                                >
+                                    电子产品
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+
+            <div class="two fields">
+                <div class="field">
+                    <div class="ui left labeled input">
+                        <div class="ui teal basic label">
+                            <div class="text">物品信息</div>
+                        </div>
+                        <input type="text" id="item_detail" name="item_detail" placeholder="例如：iphone11-绿色-黑色动漫手机壳"
+                        th:value="${lostArticle.itemDetail}">
+                    </div>
+                </div>
+                <div class="field">
+                    <div class="ui left labeled input">
+                        <div class="ui teal basic label">
+                            <div class="text">地点信息</div>
+                        </div>
+                        <input type="text" id="area_detail" name="area_detail" placeholder="例如：旭日大楼501"
+                        th:value="${lostArticle.areaDetail}">
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="field">
+                <div class="ui left labeled input">
+                    <div class="ui teal basic label">
+                        <div class="text">联系方式</div>
+                    </div>
+                    <input type="text" name="phone" id="phone" placeholder="请输入手机号"
+                    th:value="${lostArticle.phone}">
+                </div>
+            </div>
+
+            <div class="two fields">
+                <div class="field">
+                    <div class="ui left labeled input">
+                        <div class="ui teal basic label">
+                            <div class="text">完成者id</div>
+                        </div>
+                        <input type="text" id="finisher_id" name="finisher_id" placeholder="完成者的用户id">
+                    </div>
+                </div>
+                <div class="field">
+                    <div class="ui left labeled action input">
+                        <label class="ui compact teal basic label">完成时间</label>
+                        <input type="date" name="finish_time" id="finish_time" placeholder="完成时间" class="m-text-color">
+                    </div>
+                </div>
+
+            </div>
+
+
+
+            </div>
+
+            <div class="ui grid">
+                <div class="eight wide column">
+                    <div class="field">
+                        <!--<button class="ui teal button" id="upload-btn">图片上传</button>-->
+                        <input type="file"  id="upload" name="upload">
+                    </div>
+                </div>
+                <div class="right aligned eight wide column">
+                    <button type="button" class="ui button" onclick="window.history.go(-1)" >返回</button>
+                    <button class="ui teal button" id="submit">发布</button>
+                </div>
+            </div>
+
+
+
+
+
+
+        </div>
+    </div>
+
+</div>
+<!--底部-->
+<!--vertical垂直-->
+<footer class="ui inverted segment vertical segment m-padded-tb-massive">
+    <div class="ui container center aligned">
+        <!--grid布局，共分16份,divided分割线-->
+        <div class="ui inverted stackable divided grid">
+            <div class="three wide column">
+                <div class="ui inverted link list">
+                    <div class="item">
+                        <img src="../static/images/hzu.jpg" alt="" class="ui rounded image" style="width: 110px"/>
+                    </div>
+
+                </div>
+
+            </div>
+            <div class="three wide column">
+                <h4 class="ui inverted header m-text-spaced m-opacity-mini">最新资讯</h4>
+                <div class="ui inverted link list">
+                    <a href="" class="item">用户故事</a>
+                    <a href="" class="item">用户故事</a>
+                    <a href="" class="item">用户故事</a>
+                </div>
+            </div>
+
+            <div class="three wide column">
+
+                <h4 class="ui inverted header m-text-spaced m-opacity-mini">最新资讯</h4>
+                <div class="ui inverted link list">
+                    <a href="" class="item">用户故事</a>
+                    <a href="" class="item">用户故事</a>
+                    <a href="" class="item">用户故事</a>
+                </div>
+            </div>
+
+            <div class="seven wide column">
+                <h4 class="ui inverted header m-text-spaced m-opacity-mini">最新资讯</h4>
+                <p class="m-text-spaced m-opacity-mini">这是一个校园社区</p>
+
+            </div>
+
+        </div>
+
+        <div class="ui inverted section divider"></div>
+        <p class="m-text-thin m-text-spaced m-opacity-mini">Copyright © 2019 - 2020 Xiehao Designed by Xiehao</p>
+
+    </div>
+
+</footer>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.js"></script>
+<script src="../static/js/common/common.js"></script>
+<script src="../static/js/lost-update.js"></script>
+<script>
+
+
+    // 手机端右上角按钮点击事件
+    $('#mobile-btn').click(function () {
+        $('.m-item').toggleClass('m-mobile-hide');
+    });
+
+    $('#mobile-btn1').click(function () {
+        $('.m-item-search').toggleClass('m-mobile-hide');
+    });
+
+    // 下拉列表
+    $('.ui.dropdown').dropdown({
+        on : 'hover'
+
+    });
+
+
+
+
+</script>
+</body>
+</html>

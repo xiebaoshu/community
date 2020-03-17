@@ -13,7 +13,7 @@ import net.coobird.thumbnailator.geometry.Positions;
 
 
 public class ImageUtil {
-    private static String basePath = "/Users/work/image";
+
     private static final SimpleDateFormat sDateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
     private static final Random r = new Random();
     public static String generateThumbnail(ImageHolder thumbnail, String targetAddr)

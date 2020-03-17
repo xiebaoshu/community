@@ -31,7 +31,7 @@ public interface LostArticleMapper {
     public int addLostArticle(LostArticle lostArticle);
 
 
-//    更新帖子里的失主信息
+//    更新帖子
     @Update("<script> " +
             "update lost_article " +
 
@@ -84,10 +84,40 @@ public interface LostArticleMapper {
             @Result(column="create_time",property="createTime"),
             @Result(column="finish_time",property="finishTime"),
             @Result(column="finisher_id",property="finishUser",one = @One(select = "com.hzu.community.mapper.UserInfoMapper.findUserInfoById")),
-            @Result(column="article_img",property="articleImg")
+            @Result(column="article_img",property="articleImg"),
+            @Result(column="finish_time",property="finishTime"),
+            @Result(column="finisher_id",property="finishUser",one = @One(select = "com.hzu.community.mapper.UserInfoMapper.findUserInfoById"))
     })
     public List<LostArticle> getArticleList(@Param("articleCondition") LostArticle articleCondition,
                                             @Param("dateCondition")Integer dateCondition);
 
 
+
+
+    @Select("<script> " +
+            "SELECT * " +
+            "from lost_article " +
+            " <where> " +
+            " <if test=\"articleId != null\">and lost_article_id = #{articleId}</if> " +
+            " </where> " +
+            " </script> ")
+    @Results({
+            @Result(id=true,column="lost_article_id",property="lostArticleId"),
+            @Result(column="article_category_id",property="articleCategory",one = @One(select = "com.hzu.community.mapper.ArticleCategoryMapper.findArticleCategoryById",fetchType= FetchType.EAGER)),
+            @Result(column="user_id",property="userInfo",one = @One(select = "com.hzu.community.mapper.UserInfoMapper.findUserInfoById",fetchType= FetchType.EAGER)),
+            @Result(column="area_id",property="area",one = @One(select = "com.hzu.community.mapper.AreaMapper.findAreaById")),
+            @Result(column="item_category_id",property="itemCategory",one = @One(select = "com.hzu.community.mapper.ItemCategoryMapper.findItemCategoryById")),
+            @Result(column="article_title",property="articleTitle"),
+            @Result(column="phone",property="phone"),
+            @Result(column="article_content",property="articleContent"),
+            @Result(column="area_detail",property="areaDetail"),
+            @Result(column="item_detail",property="itemDetail"),
+            @Result(column="create_time",property="createTime"),
+            @Result(column="finish_time",property="finishTime"),
+            @Result(column="finisher_id",property="finishUser",one = @One(select = "com.hzu.community.mapper.UserInfoMapper.findUserInfoById")),
+            @Result(column="article_img",property="articleImg"),
+            @Result(column="finish_time",property="finishTime"),
+            @Result(column="finisher_id",property="finishUser",one = @One(select = "com.hzu.community.mapper.UserInfoMapper.findUserInfoById"))
+    })
+    public LostArticle findArticleById(@Param("articleId") Integer articleId);
 }

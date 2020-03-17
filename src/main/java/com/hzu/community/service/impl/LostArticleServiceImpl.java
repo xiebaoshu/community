@@ -39,6 +39,7 @@ public class LostArticleServiceImpl implements LostArticleService {
                 } else {
                     if (imageHolder.getImage() != null) {
                         try {
+//                            对图片进行处理，并把url设置在文章中
                             addArticleImg(lostArticle, imageHolder);
                         } catch (Exception e) {
 //                         异常被try{}捕捉了，在Catch(){}中手动抛出运行时异常供事务管理器捕捉；
@@ -61,6 +62,37 @@ public class LostArticleServiceImpl implements LostArticleService {
             }
             return new LostArticleExecution(LostArticleEnum.SUCCESS,lostArticle);
 
+
+    }
+
+    @Override
+    @Transactional
+    public LostArticleExecution updateArticle(LostArticle lostArticle, ImageHolder imageHolder) {
+        try {
+//            判断是否需要处理图片
+            if(imageHolder != null){
+//            若存在图片，则取出相应文章
+              LostArticle oldArticle = lostArticleMapper.findArticleById(lostArticle.getLostArticleId());
+              if (oldArticle.getArticleImg()!= null){
+//                      根据文章的图片url删除本地下载的图片
+                    ImageUtil.deleteFileOrpath(oldArticle.getArticleImg());
+              }
+//             对图片进行处理，并把url设置在文章中
+              addArticleImg(lostArticle, imageHolder);
+            }
+//            更新文章信息
+            int updateNum = lostArticleMapper.updatelost(lostArticle);
+            if (updateNum<=0){
+                return new LostArticleExecution(LostArticleEnum.UPDATE_WRONG);
+            }else {
+//                重新赋值，并将更新后的数据封装在execution返回
+                lostArticle = lostArticleMapper.findArticleById(lostArticle.getLostArticleId());
+                return new LostArticleExecution(LostArticleEnum.SUCCESS,lostArticle);
+            }
+
+        }catch (Exception e){
+            throw new LostArticleException(e.getMessage());
+        }
 
     }
 

@@ -3,8 +3,9 @@ package com.hzu.community.util;
 import com.hzu.community.bean.UserInfo;
 
 public class PathUtil {
-    //private static String seperator = System.getProperty("file.separator");
+
     public static String getImgBasePath() {
+//        根据系统选择图片存放路径
         String os = System.getProperty("os.name");
         String basePath = "";
         if (os.toLowerCase().startsWith("win")) {
@@ -13,7 +14,7 @@ public class PathUtil {
         } else {
             basePath = "/Users/work/image";
         }
-        //basePath = basePath.replace("/", seperator);
+
         return basePath;
     }
     public static String getLostArticleImagePath(UserInfo owner,long lostArticleId) {
