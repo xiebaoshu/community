@@ -120,4 +120,8 @@ public interface LostArticleMapper {
             @Result(column="finisher_id",property="finishUser",one = @One(select = "com.hzu.community.mapper.UserInfoMapper.findUserInfoById"))
     })
     public LostArticle findArticleById(@Param("articleId") Integer articleId);
+
+
+    @Delete("delete from lost_article where lost_article_id = #{articleId}")
+    public int deleById(@Param("articleId") Integer articleId);
 }

@@ -95,6 +95,28 @@ public class LostArticleServiceImpl implements LostArticleService {
         }
 
     }
+    @Transactional
+    @Override
+    public boolean deleteArticle(Integer lostArticleId,Integer userId) throws LostArticleException {
+        try {
+//            删除文章所在路径
+            String userStr = userId.toString();
+            String lostArticleStr = lostArticleId.toString();
+            String delePath = "/upload/item/"+userStr+"/lostArticle/"+lostArticleStr;
+//            删除路径对应文件
+           ImageUtil.deleteFileOrpath(delePath);
+
+            int deleNUm = lostArticleMapper.deleById(lostArticleId);
+            if (deleNUm<=0){
+                return false;
+            }else {
+                return true;
+            }
+        }catch (Exception e){
+            throw new LostArticleException(e.getMessage());
+        }
+
+    }
 
     private void addArticleImg(LostArticle lostArticle, ImageHolder lostArticleInputStream){
         //获取图片目录的相对值路径

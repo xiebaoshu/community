@@ -304,6 +304,21 @@ public class LostArticleController {
 
     }
 
+    @PostMapping("/delete")
+    public String lostArticleList(@RequestParam(name = "articleId") Integer articleId,
+                                  HttpServletRequest request){
+        UserInfo user = (UserInfo) request.getSession().getAttribute("user");
+        Integer userId = user.getUserId();
+//        userId用于删除本地存储图片和所在文件夹
+        try {
+            lostArticleService.deleteArticle(articleId,userId);
+        }catch (LostArticleException e){
+            System.out.println(e.getMessage());
+        }
+        return "redirect:/admin/lost";
+
+    }
+
 
 
 

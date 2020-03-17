@@ -8,4 +8,5 @@ import com.hzu.community.exceptions.LostArticleException;
 public interface LostArticleService {
    public LostArticleExecution saveArticle(LostArticle lostArticle, ImageHolder imageHolder) throws LostArticleException;
    public LostArticleExecution updateArticle(LostArticle lostArticle, ImageHolder imageHolder) throws LostArticleException;
+   public boolean deleteArticle(Integer lostArticleId,Integer userId) throws LostArticleException;
 }
