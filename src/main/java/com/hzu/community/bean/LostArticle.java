@@ -1,6 +1,7 @@
 package com.hzu.community.bean;
 
 import java.util.Date;
+import java.util.List;
 
 public class LostArticle {
     private Integer lostArticleId;
@@ -20,7 +21,16 @@ public class LostArticle {
     private Date createTime;
     private Date finishTime;
     private UserInfo finishUser;
+//    一级评论
+    private List<Comment> commentList;
 
+    public List<Comment> getCommentList() {
+        return commentList;
+    }
+
+    public void setCommentList(List<Comment> commentList) {
+        this.commentList = commentList;
+    }
 
     public String getPhone() {
         return phone;
@@ -131,5 +141,26 @@ public class LostArticle {
 
     public void setArticleImg(String articleImg) {
         this.articleImg = articleImg;
+    }
+
+    @Override
+    public String toString() {
+        return "LostArticle{" +
+                "lostArticleId=" + lostArticleId +
+                ", articleCategory=" + articleCategory +
+                ", userInfo=" + userInfo +
+                ", area=" + area +
+                ", itemCategory=" + itemCategory +
+                ", articleImg='" + articleImg + '\'' +
+                ", articleTitle='" + articleTitle + '\'' +
+                ", phone='" + phone + '\'' +
+                ", articleContent='" + articleContent + '\'' +
+                ", areaDetail='" + areaDetail + '\'' +
+                ", itemDetail='" + itemDetail + '\'' +
+                ", createTime=" + createTime +
+                ", finishTime=" + finishTime +
+                ", finishUser=" + finishUser +
+                ", commentList=" + commentList +
+                '}';
     }
 }

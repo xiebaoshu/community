@@ -3,10 +3,7 @@ package com.hzu.community;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.hzu.community.bean.*;
-import com.hzu.community.mapper.AreaMapper;
-import com.hzu.community.mapper.ArticleCategoryMapper;
-import com.hzu.community.mapper.LostArticleMapper;
-import com.hzu.community.mapper.UserInfoMapper;
+import com.hzu.community.mapper.*;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -29,6 +26,8 @@ class CommunityApplicationTests {
     LostArticleMapper lostArticleMapper;
     @Autowired
     UserInfoMapper userInfoMapper;
+    @Autowired
+    CommentMapper commentMapper;
     @Test
     void areaMapperTest(){
         List<Area> areaList = areaMapper.getArea();
@@ -71,16 +70,21 @@ class CommunityApplicationTests {
         lostArticle.setCreateTime(date);
         lostArticleMapper.addLostArticle(lostArticle);*/
 
-        LostArticle lostArticle = new LostArticle();
 
-        // 开启分页
-        PageHelper.startPage(1, 10);
-        List<LostArticle> list = new ArrayList<>();
-        list=lostArticleMapper.getArticleList(lostArticle,30);
-        PageInfo<LostArticle> articlePageInfo = new PageInfo<>(list);
-        for (int i = 0; i < articlePageInfo.getList().size(); i++) {
-            System.out.println(articlePageInfo.getList().get(i).getArticleTitle());
-        }
+
+//        LostArticle lostArticle = new LostArticle();
+//
+//        // 开启分页
+//        PageHelper.startPage(1, 10);
+//        List<LostArticle> list = new ArrayList<>();
+//        list=lostArticleMapper.getArticleList(lostArticle,30);
+//        PageInfo<LostArticle> articlePageInfo = new PageInfo<>(list);
+//        for (int i = 0; i < articlePageInfo.getList().size(); i++) {
+//            System.out.println(articlePageInfo.getList().get(i).getArticleTitle());
+//        }
+
+          LostArticle lostArticle = lostArticleMapper.findArticleById(102);
+        System.out.println(lostArticle);
 
 
 
@@ -100,6 +104,13 @@ class CommunityApplicationTests {
 
         UserInfo user = userInfoMapper.findUserInfoById(1);
         System.out.println(user.getUserName());
+    }
+    @Test
+    void CommentMapperTest(){
+
+        Comment comment = new Comment();
+        comment.setCommentId(89L);
+        commentMapper.deleComment(comment);
     }
 
 }

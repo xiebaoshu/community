@@ -6,12 +6,11 @@ import com.hzu.community.dto.ImageHolder;
 import com.hzu.community.dto.LostArticleExecution;
 import com.hzu.community.enums.LostArticleEnum;
 import com.hzu.community.exceptions.LostArticleException;
+import com.hzu.community.mapper.CommentMapper;
 import com.hzu.community.mapper.LostArticleMapper;
 import com.hzu.community.mapper.UserInfoMapper;
-import com.hzu.community.service.AreaService;
-import com.hzu.community.service.ArticleCategoryService;
-import com.hzu.community.service.ItemCategoryService;
-import com.hzu.community.service.LostArticleService;
+import com.hzu.community.service.*;
+import com.hzu.community.service.impl.CommentServiceImpl;
 import com.hzu.community.util.HttpServletRequestUtil;
 import com.sun.net.httpserver.Authenticator;
 import org.apache.catalina.Session;
@@ -30,11 +29,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
-import java.util.ArrayList;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Controller
 @RequestMapping("/lost")
@@ -51,6 +46,10 @@ public class LostArticleController {
     LostArticleMapper lostArticleMapper;
     @Autowired
     UserInfoMapper userInfoMapper;
+    @Autowired
+    CommentMapper commentMapper;
+    @Autowired
+    CommentService commentService;
 
     @GetMapping("")
     public String lostArticleList(Model model,
@@ -317,6 +316,14 @@ public class LostArticleController {
         }
         return "redirect:/admin/lost";
 
+    }
+
+    @GetMapping("/article/{articleId}")
+    public String articleDetail(@PathVariable("articleId") Integer articleId,Model model
+                                ){
+        LostArticle lostArticle = lostArticleMapper.findArticleById(articleId);
+        model.addAttribute("article",lostArticle);
+        return "article-detail";
     }
 
 

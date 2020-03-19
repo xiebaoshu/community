@@ -117,7 +117,8 @@ public interface LostArticleMapper {
             @Result(column="finisher_id",property="finishUser",one = @One(select = "com.hzu.community.mapper.UserInfoMapper.findUserInfoById")),
             @Result(column="article_img",property="articleImg"),
             @Result(column="finish_time",property="finishTime"),
-            @Result(column="finisher_id",property="finishUser",one = @One(select = "com.hzu.community.mapper.UserInfoMapper.findUserInfoById"))
+            @Result(column="finisher_id",property="finishUser",one = @One(select = "com.hzu.community.mapper.UserInfoMapper.findUserInfoById")),
+            @Result(column="lost_article_id",property="commentList",many = @Many(select = "com.hzu.community.mapper.CommentMapper.findCommentListById")),
     })
     public LostArticle findArticleById(@Param("articleId") Integer articleId);
 

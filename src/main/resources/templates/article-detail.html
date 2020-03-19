@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>页面详情</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
+    <link rel="stylesheet" href="/static/css/me.css" >
+    <link rel="stylesheet" href="/static/css/layui.css">
+</head>
+<body>
+<!--导航栏-->
+<!--inverter反转，segment片段-->
+<nav class="ui inverted attached segment">
+    <div class="ui container">
+        <div class="ui inverted secondary stackable menu">
+            <h2 class="ui teal header item">Blog</h2>
+            <!--m-item无样式作用，用于js绑定-->
+            <a href="#" class="item m-mobile-hide m-item"><i class="home icon"></i>首页</a>
+            <a href="#" class="item m-mobile-hide m-item"><i class="idea icon"></i>分类</a>
+            <a href="#" class="item m-mobile-hide m-item"><i class="tag icon"></i>标签</a>
+            <a href="#" class="item m-mobile-hide m-item"><i class="info icon"></i>关于我</a>
+            <div class="righ item m-mobile-hide m-item-search">
+                <div class="ui icon input inverted">
+                    <input type="text" placeholder="Search....">
+                    <i class="search link icon"></i>
+
+                </div>
+            </div>
+
+            <div class="right item  m-mobile-hide">
+                <div>
+                    <p>你好，用户</p>
+                </div>
+                <a href="http://www.baidu.com" style="padding-left: 10px">
+                    <img src="/static/images/user.jpg" alt="" class="ui avatar image">
+                </a>
+            </div>
+            <!--手机端自适应右上角菜单按钮-->
+            <div class="ui inverted secondary m-mobile-show m-right-top menu ">
+                <a href="#" class="ui black icon button" id="mobile-btn">
+                    <i class="sidebar icon"></i>
+                </a>
+                <a href="#" class="ui black icon button" id="mobile-btn1">
+                    <i class="search link icon"></i>
+                </a>
+                <a href="#" class="ui black icon button" id="mobile-btn2">
+                    <img src="/static/images/user.jpg" alt="" class="ui avatar image">
+                </a>
+            </div>
+
+
+
+        </div>
+    </div>
+</nav>
+
+<!--中间内容-->
+<div class="m-container-small m-padded-tb-big">
+    <div class="ui container">
+        <!--头部信息-->
+        <div class="ui top attached segment">
+            <!--horizontal link list 横形列表-->
+            <div class="ui horizontal link list">
+                <div class="item">
+                    <!--avatar圆形图片-->
+                    <img src="/static/images/user.jpg" alt="" class="ui avatar image m-pic-avatar"
+                    th:src="${article.userInfo.userImg}">
+                    <div class="content"><a href="#" class="header" th:text="${article.userInfo.userName}">用户</a></div>
+
+                </div>
+                <div class="item">
+                    <i class="calendar icon"></i><span th:text="${#dates.format(article.createTime,'yyyy-MM-dd')}">2020-2-27</span>
+                </div>
+                <div class="item">
+                    <i class="university icon"></i><span th:text="${article.area.areaName}">旭日大楼</span>
+                </div>
+
+            </div>
+        </div>
+        <!--图片区域-->
+        <div class="ui attached segment">
+            <img src="/static/images/chengxiao.jpg" alt="" class="ui fluid rounded image"
+            th:src="${article.articleImg}">
+        </div>
+        <!--内容区域-->
+        <div class="ui attached padded segment">
+            <div class="ui right aligned basic segment">
+                <div class="ui orange basic label"
+                th:text="${article.articleCategory.articleCategoryName}">失物招领</div>
+            </div>
+            <!--正文区域-->
+            <h2 class="ui center aligned header" th:text="${article.articleTitle}">捡到一部手机</h2>
+            <br>
+            <div id="content" class="typo  typo-selection js-toc-content m-padded-lr-responsive m-padded-tb-large"
+            th:text="${article.articleContent}">
+                本人与2020/2/29号早上第三节课下课后，于旭日大楼305捡到手机一部，图片如上，请失主按照下列信息及时联系我
+            </div>
+            <!--标签-->
+            <!--<div class="m-padded-lr-responsive">-->
+                <!--<div class="ui basic teal left pointing label">方法论</div>-->
+            <!--</div>-->
+        </div>
+        <!--作者信息-->
+        <div class="ui attached positive message">
+            <div class="ui middle aligned grid">
+                <div class="eight wide column">
+                    <ui class="list">
+                        <li>作者：<span th:text="${article.userInfo.userName}">用户</span></li>
+                        <li>时间：<span th:text="${#dates.format(article.createTime,'yyyy-MM-dd')}">2020/2/29</span></li>
+                        <li>班级：<span th:text="${article.userInfo.userClass}">18344594609</span></li>
+
+                    </ui>
+                </div>
+                <div class="eight wide column">
+                    <ui class="list">
+                        <li>完成者：<span th:text="${article.userInfo.userName}">用户</span></li>
+                        <li>时间：<span th:text="${#dates.format(article.createTime,'yyyy-MM-dd')}">2020/2/29</span></li>
+                        <li>班级：<span th:text="${article.userInfo.userClass}">18344594609</span></li>
+
+                    </ui>
+                </div>
+            </div>
+
+        </div>
+        <!--留言区域-->
+        <div class="ui bottom attached segment">
+            <!--评论信息-->
+            <div class="ui teal segment comment-area">
+              <div th:fragment="commentList">
+                  <!--因为该代码局部刷新，所以对应的js代码放在这里-->
+                  <script>
+                      $(function () {
+                          $(".reply").click(function () {
+                              $("#commentForm").show();
+                              $("#comment-btn").hide();
+                              $("#parentId").val($(this).attr("parentId"));
+                              $("#replyUserId").val($(this).attr("replyUserId"));
+
+                          });
+
+                          $(".del").click(function () {
+                              var msg = "您确定要删除该评论？";
+                              if (confirm(msg)==true){
+                                  var comment = {};
+                                  var parentId = $(this).attr("parentId");
+                                  var url = "/lost/comment/del";
+                                  comment.commentId = $(this).attr("commentId");
+                                  if (parentId!=null) {
+                                      comment.parentComment = {
+                                          commentId : parentId
+                                      } ;
+                                  }
+
+                                  var formData = new FormData();
+                                  formData.append('commentStr',JSON.stringify(comment));
+                                  $.ajax({
+                                      url:url,
+                                      type:'POST',
+                                      data:formData,
+                                      contentType:false,
+                                      processData:false,
+                                      cache:false,
+                                      success:function (data) {
+                                          if(data.success){
+
+                                              var commentUrl = "/lost/comment/"+$("#articleId").val();
+                                              //局部刷新
+                                              $('.comment-area').load(commentUrl);
+
+                                          }else {
+                                              alert('删除失败'+data.msg);
+                                          }
+
+                                      }
+
+                                  });
+                              }
+
+
+                          });
+
+                      });
+
+                  </script>
+                <div class="ui threaded comments">
+                    <h3 class="ui dividing header">Comments</h3>
+
+                    <div class="comment" th:each="coment:${commentList}">
+                        <a class="avatar">
+                            <img src="/static/images/user.jpg"
+                            th:src="${coment.user.userImg}">
+                        </a>
+                        <div class="content">
+                            <a class="author"
+                            th:text="${coment.user.userName}">Elliot Fu</a>
+                            <div class="ui mini basic teal left pointing label m-padded-mini"
+                                 th:if="${coment.isAdmin()}">
+                            博主</div>
+                            <div class="metadata">
+                                <span class="date"
+                                th:text="${coment.createTime}">Yesterday at 12:30AM</span>
+                            </div>
+                            <div class="text">
+                                <p th:text="${coment.content}">This has been very useful for my research. Thanks as well!</p>
+                            </div>
+                            <div class="actions">
+                                <a class="reply"
+                                   th:unless="${user.userId}==${coment.user.userId}"
+                                   th:attr="parentId=${coment.commentId},replyUserId=${coment.user.userId}"
+                                >回复</a>
+                                <a class="del"
+                                   th:if="${user.userId}==${coment.user.userId}"
+                                   th:attr="parentId=null,commentId=${coment.commentId}"
+                                >删除</a>
+                            </div>
+                        </div>
+                        <div class="comments"
+                             th:if="${coment.commentList.size()>0}">
+                            <div class="commentList">
+                                <div class="comment"
+                                     th:each="comments:${coment.commentList}"
+                                >
+                                    <a class="avatar">
+                                        <img src="/static/images/user.jpg"
+                                             th:src="${comments.user.userImg}">
+                                    </a>
+                                    <div class="content">
+                                        <a class="author"
+                                           th:text="${comments.user.userName}">Jenny Hess</a>
+                                        <div class="ui mini basic teal left pointing label m-padded-mini"
+                                             th:if="${comments.isAdmin()}">博主
+                                        </div>
+                                        <span th:text="'@'+${comments.replyUser.userName}"
+                                              class="m-text-color">@小红</span>
+                                        <div class="ui mini basic teal left pointing label m-padded-mini"
+                                             th:if="${comments.replyIsAdmin}">博主</div>
+                                        <div class="metadata">
+                                        <span class="date"
+                                              th:text="${comments.createTime}">Just now</span>
+                                        </div>
+                                        <div class="text"
+                                             th:text="${comments.content}">
+                                            Elliot you are always so right :)
+                                        </div>
+                                        <div class="actions">
+                                            <a class="reply"
+                                               th:unless="${user.userId}==${comments.user.userId}"
+                                               th:attr="parentId=${coment.commentId},replyUserId=${comments.user.userId}">回复</a>
+                                            <a class="del"
+                                               th:if="${user.userId}==${comments.user.userId}"
+                                               th:attr="parentId=${coment.commentId},commentId=${comments.commentId}">删除</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+              </div>
+            </div>
+            <!--发表评论区域-->
+            <form th:action="@{/lost/comment/}" method="post" class="ui form segment" id="commentForm" style="display: none;" >
+                <div class="field">
+                    <textarea name="content" placeholder="请输入评论信息..." id="input-content"></textarea>
+                </div>
+                <input type="text" name="articleId" id="articleId" hidden="hidden" th:value="${articleId}">
+                <input type="text" name="parentId" id="parentId" hidden="hidden">
+                <input type="text" name="replyUserId" id="replyUserId" hidden="hidden">
+                <div class="field">
+                    <div class="ui grid">
+                        <div class="ui two wide column">
+
+                        </div>
+                        <div class="ui right aligned  sixteen wide column">
+                            <button class="ui  teal button " id="cancel-btn"><i class="edit icon"></i>取消</button>
+                            <button class="ui  teal button " id="submit-btn"><i class="edit icon"></i>发布</button>
+                        </div>
+
+                    </div>
+                </div>
+            </form>
+
+            <!--发布按钮区域-->
+            <div class="field">
+                <div class="ui grid">
+                    <div class="ui eight wide column">
+
+                    </div>
+                    <div class="ui right aligned eight wide column">
+                        <button class="ui  teal button m-mobile-wide" id="comment-btn"><i class="edit icon"></i>评论</button>
+
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+<!--底部-->
+<!--vertical垂直-->
+<footer class="ui inverted segment vertical segment m-padded-tb-massive">
+    <div class="ui container center aligned">
+        <!--grid布局，共分16份,divided分割线-->
+        <div class="ui inverted stackable divided grid">
+            <div class="three wide column">
+                <div class="ui inverted link list">
+                    <div class="item">
+                        <img src="/static/images/hzu.jpg" alt="" class="ui rounded image" style="width: 110px"/>
+                    </div>
+                </div>
+
+            </div>
+            <div class="three wide column">
+                <h4 class="ui inverted header m-text-spaced m-opacity-mini">最新资讯</h4>
+                <div class="ui inverted link list">
+                    <a href="" class="item">用户故事</a>
+                    <a href="" class="item">用户故事</a>
+                    <a href="" class="item">用户故事</a>
+                </div>
+            </div>
+
+            <div class="three wide column">
+
+                <h4 class="ui inverted header m-text-spaced m-opacity-mini">最新资讯</h4>
+                <div class="ui inverted link list">
+                    <a href="" class="item">用户故事</a>
+                    <a href="" class="item">用户故事</a>
+                    <a href="" class="item">用户故事</a>
+                </div>
+            </div>
+
+            <div class="seven wide column">
+                <h4 class="ui inverted header m-text-spaced m-opacity-mini">最新资讯</h4>
+                <p class="m-text-spaced m-opacity-mini">这是一个校园社区</p>
+
+            </div>
+
+        </div>
+
+        <div class="ui inverted section divider"></div>
+        <p class="m-text-thin m-text-spaced m-opacity-mini">Copyright © 2019 - 2020 Xiehao Designed by Xiehao</p>
+
+    </div>
+
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+<script src="/static/layui.js"></script>
+
+<script>
+
+    // 手机端右上角按钮点击事件
+    $('#mobile-btn').click(function () {
+        $('.m-item').toggleClass('m-mobile-hide');
+    });
+
+    $('#mobile-btn1').click(function () {
+        $('.m-item-search').toggleClass('m-mobile-hide');
+    });
+    // 评论表单相关按钮
+    $("#comment-btn").click(function () {
+       $("#commentForm").toggle();
+        $("#comment-btn").toggle();
+        $('#commentForm').attr("action",'/lost/comment');
+    });
+    $("#cancel-btn").click(function () {
+        clear();
+        $("#commentForm").hide();
+        $("#comment-btn").toggle();
+        return false;
+    });
+    function clear(){
+        $("#input-content").val('');
+        $("#input-content").attr("placeholder", "请输入评论信息...");
+        $("#parentId").val(null);
+    };
+
+    $("#submit-btn").click(function () {
+
+        var comment = {};
+        var url = $("#commentForm").attr("action");
+        comment.content = $('#input-content').val();
+        comment.articleId = $('#articleId').val();
+        comment.parentComment = {
+            commentId : $('#parentId').val()
+        } ;
+        comment.replyUser = {
+            userId : $('#replyUserId').val()
+        } ;
+        var formData = new FormData();
+        formData.append('commentStr',JSON.stringify(comment));
+        $.ajax({
+            url:url,
+            type:'POST',
+            data:formData,
+            contentType:false,
+            processData:false,
+            cache:false,
+            success:function (data) {
+                if(data.success){
+
+                    var commentUrl = "/lost/comment/"+$("#articleId").val();
+                    $("#commentForm").hide();
+                    $("#comment-btn").toggle();
+                    clear();
+                    //局部刷新
+                    $('.comment-area').load(commentUrl);
+
+                }else {
+                    alert('评论失败');
+                }
+
+            }
+
+        });
+      return false;
+
+    });
+    // 页面第一次加载，自动局部载入评论的片段
+    $(function () {
+        var url = "/lost/comment/"+$("#articleId").val();
+        $('.comment-area').load(url);
+
+    });
+
+
+
+</script>
+</body>
+</html>
