@@ -2,6 +2,7 @@ package com.hzu.community.config;
 
 import com.hzu.community.bean.UserInfo;
 import com.hzu.community.mapper.UserInfoMapper;
+import com.hzu.community.service.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 
@@ -16,7 +17,9 @@ import javax.servlet.http.HttpSession;
 @Service
 public class LoginHandlerInterceptor implements HandlerInterceptor {
     @Autowired
-    UserInfoMapper userInfoMapper;
+    private UserInfoMapper userInfoMapper;
+    @Autowired
+    private NotificationService notificationService;
 //    拦截器service调用注入，需要在webmvcconfig，先注入拦截器service，否则无法取出mapper
     //目标方法执行之前
     @Override
@@ -32,6 +35,8 @@ public class LoginHandlerInterceptor implements HandlerInterceptor {
                     if (user != null) {
                         HttpSession session = request.getSession();
                         session.setAttribute("user", user);
+                        Long unreadCount = notificationService.unreadCount(user.getUserId());
+                        session.setAttribute("unreadCount", unreadCount);
                     }
                     break;
 

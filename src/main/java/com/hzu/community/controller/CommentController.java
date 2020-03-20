@@ -2,10 +2,13 @@ package com.hzu.community.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hzu.community.bean.Comment;
+import com.hzu.community.bean.Notification;
 import com.hzu.community.bean.UserInfo;
+import com.hzu.community.enums.NotificationTypeEnum;
 import com.hzu.community.mapper.CommentMapper;
 import com.hzu.community.mapper.LostArticleMapper;
 import com.hzu.community.service.CommentService;
+import com.hzu.community.service.NotificationService;
 import com.hzu.community.util.HttpServletRequestUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -29,6 +32,8 @@ public class CommentController {
     private CommentMapper commentMapper;
     @Autowired
     private CommentService commentService;
+    @Autowired
+    private NotificationService notificationService;
 
 
 //    加载文章的评论，并返回评论区域代码块，供前端局部刷新
@@ -61,28 +66,15 @@ public class CommentController {
             modelmap.put("msg",e.getMessage());
             return modelmap;
         }
-//        封装数据并判断是不是博主
+//        设置comment数据并生成信息通知notification
+         Notification notification = new Notification();
+         getCandN(request, comment,notification);
 
-        UserInfo user = (UserInfo) request.getSession().getAttribute("user");
-        comment.setUser(user);
-        Date date = new Date();
-        comment.setCreateTime(date);
-
-        Integer ownerId = lostArticleMapper.findArticleById(comment.getArticleId()).getUserInfo().getUserId();
-        if (ownerId == user.getUserId()){
-            comment.setAdmin(true);
-        }else {
-            comment.setAdmin(false);
-        }
-        if (ownerId == comment.getReplyUser().getUserId()){
-            comment.setReplyIsAdmin(true);
-        }else {
-            comment.setReplyIsAdmin(false);
-        }
-//        将评论插入数据库中
+//        将评论插入数据库中,且新增信息通知
         try {
-            int num = commentMapper.addComment(comment);
-            if (num>0){
+            int cNum = commentMapper.addComment(comment);
+            int nNum = notificationService.add(notification);
+            if (cNum>0 && nNum>0){
                 modelmap.put("success",true);
             }
 
@@ -96,7 +88,10 @@ public class CommentController {
 
     }
 
-//    删除评论
+
+
+
+    //    删除评论
     @PostMapping("/lost/comment/del")
     @ResponseBody
     public Map<String,Object> delComment(
@@ -130,5 +125,56 @@ public class CommentController {
         return modelmap;
 
     }
+
+
+    private void getCandN(HttpServletRequest request, Comment comment,Notification notification) {
+        UserInfo user = (UserInfo) request.getSession().getAttribute("user");
+        comment.setUser(user);
+        Date date = new Date();
+        comment.setCreateTime(date);
+//        与文章拥有者对比，判断是否为博主
+        UserInfo owner = lostArticleMapper.findArticleById(comment.getArticleId()).getUserInfo();
+        if (owner.getUserId() == user.getUserId()){
+            comment.setAdmin(true);
+        }else {
+            comment.setAdmin(false);
+        }
+        if (owner.getUserId() == comment.getReplyUser().getUserId()){
+            comment.setReplyIsAdmin(true);
+        }else {
+            comment.setReplyIsAdmin(false);
+        }
+//        生成信息通知
+        if (comment.getParentComment().getCommentId()==null){
+//            无父评论，生成回复文章信息通知
+
+//              信息发出者
+            notification.setNotifier(comment.getUser());
+//              信息接收者
+            notification.setReceiver(owner);
+//              文章id和文章类型id
+            notification.setArticleId(comment.getArticleId());
+            notification.setArticleParCategory(1);
+            notification.setType(NotificationTypeEnum.REPLY_ARTICLE.getType());
+            notification.setCreateTime(new Date());
+            notification.setOuterTitle(lostArticleMapper.findArticleById(comment.getArticleId()).getArticleTitle());
+//             设置未读状态
+            notification.setStatus(false);
+
+        }else {
+//            生成回复评论信息通知
+
+            notification.setNotifier(comment.getUser());
+            notification.setReceiver(comment.getReplyUser());
+            notification.setArticleId(comment.getArticleId());
+            notification.setArticleParCategory(1);
+            notification.setType(NotificationTypeEnum.REPLY_COMMENT.getType());
+            notification.setCreateTime(new Date());
+            notification.setOuterTitle(comment.getContent());
+            notification.setStatus(false);
+        }
+    }
+
+
 
 }

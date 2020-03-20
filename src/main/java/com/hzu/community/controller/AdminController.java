@@ -4,9 +4,11 @@ package com.hzu.community.controller;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.hzu.community.bean.LostArticle;
+import com.hzu.community.bean.Notification;
 import com.hzu.community.bean.UserInfo;
 import com.hzu.community.mapper.LostArticleMapper;
 import com.hzu.community.service.ArticleCategoryService;
+import com.hzu.community.service.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,9 +25,11 @@ import java.util.List;
 
 public class AdminController {
     @Autowired
-    ArticleCategoryService articleCategoryService;
+    private ArticleCategoryService articleCategoryService;
     @Autowired
-    LostArticleMapper lostArticleMapper;
+    private LostArticleMapper lostArticleMapper;
+    @Autowired
+    private NotificationService notificationService;
 //    个人页面失物招领模块初始化
     @GetMapping("/admin/{parCategory}")
     public String adminInit(@PathVariable("parCategory") String  parCategory,
@@ -65,6 +69,12 @@ public class AdminController {
                 break; //可选
             case "business" :
                 //语句
+                break; //可选
+            case "notification" :
+                List<Notification> notificationList = new ArrayList<>();
+                notificationList = notificationService.getList(owner.getUserId());
+                PageInfo<Notification> notificationInfo = new PageInfo<>(notificationList);
+                model.addAttribute("notificationInfo",notificationInfo);
                 break; //可选
 
 

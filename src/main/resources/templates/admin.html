@@ -18,7 +18,12 @@
             <!--m-item无样式作用，用于js绑定-->
             <a href="#" class="item m-mobile-hide m-item"><i class="home icon"></i>首页</a>
             <a href="#" class="item m-mobile-hide m-item"><i class="idea icon"></i>分类</a>
-            <a href="#" class="item m-mobile-hide m-item"><i class="tag icon"></i>标签</a>
+            <a href="" class="item m-mobile-hide m-item"
+            th:href="@{/admin/notification}"><i class="alarm icon"></i>通知
+                <div class="ui inverted basic left pointing label"
+                      th:text="${session.unreadCount}">未读
+                </div>
+            </a>
             <a href="#" class="item m-mobile-hide m-item"><i class="info icon"></i>关于我</a>
             <div class="right item m-mobile-hide m-item-search">
                 <div class="ui icon input inverted">
@@ -30,10 +35,11 @@
 
             <div class="right item  m-mobile-hide">
                 <div>
-                    <p>你好，用户</p>
+                    <p th:href="'你好,'+${session.user.userName}">你好，用户</p>
                 </div>
                 <a href="http://www.baidu.com" style="padding-left: 10px">
-                    <img src="../static/images/user.jpg" alt="" class="ui avatar image">
+                    <img src="../static/images/user.jpg" alt="" class="ui avatar image"
+                    th:src="${session.user.userImg}">
                 </a>
             </div>
             <!--手机端自适应右上角菜单按钮-->
@@ -67,11 +73,12 @@
                         <div class="ui horizontal link list">
                             <div class="item">
                                 <!--avatar圆形图片-->
-                                <img src="../static/images/user.jpg" alt="" class="ui avatar image" style="width: 160px!important;height: 160px!important;">
+                                <img src="../static/images/user.jpg" alt="" class="ui avatar image" style="width: 160px!important;height: 160px!important;"
+                                th:src="${session.user.userImg}">
 
                             </div>
                             <div class="item tear">
-                                <h1 class="header">用户</h1>
+                                <h1 class="header" th:text="${session.user.userName}">用户</h1>
                                 <div>
                                     <a href="#" style="margin-top:10px!important;">编辑资料</a>
                                 </div>
@@ -81,7 +88,8 @@
                     <!--已发布信息区域-->
                     <div class="ui segment">
 
-                        <div class="ui menu stackable">
+                        <div class="ui menu stackable"
+                       >
                             <a th:class="${parCategory}=='lost'?'active item':'item'"
                                th:href="@{/admin/lost}"
                                 >
@@ -103,15 +111,20 @@
                                th:href="@{/admin/university}">
                                 <i class="student icon"></i> 校园公告
                             </a>
-                            <a th:class="${parCategory}=='business'?'active item':'item'"
+                          <!--  <a th:class="${parCategory}=='business'?'active item':'item'"
                                th:href="@{/admin/business}">
                                 <i class="travel icon"></i> 企业信息
+                            </a>-->
+                            <a th:class="${parCategory}=='business'?'active item':'item'"
+                               th:href="@{/admin/notification}">
+                                <i class="alarm icon"></i> 我的通知
                             </a>
 
 
                         </div>
 
-                        <table class="ui celled stackable table">
+                        <table class="ui celled stackable table"
+                               th:unless="${notificationInfo}">
                             <thead class="m-mobile-hide">
                             <tr>
 
@@ -151,6 +164,42 @@
                             </tr>
                             </tfoot>
                         </table>
+
+                        <div class="ui  message" th:if="${notificationInfo}">
+                            <div class="header">我的通知</div>
+                            <div class="ui divider"></div>
+                            <ul class="list">
+                                <li th:each="notification:${notificationInfo.getList()}">
+                                    <div>
+                                        <a href="#" th:text="${notification.notifier.userName}">谢豪</a>
+                                        <span th:text="${notification.type}==1?'评论了文章':'发表了评论'">评论了文章</span>
+                                        <a href="#" th:href="@{'/notification/'+${notification.id}}"
+                                        th:text="${notification.outerTitle}">123</a>
+                                        <div class="ui teal basic left pointing label"
+                                             th:unless="${notification.status}" th:text="未读">未读</div>
+                                    </div>
+
+                                </li>
+
+                            </ul>
+                            <div class="ui divider"></div>
+                            <div class="ui mini pagination menu">
+                                <a class="item"
+                                   th:href="@{'/admin/'+${parCategory}(page=${notificationInfo.pageNum - 1})}"
+                                   th:style="${notificationInfo.pageNum - 1}<=0?'pointer-events: none;':'pointer-events:true'">
+                                    上一页
+                                </a>
+                                <a class="item"
+                                   th:href="@{'/admin/'+${parCategory}(page=${notificationInfo.pageNum + 1})}"
+                                   th:style="${notificationInfo.pageNum + 1}>${notificationInfo.pages}?'pointer-events: none;':'pointer-events:true'"
+                                >
+                                    下一页
+                                </a>
+                            </div>
+
+                        </div>
+
+
                     </div>
 
 
@@ -197,6 +246,7 @@
                                     兼职信息
 
                                 </a>
+
                             </div>
                         </div>
 

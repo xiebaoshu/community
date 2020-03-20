@@ -28,6 +28,8 @@ class CommunityApplicationTests {
     UserInfoMapper userInfoMapper;
     @Autowired
     CommentMapper commentMapper;
+    @Autowired
+    NotificationMapper notificationMapper;
     @Test
     void areaMapperTest(){
         List<Area> areaList = areaMapper.getArea();
@@ -112,5 +114,6 @@ class CommunityApplicationTests {
         comment.setCommentId(89L);
         commentMapper.deleComment(comment);
     }
+
 
 }
