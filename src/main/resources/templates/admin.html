@@ -171,8 +171,8 @@
                             <ul class="list">
                                 <li th:each="notification:${notificationInfo.getList()}">
                                     <div>
-                                        <a href="#" th:text="${notification.notifier.userName}">谢豪</a>
-                                        <span th:text="${notification.type}==1?'评论了文章':'发表了评论'">评论了文章</span>
+                                        <a href="#" th:text="${notification.notifier.userName}" >谢豪</a>
+                                        <span th:text="${notification.type}==1?'评论了文章':'回复了评论'">评论了文章</span>
                                         <a href="#" th:href="@{'/notification/'+${notification.id}}"
                                         th:text="${notification.outerTitle}">123</a>
                                         <div class="ui teal basic left pointing label"

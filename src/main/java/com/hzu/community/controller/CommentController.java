@@ -170,7 +170,7 @@ public class CommentController {
             notification.setArticleParCategory(1);
             notification.setType(NotificationTypeEnum.REPLY_COMMENT.getType());
             notification.setCreateTime(new Date());
-            notification.setOuterTitle(comment.getContent());
+            notification.setOuterTitle(commentMapper.findCommentById(comment.getParentComment().getCommentId()).getContent());
             notification.setStatus(false);
         }
     }
