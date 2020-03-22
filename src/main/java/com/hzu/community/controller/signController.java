@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.List;
+import java.util.UUID;
 
 @Controller
 public class signController {
@@ -51,9 +52,12 @@ public class signController {
         List<UserInfo> list = userInfoMapper.sign(username,password);
         if (list.size()>0){
 
-            String userId =  list.get(0).getUserId().toString();
-            System.out.println(userId);
-            Cookie cookie = new Cookie("userId",userId);
+            UserInfo user =  list.get(0);
+            String token = UUID.randomUUID().toString();
+            user.setToken(token);
+            userInfoMapper.update(user);
+
+            Cookie cookie = new Cookie("token",token);
             cookie.setMaxAge(60 * 60 * 24 * 30 * 6);
             response.addCookie(cookie);
             return "redirect:/lost";
@@ -61,5 +65,14 @@ public class signController {
             model.addAttribute("msg","账号密码错误");
             return "sign";
         }
+    }
+    @GetMapping("/logout")
+    public String logout(HttpServletRequest request,
+                         HttpServletResponse response) {
+        request.getSession().removeAttribute("user");
+        Cookie cookie = new Cookie("token", null);
+        cookie.setMaxAge(0);
+        response.addCookie(cookie);
+        return "redirect:/";
     }
 }
