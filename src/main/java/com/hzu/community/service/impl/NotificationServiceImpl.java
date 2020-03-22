@@ -36,4 +36,9 @@ public class NotificationServiceImpl implements NotificationService {
     public Long unreadCount(Integer userId) {
         return notificationMapper.countUnread(userId);
     }
+
+    @Override
+    public List<Notification> replyList(Integer userId) {
+        return notificationMapper.replyList(userId);
+    }
 }

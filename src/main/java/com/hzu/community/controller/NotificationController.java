@@ -15,21 +15,29 @@ public class NotificationController {
     @Autowired
     private NotificationService notificationService;
 //    更改通知信息的未读状态
-    @GetMapping("/notification/{id}")
+    @GetMapping("/notification/{peopleId}/{id}")
     public String profile(HttpServletRequest request,
-                          @PathVariable(name = "id") Long id){
+                          @PathVariable(name = "id") Long id,
+                          @PathVariable(name = "peopleId") Integer peopleId){
         UserInfo user = (UserInfo) request.getSession().getAttribute("user");
+        Notification notification = notificationService.getById(id);
         if (user == null) {
             return "redirect:/";
-        }
-        Notification notification = notificationService.getById(id);
-        notification.setStatus(true);
-        int num = notificationService.update(notification);
-        if (num>=0){
-            return "redirect:/lost/article/" + notification.getArticleId();
+        }else if (user.getUserId()==peopleId){
+//            如果是当前用户的信息通知点击，则修改未读状态
+            notification.setStatus(true);
+            int num = notificationService.update(notification);
+            if (num>=0){
+                return "redirect:/lost/" + notification.getArticleId();
+            }else {
+                return "redirect:/";
+            }
         }else {
-            return "redirect:/";
+//            他人用户的点击，直接跳转
+            return "redirect:/lost/" + notification.getArticleId();
         }
+
+
 
     }
 }

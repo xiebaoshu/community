@@ -7,6 +7,7 @@ import com.hzu.community.bean.LostArticle;
 import com.hzu.community.bean.Notification;
 import com.hzu.community.bean.UserInfo;
 import com.hzu.community.mapper.LostArticleMapper;
+import com.hzu.community.mapper.UserInfoMapper;
 import com.hzu.community.service.ArticleCategoryService;
 import com.hzu.community.service.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,16 +31,28 @@ public class AdminController {
     private LostArticleMapper lostArticleMapper;
     @Autowired
     private NotificationService notificationService;
+    @Autowired
+    private UserInfoMapper userInfoMapper;
 //    个人页面失物招领模块初始化
-    @GetMapping("/admin/{parCategory}")
+    @GetMapping("/admin/{peopleId}/{parCategory}")
     public String adminInit(@PathVariable("parCategory") String  parCategory,
+                            @PathVariable("peopleId") Integer  peopleId,
                             Model model,HttpServletRequest request,
                             @RequestParam(name = "page", defaultValue = "1") Integer page
 
                             ){
 //        获取session中的用户数据
 
-        UserInfo owner = (UserInfo) request.getSession().getAttribute("user");
+        UserInfo user = (UserInfo) request.getSession().getAttribute("user");
+//         判断该个人页面是否属于当前用户
+        if (user.getUserId() == peopleId){
+            model.addAttribute("owner",true);
+        }else{
+            model.addAttribute("owner",false);
+        }
+
+        UserInfo people = userInfoMapper.findUserInfoById(peopleId);
+        model.addAttribute("people",people);
 //        设置当前页和每页的数据数量
         PageHelper.startPage(page,3);
 //        根据分类id查询文章
@@ -48,7 +61,7 @@ public class AdminController {
                 //失物招领模块
 
                 LostArticle lostArticle = new LostArticle();
-                lostArticle.setUserInfo(owner);
+                lostArticle.setUserInfo(people);
                 List<LostArticle> list = new ArrayList<>();
                 list=lostArticleMapper.getArticleList(lostArticle,null);
                 PageInfo<LostArticle> pageInfo = new PageInfo<>(list);
@@ -72,7 +85,13 @@ public class AdminController {
                 break; //可选
             case "notification" :
                 List<Notification> notificationList = new ArrayList<>();
-                notificationList = notificationService.getList(owner.getUserId());
+                if (user.getUserId()==peopleId){
+//                    我的通知列表
+                    notificationList = notificationService.getList(peopleId);
+                }else {
+                    notificationList = notificationService.replyList(peopleId);
+                }
+
                 PageInfo<Notification> notificationInfo = new PageInfo<>(notificationList);
                 model.addAttribute("notificationInfo",notificationInfo);
                 break; //可选

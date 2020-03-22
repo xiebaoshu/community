@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>用户页面</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
-    <link rel="stylesheet" href="../static/css/me.css" >
-    <link rel="stylesheet" href="../static/css/layui.css">
+    <link rel="stylesheet" href="/static/css/me.css" >
+    <link rel="stylesheet" href="/static/css/layui.css">
 </head>
 <body>
 <!--导航栏-->
@@ -35,12 +35,14 @@
 
             <div class="right item  m-mobile-hide">
                 <div>
-                    <p th:href="'你好,'+${session.user.userName}">你好，用户</p>
+                    <p th:text="'你好,'+${session.user.userName}">你好，用户</p>
                 </div>
                 <a href="http://www.baidu.com" style="padding-left: 10px">
-                    <img src="../static/images/user.jpg" alt="" class="ui avatar image"
+                    <img src="/static/images/user.jpg" alt="" class="ui avatar image"
                     th:src="${session.user.userImg}">
                 </a>
+                <span>&nbsp;&nbsp;</span>
+                <a href="/logout">  退出</a>
             </div>
             <!--手机端自适应右上角菜单按钮-->
             <div class="ui inverted secondary m-mobile-show m-right-top menu ">
@@ -51,7 +53,7 @@
                     <i class="search link icon"></i>
                 </a>
                 <a href="#" class="ui black icon button" id="mobile-btn2">
-                    <img src="../static/images/user.jpg" alt="" class="ui avatar image">
+                    <img src="/static/images/user.jpg" alt="" class="ui avatar image">
                 </a>
             </div>
 
@@ -73,13 +75,13 @@
                         <div class="ui horizontal link list">
                             <div class="item">
                                 <!--avatar圆形图片-->
-                                <img src="../static/images/user.jpg" alt="" class="ui avatar image" style="width: 160px!important;height: 160px!important;"
-                                th:src="${session.user.userImg}">
+                                <img src="/static/images/user.jpg" alt="" class="ui avatar image" style="width: 160px!important;height: 160px!important;"
+                                th:src="${people.userImg}">
 
                             </div>
                             <div class="item tear">
-                                <h1 class="header" th:text="${session.user.userName}">用户</h1>
-                                <div>
+                                <h1 class="header" th:text="${people.userName}">用户</h1>
+                                <div th:if="${owner}">
                                     <a href="#" style="margin-top:10px!important;">编辑资料</a>
                                 </div>
                             </div>
@@ -91,7 +93,7 @@
                         <div class="ui menu stackable"
                        >
                             <a th:class="${parCategory}=='lost'?'active item':'item'"
-                               th:href="@{/admin/lost}"
+                               th:href="@{|/admin/${peopleId}/lost|}"
                                 >
                                 <i class="privacy icon"></i> 失物招领
                             </a>
@@ -116,8 +118,9 @@
                                 <i class="travel icon"></i> 企业信息
                             </a>-->
                             <a th:class="${parCategory}=='business'?'active item':'item'"
-                               th:href="@{/admin/notification}">
-                                <i class="alarm icon"></i> 我的通知
+                               th:href="@{'/admin/'+${peopleId}+'/notification'}">
+                                <i class="alarm icon"></i>
+                                <span th:text="${owner}?'我的通知':'他的回复'">我的通知</span>
                             </a>
 
 
@@ -129,14 +132,14 @@
                             <tr>
 
                                 <th>标题</th>
-                                <th>操作</th>
+                                <th th:if="${owner}">操作</th>
                             </tr>
                             </thead>
                             <tbody>
                             <tr th:each="list:${pageInfo.getList()}">
 
                                 <td th:text="${list.articleTitle}">文章标题</td>
-                                <td>
+                                <td th:if="${owner}">
                                     <a th:href="@{/lost/update(articleId=${list.lostArticleId})}" class="ui mini teal basic button">编辑</a>
                                     <a href="#" class="ui mini red basic button delete-btn"
                                     th:attr="del_uri=@{/lost/delete(articleId=${list.lostArticleId})}">删除</a>
@@ -159,24 +162,28 @@
                                             下一页
                                         </a>
                                     </div>
-                                    <a href="#" class="ui mini right floated teal basic button">新增</a>
+                                    <a href="#" class="ui mini right floated teal basic button"
+                                       th:if="${owner}">新增</a>
                                 </th>
                             </tr>
                             </tfoot>
                         </table>
 
                         <div class="ui  message" th:if="${notificationInfo}">
-                            <div class="header">我的通知</div>
+                            <div class="header"
+                                 th:text="${owner}?'我的通知':'他的回复'">我的通知</div>
                             <div class="ui divider"></div>
                             <ul class="list">
                                 <li th:each="notification:${notificationInfo.getList()}">
                                     <div>
-                                        <a href="#" th:text="${notification.notifier.userName}">谢豪</a>
-                                        <span th:text="${notification.type}==1?'评论了文章':'发表了评论'">评论了文章</span>
-                                        <a href="#" th:href="@{'/notification/'+${notification.id}}"
+                                        <a href="" th:text="${notification.notifier.userName}"
+                                        th:href="@{|/admin/${notification.notifier.userId}/lost|}">谢豪</a>
+                                        <span th:text="${notification.type}==1?'评论了文章':'回复了评论'">评论了文章</span>
+                                        <a href="#" th:href="@{|/notification/${peopleId}/${notification.id}|}"
                                         th:text="${notification.outerTitle}">123</a>
                                         <div class="ui teal basic left pointing label"
-                                             th:unless="${notification.status}" th:text="未读">未读</div>
+                                             th:unless="${notification.status} " th:text="未读">未读</div>
+
                                     </div>
 
                                 </li>
@@ -274,7 +281,7 @@
             <div class="three wide column">
                 <div class="ui inverted link list">
                     <div class="item">
-                        <img src="../static/images/hzu.jpg" alt="" class="ui rounded image" style="width: 110px"/>
+                        <img src="/static/images/hzu.jpg" alt="" class="ui rounded image" style="width: 110px"/>
                     </div>
                 </div>
 
@@ -317,7 +324,7 @@
 </form>
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
-<script src="../static/layui.js"></script>
+<script src="/static/layui.js"></script>
 <script>
 
 

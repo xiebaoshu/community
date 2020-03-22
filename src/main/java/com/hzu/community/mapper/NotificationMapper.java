@@ -16,7 +16,7 @@ public interface NotificationMapper {
             "#{type},#{createTime},#{outerTitle},#{status})")
     public int addNotification(Notification notification);
 
-
+    //    信息通知，以未读排序
     @Select("select * from notification where receiver_id = #{userId} order by status asc")
     @Results({
             @Result(id=true,column="id",property="id"),
@@ -31,6 +31,23 @@ public interface NotificationMapper {
 
     })
     public List<Notification> notificationList(@Param("userId") Integer userId);
+
+
+//    回复他人或者我发表的评论
+    @Select("select * from notification where notifier_id = #{userId} order by create_time desc")
+    @Results({
+            @Result(id=true,column="id",property="id"),
+            @Result(column="notifier_id",property="notifier",one = @One(select = "com.hzu.community.mapper.UserInfoMapper.findUserInfoById")),
+            @Result(column="receiver_id",property="receiver",one = @One(select = "com.hzu.community.mapper.UserInfoMapper.findUserInfoById")),
+            @Result(column="article_id",property="articleId"),
+            @Result(column="article_par_category",property="articleParCategory"),
+            @Result(column="type",property="type"),
+            @Result(column="create_time",property="createTime"),
+            @Result(column="outerTitle",property="outerTitle"),
+
+
+    })
+    public List<Notification> replyList(@Param("userId") Integer userId);
 
     @Select("select * from notification where id = #{id}")
     @Results({

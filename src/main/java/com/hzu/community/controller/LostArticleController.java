@@ -318,7 +318,7 @@ public class LostArticleController {
 
     }
 
-    @GetMapping("/article/{articleId}")
+    @GetMapping("/{articleId}")
     public String articleDetail(@PathVariable("articleId") Integer articleId,Model model
                                 ){
         LostArticle lostArticle = lostArticleMapper.findArticleById(articleId);
