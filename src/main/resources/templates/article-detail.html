@@ -6,7 +6,8 @@
     <title>页面详情</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
     <link rel="stylesheet" href="/static/css/me.css" >
-    <link rel="stylesheet" href="/static/css/layui.css">
+    <link rel="stylesheet" href="/static/plugins/editor/css/editormd.preview.min.css" >
+
 </head>
 <body>
 <!--导航栏-->
@@ -70,7 +71,7 @@
 
                 </div>
                 <div class="item">
-                    <i class="calendar icon"></i><span th:text="${#dates.format(article.createTime,'yyyy-MM-dd')}">2020-2-27</span>
+                    <i class="calendar icon"></i><span>2020/2/27</span>
                 </div>
                 <div class="item">
                     <i class="university icon"></i><span th:text="${article.area.areaName}">旭日大楼</span>
@@ -93,13 +94,13 @@
             <h2 class="ui center aligned header" th:text="${article.articleTitle}">捡到一部手机</h2>
             <br>
             <div id="content" class="typo  typo-selection js-toc-content m-padded-lr-responsive m-padded-tb-large"
-            th:text="${article.articleContent}">
-                本人与2020/2/29号早上第三节课下课后，于旭日大楼305捡到手机一部，图片如上，请失主按照下列信息及时联系我
+            >
+                <textarea style="display:none;" th:text="${article.articleContent}">
+                    本人与2020/2/29号早上第三节课下课后，于旭日大楼305捡到手机一部，图片如上，请失主按照下列信息及时联系我
+                </textarea>
+
             </div>
-            <!--标签-->
-            <!--<div class="m-padded-lr-responsive">-->
-                <!--<div class="ui basic teal left pointing label">方法论</div>-->
-            <!--</div>-->
+
         </div>
         <!--作者信息-->
         <div class="ui attached positive message">
@@ -144,7 +145,7 @@
                               if (confirm(msg)==true){
                                   var comment = {};
                                   var parentId = $(this).attr("parentId");
-                                  var url = "/lost/comment/del";
+                                  var url = "/"+parCategory+"/comment/del";
                                   comment.commentId = $(this).attr("commentId");
                                   if (parentId!=null) {
                                       comment.parentComment = {
@@ -164,7 +165,7 @@
                                       success:function (data) {
                                           if(data.success){
 
-                                              var commentUrl = "/lost/comment/"+$("#articleId").val();
+                                              var commentUrl = "/"+parCategory+"/comment/"+$("#articleId").val();
                                               //局部刷新
                                               $('.comment-area').load(commentUrl);
 
@@ -262,7 +263,7 @@
               </div>
             </div>
             <!--发表评论区域-->
-            <form th:action="@{/lost/comment/}" method="post" class="ui form segment" id="commentForm" style="display: none;" >
+            <form  method="post" class="ui form segment" id="commentForm" style="display: none;" >
                 <div class="field">
                     <textarea name="content" placeholder="请输入评论信息..." id="input-content"></textarea>
                 </div>
@@ -352,9 +353,14 @@
 
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
-<script src="/static/layui.js"></script>
-
+<script src="/static/plugins/editor/editormd.js"></script>
+<script src="/static/plugins/editor/lib/marked.min.js"></script>
+<script src="/static/plugins/editor/lib/prettify.min.js"></script>
 <script>
+    var test = window.location.href;
+    var array = test.split("/");
+    var parCategory = array[array.length-2];
+    $("#commentForm").attr("action","/"+parCategory+"/comment");
 
     // 手机端右上角按钮点击事件
     $('#mobile-btn').click(function () {
@@ -368,7 +374,7 @@
     $("#comment-btn").click(function () {
        $("#commentForm").toggle();
         $("#comment-btn").toggle();
-        $('#commentForm').attr("action",'/lost/comment');
+        $('#commentForm').attr("action","/"+parCategory+"/comment");
     });
     $("#cancel-btn").click(function () {
         clear();
@@ -406,7 +412,7 @@
             success:function (data) {
                 if(data.success){
 
-                    var commentUrl = "/lost/comment/"+$("#articleId").val();
+                    var commentUrl = "/"+parCategory+"/comment/"+$("#articleId").val();
                     $("#commentForm").hide();
                     $("#comment-btn").toggle();
                     clear();
@@ -425,10 +431,15 @@
     });
     // 页面第一次加载，自动局部载入评论的片段
     $(function () {
-        var url = "/lost/comment/"+$("#articleId").val();
+        var url = "/"+parCategory+"/comment/"+$("#articleId").val();
         $('.comment-area').load(url);
 
     });
+
+    $(function () {
+        editormd.markdownToHTML("content", {});
+    });
+
 
 
 

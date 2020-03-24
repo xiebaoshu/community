@@ -13,7 +13,7 @@ public interface LostArticleMapper {
 //     使用jdbc的getGeneratedKeys获取数据库自增主键值
     @Options(useGeneratedKeys = true,keyProperty = "lostArticleId")
     @Insert("insert into lost_article(article_category_id,user_id,area_id,item_category_id," +
-            "article_title,phone,article_content,area_detail,item_detail," +
+            "article_title,phone,article_content,description," +
             "create_time,finish_time) " +
             "values(#{articleCategory.articleCategoryId}," +
             "#{userInfo.userId}," +
@@ -22,8 +22,7 @@ public interface LostArticleMapper {
             "#{articleTitle}," +
             "#{phone}," +
             "#{articleContent}," +
-            "#{areaDetail}," +
-            "#{itemDetail}," +
+            "#{description}," +
             "#{createTime}," +
             "#{finishTime}" +
 
@@ -43,9 +42,8 @@ public interface LostArticleMapper {
             " <if test=\"articleTitle != null\"> article_title = #{articleTitle},</if> " +
             " <if test=\"phone != null\"> phone = #{phone},</if> " +
             " <if test=\"articleContent != null\"> article_content = #{articleContent},</if> " +
-            " <if test=\"areaDetail != null\"> area_detail = #{areaDetail},</if> " +
-            " <if test=\"itemDetail != null\"> item_detail = #{itemDetail},</if> " +
             " <if test=\"createTime != null\"> create_time = #{createTime},</if> " +
+            " <if test=\"description != null\"> description = #{description},</if> " +
             " <if test=\"finishTime != null\"> finish_time = #{finishTime},</if> " +
             " <if test=\"finishUser != null\"> finisher_id = #{finishUser.userId}</if> " +
             " </set> " +
@@ -66,9 +64,9 @@ public interface LostArticleMapper {
             " <if test=\"articleCondition.articleTitle != null \">and article_title like '%${articleCondition.articleTitle}%'</if> " +
             " <if test=\"articleCondition.area != null and articleCondition.area.areaId != null\">and area_id = #{articleCondition.area.areaId}</if> " +
             " <if test=\"articleCondition.itemCategory != null and articleCondition.itemCategory.itemCategoryId != null\">and item_category_id = #{articleCondition.itemCategory.itemCategoryId}</if> " +
-            " <if test=\"dateCondition != null\">and DATE_SUB(CURDATE(), INTERVAL #{dateCondition} DAY) <![CDATA[<=date(CREATE_TIME)]]></if> " +
+            " <if test=\"dateCondition != null\">and DATE_SUB(CURDATE(), INTERVAL #{dateCondition} DAY) <![CDATA[<=date(CREATE_TIME)]]></if>" +
             " </where> " +
-
+            "order by create_time desc" +
             " </script> ")
     @Results({
             @Result(id=true,column="lost_article_id",property="lostArticleId"),
@@ -79,14 +77,12 @@ public interface LostArticleMapper {
             @Result(column="article_title",property="articleTitle"),
             @Result(column="phone",property="phone"),
             @Result(column="article_content",property="articleContent"),
-            @Result(column="area_detail",property="areaDetail"),
-            @Result(column="item_detail",property="itemDetail"),
             @Result(column="create_time",property="createTime"),
             @Result(column="finish_time",property="finishTime"),
             @Result(column="finisher_id",property="finishUser",one = @One(select = "com.hzu.community.mapper.UserInfoMapper.findUserInfoById")),
             @Result(column="article_img",property="articleImg"),
-            @Result(column="finish_time",property="finishTime"),
-            @Result(column="finisher_id",property="finishUser",one = @One(select = "com.hzu.community.mapper.UserInfoMapper.findUserInfoById"))
+            @Result(column="description",property="description"),
+            @Result(column="read_count",property="readCount")
     })
     public List<LostArticle> getArticleList(@Param("articleCondition") LostArticle articleCondition,
                                             @Param("dateCondition")Integer dateCondition);
@@ -100,6 +96,7 @@ public interface LostArticleMapper {
             " <where> " +
             " <if test=\"articleId != null\">and lost_article_id = #{articleId}</if> " +
             " </where> " +
+            "order by create_time desc" +
             " </script> ")
     @Results({
             @Result(id=true,column="lost_article_id",property="lostArticleId"),
@@ -110,19 +107,20 @@ public interface LostArticleMapper {
             @Result(column="article_title",property="articleTitle"),
             @Result(column="phone",property="phone"),
             @Result(column="article_content",property="articleContent"),
-            @Result(column="area_detail",property="areaDetail"),
-            @Result(column="item_detail",property="itemDetail"),
             @Result(column="create_time",property="createTime"),
             @Result(column="finish_time",property="finishTime"),
             @Result(column="finisher_id",property="finishUser",one = @One(select = "com.hzu.community.mapper.UserInfoMapper.findUserInfoById")),
             @Result(column="article_img",property="articleImg"),
-            @Result(column="finish_time",property="finishTime"),
-            @Result(column="finisher_id",property="finishUser",one = @One(select = "com.hzu.community.mapper.UserInfoMapper.findUserInfoById")),
-            @Result(column="lost_article_id",property="commentList",many = @Many(select = "com.hzu.community.mapper.CommentMapper.findCommentListById")),
+            @Result(column="description",property="description"),
+            @Result(column="read_count",property="readCount"),
+            @Result(column="lost_article_id",property="commentList",many = @Many(select = "com.hzu.community.mapper.CommentMapper.findCommentListById"))
     })
     public LostArticle findArticleById(@Param("articleId") Integer articleId);
 
 
     @Delete("delete from lost_article where lost_article_id = #{articleId}")
     public int deleById(@Param("articleId") Integer articleId);
+
+    @Update("update lost_article set read_count = read_count+1 where lost_article_id = #{lostArticleId}")
+    void incReadCount(LostArticle lostArticle);
 }

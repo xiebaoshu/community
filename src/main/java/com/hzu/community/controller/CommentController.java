@@ -1,7 +1,9 @@
 package com.hzu.community.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.pagehelper.PageInfo;
 import com.hzu.community.bean.Comment;
+import com.hzu.community.bean.LostArticle;
 import com.hzu.community.bean.Notification;
 import com.hzu.community.bean.UserInfo;
 import com.hzu.community.enums.NotificationTypeEnum;
@@ -19,9 +21,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 @Controller
 public class CommentController {
@@ -37,23 +37,50 @@ public class CommentController {
 
 
 //    加载文章的评论，并返回评论区域代码块，供前端局部刷新
-    @GetMapping("/lost/comment/{articleId}")
-    public String comments(@PathVariable Integer articleId, Model model, HttpServletRequest request) {
-        model.addAttribute("commentList", lostArticleMapper.findArticleById(articleId).getCommentList());
+    @GetMapping("/{parCategory}/comment/{articleId}")
+    public String comments(@PathVariable("parCategory") Integer parCategory,
+                           @PathVariable("articleId") Integer articleId,
+                           Model model, HttpServletRequest request) {
+        switch(parCategory){
+            case 1 :
+                //失物招领模块
+                model.addAttribute("commentList", lostArticleMapper.findArticleById(articleId).getCommentList());
+                break; //可选
+            case 2 :
+                //二手交易模块
+
+                break; //可选
+            case 3 :
+                //语句
+                break; //可选
+            case 4 :
+                //语句
+                break; //可选
+            case 5 :
+                //语句
+                break; //可选
+            case 6 :
+                //语句
+                break; //可选
+
+
+        }
+
 //        用于判断当前评论是否属于自己，是否能操作
 
         UserInfo user = (UserInfo) request.getSession().getAttribute("user");
         model.addAttribute("user",user);
+
         return "article-detail :: commentList";
     }
 
 
 
 //    添加评论
-    @PostMapping("/lost/comment")
+    @PostMapping("/{parCategory}/comment")
     @ResponseBody
     public Map<String,Object> addComment(
-            HttpServletRequest request){
+            @PathVariable("parCategory") Integer parCategory,HttpServletRequest request){
         Map<String,Object> modelmap = new HashMap<>();
         ObjectMapper mapper = new ObjectMapper();
         Comment comment = null;
@@ -68,7 +95,7 @@ public class CommentController {
         }
 //        设置comment数据并生成信息通知notification
          Notification notification = new Notification();
-         getCandN(request, comment,notification);
+         getCandN(request, comment,notification,parCategory);
 
 //        将评论插入数据库中,且新增信息通知
         try {
@@ -92,9 +119,9 @@ public class CommentController {
 
 
     //    删除评论
-    @PostMapping("/lost/comment/del")
+    @PostMapping("/{parCategory}/comment/del")
     @ResponseBody
-    public Map<String,Object> delComment(
+    public Map<String,Object> delComment(@PathVariable("parCategory") Integer parCategory,
             HttpServletRequest request){
         Map<String,Object> modelmap = new HashMap<>();
         ObjectMapper mapper = new ObjectMapper();
@@ -127,11 +154,13 @@ public class CommentController {
     }
 
 
-    private void getCandN(HttpServletRequest request, Comment comment,Notification notification) {
+    private void getCandN(HttpServletRequest request, Comment comment,Notification notification,Integer parCategory) {
         UserInfo user = (UserInfo) request.getSession().getAttribute("user");
         comment.setUser(user);
         Date date = new Date();
         comment.setCreateTime(date);
+//        设置文章父类别
+        comment.setArticleParCategory(parCategory);
 //        与文章拥有者对比，判断是否为博主
         UserInfo owner = lostArticleMapper.findArticleById(comment.getArticleId()).getUserInfo();
         if (owner.getUserId() == user.getUserId()){

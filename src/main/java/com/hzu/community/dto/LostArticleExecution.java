@@ -8,19 +8,19 @@ public class LostArticleExecution {
     private int state;
     //状态标识
     private String stateInfo;
-    //店铺数量
+
 
     //操作的LostArticle,增删改
     private LostArticle lostArticle;
 
     public LostArticleExecution() {
     }
-    //    LostArticle操作失败构造器，不带数据
+    //    构造器，不返回数据
     public LostArticleExecution(LostArticleEnum lostArticleEnum) {
         this.state = lostArticleEnum.getState();
         this.stateInfo = lostArticleEnum.getStateInfo();
     }
-    //    LostArticle操作成功构造器，带数据
+    //    LostArticle操作成功构造器，返回数据
     public LostArticleExecution(LostArticleEnum lostArticleEnum, LostArticle lostArticle) {
         this.state = lostArticleEnum.getState();
         this.stateInfo = lostArticleEnum.getStateInfo();

@@ -67,7 +67,7 @@ public interface CommentMapper {
 
     @Options(useGeneratedKeys = true,keyProperty = "commentId")
     @Insert("insert into comment(article_id,user_id,content,parent_id," +
-            "is_admin,create_time,reply_user_id,reply_is_admin)"+
+            "is_admin,create_time,reply_user_id,reply_is_admin,article_par_category)"+
             "values(#{articleId}," +
             "#{user.userId}," +
             "#{content}," +
@@ -75,7 +75,8 @@ public interface CommentMapper {
             "#{isAdmin}," +
             "#{createTime}," +
             "#{replyUser.userId}," +
-            "#{replyIsAdmin}"+
+            "#{replyIsAdmin},"+
+            "#{articleParCategory}"+
             ")")
     public int addComment(Comment comment);
 
@@ -85,4 +86,7 @@ public interface CommentMapper {
 //    删除一级评论下的二级评论
     @Delete("delete from comment where parent_id = #{commentId}")
     public int deleCommentList(Comment comment);
+//    删除文章评论
+    @Delete("delete from comment where article_id = #{articleId} and article_par_category = #{articleParCategory}")
+    public int deleArticleComment(Comment comment);
 }

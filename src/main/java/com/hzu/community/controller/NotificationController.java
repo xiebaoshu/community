@@ -28,13 +28,13 @@ public class NotificationController {
             notification.setStatus(true);
             int num = notificationService.update(notification);
             if (num>=0){
-                return "redirect:/lost/" + notification.getArticleId();
+                return "redirect:/"+notification.getArticleParCategory()+"/" + notification.getArticleId();
             }else {
                 return "redirect:/";
             }
         }else {
 //            他人用户的点击，直接跳转
-            return "redirect:/lost/" + notification.getArticleId();
+            return "redirect:/"+notification.getArticleParCategory()+"/" + notification.getArticleId();
         }
 
 

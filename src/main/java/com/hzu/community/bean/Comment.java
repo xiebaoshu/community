@@ -7,6 +7,7 @@ import java.util.List;
 
 public class Comment {
     private Long commentId;
+    private Integer articleParCategory;
     private Integer articleId;
     private UserInfo user;
     private String content;
@@ -18,6 +19,15 @@ public class Comment {
     private List<Comment> commentList;
     private UserInfo replyUser;
     private boolean replyIsAdmin;
+
+
+    public Integer getArticleParCategory() {
+        return articleParCategory;
+    }
+
+    public void setArticleParCategory(Integer articleParCategory) {
+        this.articleParCategory = articleParCategory;
+    }
 
     public boolean isReplyIsAdmin() {
         return replyIsAdmin;

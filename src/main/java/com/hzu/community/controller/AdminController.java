@@ -15,6 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
@@ -23,7 +24,7 @@ import java.util.List;
 
 
 @Controller
-
+@RequestMapping("/people")
 public class AdminController {
     @Autowired
     private ArticleCategoryService articleCategoryService;
@@ -34,7 +35,7 @@ public class AdminController {
     @Autowired
     private UserInfoMapper userInfoMapper;
 //    个人页面失物招领模块初始化
-    @GetMapping("/admin/{peopleId}/{parCategory}")
+    @GetMapping("/{peopleId}/{parCategory}")
     public String adminInit(@PathVariable("parCategory") String  parCategory,
                             @PathVariable("peopleId") Integer  peopleId,
                             Model model,HttpServletRequest request,
@@ -57,7 +58,7 @@ public class AdminController {
         PageHelper.startPage(page,3);
 //        根据分类id查询文章
         switch(parCategory){
-            case "lost" :
+            case "1" :
                 //失物招领模块
 
                 LostArticle lostArticle = new LostArticle();
@@ -67,20 +68,20 @@ public class AdminController {
                 PageInfo<LostArticle> pageInfo = new PageInfo<>(list);
                 model.addAttribute("pageInfo",pageInfo);
                 break; //可选
-            case "second" :
+            case "2" :
                 //二手交易模块
 
                 break; //可选
-            case "help" :
+            case "3" :
                 //语句
                 break; //可选
-            case "job" :
+            case "4" :
                 //语句
                 break; //可选
-            case "university" :
+            case "5" :
                 //语句
                 break; //可选
-            case "business" :
+            case "6" :
                 //语句
                 break; //可选
             case "notification" :

@@ -6,7 +6,7 @@
     <title>用户页面</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
     <link rel="stylesheet" href="/static/css/me.css" >
-    <link rel="stylesheet" href="/static/css/layui.css">
+
 </head>
 <body>
 <!--导航栏-->
@@ -82,7 +82,8 @@
                             <div class="item tear">
                                 <h1 class="header" th:text="${people.userName}">用户</h1>
                                 <div th:if="${owner}">
-                                    <a href="#" style="margin-top:10px!important;">编辑资料</a>
+                                    <a href="" style="margin-top:10px!important;"
+                                    th:href="@{|/people/${peopleId}/4|}">编辑资料</a>
                                 </div>
                             </div>
                         </div>
@@ -92,33 +93,33 @@
 
                         <div class="ui menu stackable"
                        >
-                            <a th:class="${parCategory}=='lost'?'active item':'item'"
-                               th:href="@{|/admin/${peopleId}/lost|}"
+                            <a th:class="${parCategory}=='1'?'active item':'item'"
+                               th:href="@{|/people/${peopleId}/1|}"
                                 >
                                 <i class="privacy icon"></i> 失物招领
                             </a>
-                            <a th:class="${parCategory}=='second'?'active item':'item'"
-                                   th:href="@{/admin/second}">
+                            <a th:class="${parCategory}=='2'?'active item':'item'"
+                                   th:href="@{|/people/${peopleId}/2|}">
                                 <i class="shop icon"></i> 二手交易
                             </a>
-                            <a th:class="${parCategory}=='help'?'active item':'item'"
-                               th:href="@{/admin/help}">
+                            <a th:class="${parCategory}=='3'?'active item':'item'"
+                               th:href="@{|/people/${peopleId}/3|}">
                                 <i class="exchange icon"></i> 校园互助
                             </a>
-                            <a th:class="${parCategory}=='job'?'active item':'item'"
-                               th:href="@{/admin/job}">
+                            <a th:class="${parCategory}=='4'?'active item':'item'"
+                               th:href="@{|/people/${peopleId}/4|}">
                                 <i class="money icon"></i> 兼职信息
                             </a>
-                            <a th:class="${parCategory}=='university'?'active item':'item'"
-                               th:href="@{/admin/university}">
+                            <a th:class="${parCategory}=='5'?'active item':'item'"
+                               th:href="@{|/people/${peopleId}/5|}">
                                 <i class="student icon"></i> 校园公告
                             </a>
-                          <!--  <a th:class="${parCategory}=='business'?'active item':'item'"
-                               th:href="@{/admin/business}">
+                           <!-- <a th:class="${parCategory}=='6'?'active item':'item'"
+                               th:href="@{|/people/${peopleId}/6|}">
                                 <i class="travel icon"></i> 企业信息
                             </a>-->
-                            <a th:class="${parCategory}=='business'?'active item':'item'"
-                               th:href="@{'/admin/'+${peopleId}+'/notification'}">
+                            <a th:class="${parCategory}=='notification'?'active item':'item'"
+                               th:href="@{'/people/'+${peopleId}+'/notification'}">
                                 <i class="alarm icon"></i>
                                 <span th:text="${owner}?'我的通知':'他的回复'">我的通知</span>
                             </a>
@@ -138,11 +139,12 @@
                             <tbody>
                             <tr th:each="list:${pageInfo.getList()}">
 
-                                <td th:text="${list.articleTitle}">文章标题</td>
+                                <td><a href="" th:text="${list.articleTitle}"
+                                                th:href="@{|/${parCategory}/${list.lostArticleId}|}">文章标题</a></td>
                                 <td th:if="${owner}">
-                                    <a th:href="@{/lost/update(articleId=${list.lostArticleId})}" class="ui mini teal basic button">编辑</a>
+                                    <a th:href="@{'/'+${parCategory}+'/'+update(articleId=${list.lostArticleId})}" class="ui mini teal basic button">编辑</a>
                                     <a href="#" class="ui mini red basic button delete-btn"
-                                    th:attr="del_uri=@{/lost/delete(articleId=${list.lostArticleId})}">删除</a>
+                                    th:attr="del_uri=@{'/'+${parCategory}+'/'+delete(articleId=${list.lostArticleId})}">删除</a>
                                 </td>
                             </tr>
                             </tbody>
@@ -151,19 +153,21 @@
                                 <th colspan="6">
                                     <div class="ui mini pagination menu">
                                         <a class="item"
-                                           th:href="@{'/admin/'+${parCategory}(page=${pageInfo.pageNum - 1})}"
+                                           th:href="@{'/people/'+${peopleId}+'/'+${parCategory}(page=${pageInfo.pageNum - 1})}"
                                            th:style="${pageInfo.pageNum - 1}<=0?'pointer-events: none;':'pointer-events:true'">
                                             上一页
                                         </a>
                                         <a class="item"
-                                           th:href="@{'/admin/'+${parCategory}(page=${pageInfo.pageNum + 1})}"
+                                           th:href="@{'/people/'+${peopleId}+'/'+${parCategory}(page=${pageInfo.pageNum + 1})}"
                                            th:style="${pageInfo.pageNum + 1}>${pageInfo.pages}?'pointer-events: none;':'pointer-events:true'"
                                         >
                                             下一页
                                         </a>
                                     </div>
                                     <a href="#" class="ui mini right floated teal basic button"
-                                       th:if="${owner}">新增</a>
+                                       th:if="${owner}"
+                                       th:href="@{|/${parCategory}/add|}"
+                                    >新增</a>
                                 </th>
                             </tr>
                             </tfoot>
@@ -177,7 +181,7 @@
                                 <li th:each="notification:${notificationInfo.getList()}">
                                     <div>
                                         <a href="" th:text="${notification.notifier.userName}"
-                                        th:href="@{|/admin/${notification.notifier.userId}/lost|}">谢豪</a>
+                                        th:href="@{|/people/${notification.notifier.userId}/1|}">谢豪</a>
                                         <span th:text="${notification.type}==1?'评论了文章':'回复了评论'">评论了文章</span>
                                         <a href="#" th:href="@{|/notification/${peopleId}/${notification.id}|}"
                                         th:text="${notification.outerTitle}">123</a>
@@ -192,12 +196,12 @@
                             <div class="ui divider"></div>
                             <div class="ui mini pagination menu">
                                 <a class="item"
-                                   th:href="@{'/admin/'+${parCategory}(page=${notificationInfo.pageNum - 1})}"
+                                   th:href="@{'/people/'+${peopleId}+'/'+${parCategory}(page=${notificationInfo.pageNum - 1})}"
                                    th:style="${notificationInfo.pageNum - 1}<=0?'pointer-events: none;':'pointer-events:true'">
                                     上一页
                                 </a>
                                 <a class="item"
-                                   th:href="@{'/admin/'+${parCategory}(page=${notificationInfo.pageNum + 1})}"
+                                   th:href="@{'/people/'+${peopleId}+'/'+${parCategory}(page=${notificationInfo.pageNum + 1})}"
                                    th:style="${notificationInfo.pageNum + 1}>${notificationInfo.pages}?'pointer-events: none;':'pointer-events:true'"
                                 >
                                     下一页
@@ -324,7 +328,7 @@
 </form>
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
-<script src="/static/layui.js"></script>
+
 <script>
 
 

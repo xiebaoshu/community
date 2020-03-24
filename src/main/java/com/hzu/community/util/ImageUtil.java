@@ -29,9 +29,9 @@ public class ImageUtil {
         try{ //图片处理
 //            size图片大小
 //            outputQuality图片品质，1最高
-            Thumbnails.of(thumbnail.getImage()).size(200, 200)
+            Thumbnails.of(thumbnail.getImage()).scale(1.00f)
 
-                    .outputQuality(0.8f).toFile(dest);
+                    .outputQuality(1f).toFile(dest);
         }catch(IOException e){
             e.printStackTrace();
         }

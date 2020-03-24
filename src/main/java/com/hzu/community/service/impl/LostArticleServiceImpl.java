@@ -1,11 +1,15 @@
 package com.hzu.community.service.impl;
 
+import com.hzu.community.bean.Comment;
 import com.hzu.community.bean.LostArticle;
+import com.hzu.community.bean.Notification;
 import com.hzu.community.dto.ImageHolder;
 import com.hzu.community.dto.LostArticleExecution;
 import com.hzu.community.enums.LostArticleEnum;
 import com.hzu.community.exceptions.LostArticleException;
+import com.hzu.community.mapper.CommentMapper;
 import com.hzu.community.mapper.LostArticleMapper;
+import com.hzu.community.mapper.NotificationMapper;
 import com.hzu.community.service.LostArticleService;
 import com.hzu.community.util.ImageUtil;
 import com.hzu.community.util.PathUtil;
@@ -19,7 +23,10 @@ import org.springframework.transaction.annotation.Transactional;
 public class LostArticleServiceImpl implements LostArticleService {
     @Autowired
     LostArticleMapper lostArticleMapper;
-
+    @Autowired
+    CommentMapper commentMapper;
+    @Autowired
+    NotificationMapper notificationMapper;
     @Override
     @Transactional
     public LostArticleExecution saveArticle(LostArticle lostArticle, ImageHolder imageHolder) {
@@ -97,7 +104,7 @@ public class LostArticleServiceImpl implements LostArticleService {
     }
     @Transactional
     @Override
-    public boolean deleteArticle(Integer lostArticleId,Integer userId) throws LostArticleException {
+    public LostArticleExecution deleteArticle(Integer lostArticleId,Integer userId) throws LostArticleException {
         try {
 //            删除文章所在路径
             String userStr = userId.toString();
@@ -106,12 +113,34 @@ public class LostArticleServiceImpl implements LostArticleService {
 //            删除路径对应文件
            ImageUtil.deleteFileOrpath(delePath);
 
-            int deleNUm = lostArticleMapper.deleById(lostArticleId);
-            if (deleNUm<=0){
-                return false;
-            }else {
-                return true;
+            try {
+//                删除该文章下的信息通知
+                Notification notification = new Notification();
+                notification.setArticleId(lostArticleId);
+                notification.setArticleParCategory(1);
+                notificationMapper.delNotification(notification);
+            }catch (Exception e){
+                throw new LostArticleException("删除该文章的信息通知失败:"+e.getMessage());
             }
+
+            try {
+//                删除该文章评论
+                Comment comment = new Comment();
+                comment.setArticleId(lostArticleId);
+                comment.setArticleParCategory(1);
+                commentMapper.deleArticleComment(comment);
+            }catch (Exception e){
+                throw new LostArticleException("删除该文章的评论失败:"+e.getMessage());
+            }
+
+            try {
+//                删除该文章
+                lostArticleMapper.deleById(lostArticleId);
+            }catch (Exception e){
+                throw new LostArticleException("删除该文章失败:"+e.getMessage());
+            }
+            return new LostArticleExecution(LostArticleEnum.SUCCESS);
+
         }catch (Exception e){
             throw new LostArticleException(e.getMessage());
         }

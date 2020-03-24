@@ -10,29 +10,24 @@ import com.hzu.community.mapper.CommentMapper;
 import com.hzu.community.mapper.LostArticleMapper;
 import com.hzu.community.mapper.UserInfoMapper;
 import com.hzu.community.service.*;
-import com.hzu.community.service.impl.CommentServiceImpl;
 import com.hzu.community.util.HttpServletRequestUtil;
-import com.sun.net.httpserver.Authenticator;
-import org.apache.catalina.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 import org.springframework.ui.Model;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.*;
 
 @Controller
-@RequestMapping("/lost")
+@RequestMapping("/1")
 public class LostArticleController {
     @Autowired
     AreaService areaService;
@@ -105,7 +100,7 @@ public class LostArticleController {
 
         PageInfo<LostArticle> pageInfo = new PageInfo<>(list);
         model.addAttribute("pageInfo",pageInfo);
-        return "lost";
+        return "/lost/lost";
     }
 
 
@@ -131,7 +126,7 @@ public class LostArticleController {
             modelMap.put("msg",e.getMessage());
         }
 //        返回视图
-        return  "lost-input";
+        return  "/lost/lost-input";
     }
 
 
@@ -186,6 +181,7 @@ public class LostArticleController {
 
                 if(le.getState() == LostArticleEnum.SUCCESS.getState()){
                     modelMap.put("success",true);
+                    modelMap.put("user",owner);
 
                 }else{
                     modelMap.put("success",false);
@@ -230,7 +226,7 @@ public class LostArticleController {
         //通过articleId回显article里面的数据
         LostArticle lostArticle = lostArticleMapper.findArticleById(articleId);
         model.addAttribute("lostArticle",lostArticle);
-        return "lost-update";
+        return "/lost/lost-update";
     }
     @PostMapping("/update")
     @ResponseBody
@@ -276,6 +272,7 @@ public class LostArticleController {
 
                 if(le.getState() == LostArticleEnum.SUCCESS.getState()){
                     modelMap.put("success",true);
+                    modelMap.put("user",owner);
 
                 }else{
                     modelMap.put("success",false);
@@ -314,7 +311,7 @@ public class LostArticleController {
         }catch (LostArticleException e){
             System.out.println(e.getMessage());
         }
-        return "redirect:/admin/lost";
+        return "redirect:/people/"+userId+"/1";
 
     }
 
@@ -323,6 +320,7 @@ public class LostArticleController {
                                 ){
         LostArticle lostArticle = lostArticleMapper.findArticleById(articleId);
         model.addAttribute("article",lostArticle);
+        lostArticleMapper.incReadCount(lostArticle);
         return "article-detail";
     }
 

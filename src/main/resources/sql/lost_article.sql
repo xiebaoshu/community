@@ -8,8 +8,6 @@ CREATE TABLE lost_article (
 	article_title varchar(200) NOT NULL,
 	phone varchar(200) NOT NULL,
 	article_content varchar(1024) NOT NULL,
-	area_detail varchar(1024) DEFAULT NULL,
-	item_detail varchar(1024) DEFAULT NULL,
 	create_time datetime NOT NULL,
 	finish_time datetime DEFAULT NULL,
 	finisher_id int(10) DEFAULT NULL,

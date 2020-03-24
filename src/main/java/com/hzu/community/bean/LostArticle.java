@@ -9,18 +9,15 @@ public class LostArticle {
     private UserInfo userInfo;
     private Area area;
     private ItemCategory itemCategory;
-
-
-
     private String articleImg;
     private String articleTitle;
     private String phone;
     private String articleContent;
-    private String areaDetail;
-    private String itemDetail;
+    private String description;
     private Date createTime;
     private Date finishTime;
     private UserInfo finishUser;
+    private Integer readCount;
 //    一级评论
     private List<Comment> commentList;
 
@@ -96,22 +93,6 @@ public class LostArticle {
         this.articleContent = articleContent;
     }
 
-    public String getAreaDetail() {
-        return areaDetail;
-    }
-
-    public void setAreaDetail(String areaDetail) {
-        this.areaDetail = areaDetail;
-    }
-
-    public String getItemDetail() {
-        return itemDetail;
-    }
-
-    public void setItemDetail(String itemDetail) {
-        this.itemDetail = itemDetail;
-    }
-
     public Date getCreateTime() {
         return createTime;
     }
@@ -143,6 +124,22 @@ public class LostArticle {
         this.articleImg = articleImg;
     }
 
+    public Integer getReadCount() {
+        return readCount;
+    }
+
+    public void setReadCount(Integer readCount) {
+        this.readCount = readCount;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     @Override
     public String toString() {
         return "LostArticle{" +
@@ -155,11 +152,11 @@ public class LostArticle {
                 ", articleTitle='" + articleTitle + '\'' +
                 ", phone='" + phone + '\'' +
                 ", articleContent='" + articleContent + '\'' +
-                ", areaDetail='" + areaDetail + '\'' +
-                ", itemDetail='" + itemDetail + '\'' +
+                ", description='" + description + '\'' +
                 ", createTime=" + createTime +
                 ", finishTime=" + finishTime +
                 ", finishUser=" + finishUser +
+                ", readCount=" + readCount +
                 ", commentList=" + commentList +
                 '}';
     }

@@ -17,7 +17,7 @@ public interface NotificationMapper {
     public int addNotification(Notification notification);
 
     //    信息通知，以未读排序
-    @Select("select * from notification where receiver_id = #{userId} order by status asc")
+    @Select("select * from notification where receiver_id = #{userId} and notifier_id != #{userId} order by status asc")
     @Results({
             @Result(id=true,column="id",property="id"),
             @Result(column="notifier_id",property="notifier",one = @One(select = "com.hzu.community.mapper.UserInfoMapper.findUserInfoById")),
@@ -33,7 +33,7 @@ public interface NotificationMapper {
     public List<Notification> notificationList(@Param("userId") Integer userId);
 
 
-//    回复他人或者我发表的评论
+//    他人主页：他的回复或者他发表的评论
     @Select("select * from notification where notifier_id = #{userId} order by create_time desc")
     @Results({
             @Result(id=true,column="id",property="id"),
@@ -74,8 +74,11 @@ public interface NotificationMapper {
             " </script> ")
     public int updateNotification(Notification notification);
 
-    @Select("select count(1) from notification where status = 0 and receiver_id = #{userId}")
+    @Select("select count(1) from notification where status = 0 and receiver_id = #{userId} and notifier_id != #{userId}")
     public Long countUnread(@Param("userId") Integer userId);
+
+    @Delete("delete from notification where article_id = #{articleId} and article_par_category = #{articleParCategory}")
+    public int delNotification(Notification notification);
 
 
 }
