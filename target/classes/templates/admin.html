@@ -19,7 +19,7 @@
             <a href="#" class="item m-mobile-hide m-item"><i class="home icon"></i>首页</a>
             <a href="#" class="item m-mobile-hide m-item"><i class="idea icon"></i>分类</a>
             <a href="" class="item m-mobile-hide m-item"
-            th:href="@{/admin/notification}"><i class="alarm icon"></i>通知
+            th:href="@{|/people/${session.user.userId}/notification|}"><i class="alarm icon"></i>通知
                 <div class="ui inverted basic left pointing label"
                       th:text="${session.unreadCount}">未读
                 </div>
