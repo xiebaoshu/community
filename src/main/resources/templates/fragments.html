@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <!--nav的导航图片栏-->
+    <div class="ui  grid" th:fragment="nav_area">
+        <div class="ui center aligned two wide column">
+            <div class="left-btn ">
+
+                <a th:attr="page=${pageInfo.getPrePage()}"
+                   class="m-btn"
+                   href="javascript:void(0);"
+                   th:style="!${pageInfo.hasPreviousPage}?'pointer-events: none;':'pointer-events:true'">
+                    <i class="ui angle left huge icon"></i>
+                </a>
+
+
+
+            </div>
+        </div>
+        <div class="twelve wide column">
+            <div class="contain five">
+                <div class="ui grid">
+                    <div class="five column row" style="margin-left: 20px;display: none">
+                        <div class="column">
+                            <div align="center">
+                                <img src="/static/images/chengxiao2.jpg" alt="" class="ui small circular image m-img-big"><br>
+                                <a href="">爱奇艺</a>
+                            </div>
+                        </div>
+                        <div class="column">
+                            <div align="center">
+                                <img src="/static/images/chengxiao2.jpg" alt="" class="ui small circular image m-img-big"><br>
+                                <a href="">爱奇艺</a>
+                            </div>
+                        </div>
+                        <div class="column">
+                            <div align="center">
+                                <img src="/static/images/chengxiao2.jpg" alt="" class="ui small circular image m-img-big"><br>
+                                <a href="">爱奇艺</a>
+                            </div>
+                        </div>
+                        <div class="column">
+                            <div align="center">
+                                <img src="/static/images/chengxiao2.jpg" alt="" class="ui small circular image m-img-big"><br>
+                                <a href="">爱奇艺</a>
+                            </div>
+                        </div>
+                        <div class="column">
+                            <div align="center">
+                                <img src="/static/images/chengxiao2.jpg" alt="" class="ui small circular image m-img-big"><br>
+                                <a href="">爱奇艺</a>
+                            </div>
+                        </div>
+                        <div class="column">
+                            <div align="center">
+                                <img src="/static/images/chengxiao2.jpg" alt="" class="ui small circular image m-img-big"><br>
+                                <a href="">爱奇艺</a>
+                            </div>
+                        </div>
+                        <div class="column">
+                            <div align="center">
+                                <img src="/static/images/chengxiao2.jpg" alt="" class="ui small circular image m-img-big"><br>
+                                <a href="">爱奇艺</a>
+                            </div>
+                        </div>
+                        <div class="column">
+                            <div align="center">
+                                <img src="/static/images/chengxiao2.jpg" alt="" class="ui small circular image m-img-big"><br>
+                                <a href="">爱奇艺</a>
+                            </div>
+                        </div>
+                        <div class="column">
+                            <div align="center">
+                                <img src="/static/images/chengxiao2.jpg" alt="" class="ui small circular image m-img-big"><br>
+                                <a href="">爱奇艺</a>
+                            </div>
+                        </div>
+                        <div class="column">
+                            <div align="center">
+                                <img src="/static/images/chengxiao2.jpg" alt="" class="ui small circular image m-img-big"><br>
+                                <a href="">爱奇艺</a>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+            <div class="contain four">
+                <div class="ui grid">
+                    <div class="four wide column" th:each="nav:${pageInfo.getList()}"
+                    >
+                        <div align="center">
+                            <img src="/static/images/chengxiao2.jpg" alt="" class="ui small circular image m-img-big"
+                                 th:src="${nav.imgUrl}"><br>
+                            <a href=""
+                               th:href="${nav.url}" th:text="${nav.name}">爱奇艺</a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!--下标-->
+
+            <div align="center" id="circle" style="margin-top: 10px">
+
+                <a href="javascript:void(0);"
+                   th:each="page:${pageInfo.getNavigatepageNums()}"
+                   th:attr="page=${page}">
+                    <i class="small black circle icon"
+                       th:class="${page}==${pageInfo.getPageNum()}?'small black circle icon':'small white circle icon'"
+                       ></i>
+                </a>
+
+            </div>
+
+        </div>
+        <div class="ui center aligned two wide column">
+            <div class="right-btn">
+                <a th:attr="page=${pageInfo.getNextPage()}"
+                   th:style="!${pageInfo.hasNextPage}?'pointer-events: none;':'pointer-events:true'"
+                   href="javascript:void(0);"
+                   class="m-btn">
+                    <i class="ui angle right huge icon"></i>
+                </a>
+            </div>
+
+        </div>
+        <script>
+            $('.m-btn').click(function () {
+               var page = $(this).attr('page');
+               var url = "/nav?page="+page;
+                $('#nav_content').load(url);
+
+            });
+            $('#circle a').click(function () {
+
+                $(this).siblings('a').children('i').removeClass('black');
+                $(this).find('i').removeClass('white').addClass('black');
+                var page = $(this).attr('page');
+                var url = "/nav?page="+page;
+                $('#nav_content').load(url);
+            });
+        </script>
+    </div>
+</body>
+</html>

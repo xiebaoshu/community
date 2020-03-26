@@ -21,7 +21,7 @@ public class signController {
     static Boolean hasUser;
     @Autowired
     UserInfoMapper userInfoMapper;
-    @GetMapping("/")
+    @GetMapping("/login")
     public String signPage(HttpServletRequest request){
         hasUser =false;
 //       通过cookies判断用户是否登陆
@@ -36,14 +36,14 @@ public class signController {
         }
         if(hasUser){
             // 如果已登陆跳转到展示页
-            return "redirect:/lost";
+            return "redirect:/1";
         }else{
             return "sign";
         }
 
 
     }
-    @PostMapping(value = "/")
+    @PostMapping(value = "/login")
     public String sign(@RequestParam(name = "username") String username,
                        @RequestParam(name = "password") String password,
                        HttpServletResponse response,
@@ -60,7 +60,7 @@ public class signController {
             Cookie cookie = new Cookie("token",token);
             cookie.setMaxAge(60 * 60 * 24 * 30 * 6);
             response.addCookie(cookie);
-            return "redirect:/lost";
+            return "redirect:/1";
         }else{
             model.addAttribute("msg","账号密码错误");
             return "sign";
@@ -73,6 +73,6 @@ public class signController {
         Cookie cookie = new Cookie("token", null);
         cookie.setMaxAge(0);
         response.addCookie(cookie);
-        return "redirect:/";
+        return "redirect:/login";
     }
 }

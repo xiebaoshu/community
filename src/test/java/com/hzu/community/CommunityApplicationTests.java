@@ -4,6 +4,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.hzu.community.bean.*;
 import com.hzu.community.mapper.*;
+import com.hzu.community.service.NavService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -30,6 +31,10 @@ class CommunityApplicationTests {
     CommentMapper commentMapper;
     @Autowired
     NotificationMapper notificationMapper;
+    @Autowired
+    NavMapper navMapper;
+    @Autowired
+    NavService navService;
     @Test
     void areaMapperTest(){
         List<Area> areaList = areaMapper.getArea();
@@ -113,6 +118,14 @@ class CommunityApplicationTests {
         Comment comment = new Comment();
         comment.setCommentId(89L);
         commentMapper.deleComment(comment);
+    }
+    @Test
+    void NavMapperTest(){
+        List<Nav> navList = navService.navDefault();
+        for (Nav nav : navList) {
+            System.out.println(nav);
+        }
+
     }
 
 

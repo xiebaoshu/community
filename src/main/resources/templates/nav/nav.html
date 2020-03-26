@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>导航页</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" href="/static/css/nav.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
+</head>
+<body>
+
+    <div style="height: 100%;" id="demo">
+        <!--内容部分-->
+
+
+            <div class="ui grid" style="height: 100%">
+                <div class="four wide column">
+
+                </div>
+                <div class="eight wide column" style="margin-top:135px;">
+                    <div align="center">
+                        <img src="/static/images/baidu.png" alt="" style="width: 25%;height: 25%;">
+                    </div>
+                    <!--百度搜索区域-->
+                    <div align="center" class="m-padded-tb">
+                        <form action="https://www.baidu.com/s" class="ui form">
+                            <div class="ui big action input" style="width: 70%!important;">
+                                <input type="text" name="wd" placeholder="Search...">
+                                <button class="ui icon button">
+                                    <i class="search icon"></i>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                    <!--导航栏模块-->
+                    <div class="container m-margin-top" id="nav_content">
+
+                    </div>
+                    <!--校园社区功能区域-->
+                    <div class="container m-padded-top">
+                        <div class="row" style="padding-left: 60px;padding-right: 60px">
+                            <div class="col-md-2">
+                                <button type="button" class="btn btn-outline-info" style="width: 100px">
+                                    <a href="/1"><i class="key icon"></i>失物招领</a>
+                                </button>
+                            </div>
+                            <div class="col-md-2">
+                                <button type="button" class="btn btn-outline-info" style="width: 100px">
+                                    <a href="/2"><i class="shop icon"></i>二手交易</a>
+                                </button>
+                            </div>
+                            <div class="col-md-2">
+                                <button type="button" class="btn btn-outline-info" style="width: 100px">
+                                    <a href="/3"><i class="exchange icon"></i>校园互助</a>
+                                </button>
+                            </div>
+                            <div class="col-md-2">
+                                <button type="button" class="btn btn-outline-info" style="width: 100px">
+                                    <a href="/1"><i class="money icon"></i>兼职信息</a>
+                                </button>
+                            </div>
+                            <div class="col-md-2">
+                                <button type="button" class="btn btn-outline-info" style="width: 100px">
+                                    <a href="/1"><i class="student icon"></i>校园公告</a>
+                                </button>
+                            </div>
+                            <div class="col-md-2">
+                                <button type="button" class="btn btn-outline-info" style="width: 100px">
+                                    <a href="/1"><i class="travel icon"></i>企业信息</a>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="four wide column" style="height: 100%">
+                    <button  id="set-btn">
+                        <img src="/static/images/set.jpg"  class="rounded-circle" style="
+                        width: 38px!important;height: 38px!important;position:absolute;right: 30px;
+                        top: 20px;opacity:0.6;"
+                        >
+                    </button>
+
+                    <div class="ui  right fixed segment " style="min-height: 100%;display: none;" id="context1">
+                        <div class="ui secondary pointing menu">
+                            <a class="item active" data-tab="add">添加 </a>
+                            <a class="item" data-tab="set">设置 </a>
+                            <a class="right item" id="close-btn">
+                                <i class="icon close"></i>
+                            </a>
+                        </div>
+                        <div class="ui active tab" data-tab="add">
+                            <div class="ui  menu secondary">
+                                <a class="item active" data-tab="add/default">默认</a>
+                                <a class="item" data-tab="add/diy">自定义</a>
+
+                            </div>
+                            <div class="ui  cards tab active" data-tab="add/default">
+                                <div class="card">
+                                    <div class="content">
+                                        <img class="right floated  ui  circular image m-img" src="/static/images/user.jpg">
+                                        <div class="header" style="padding-top: 15px!important;">Elliot Fu </div>
+                                        <div class="meta">New Member </div>
+
+                                    </div>
+                                    <div class="extra content">
+                                        <div class="ui two buttons">
+                                            <div class="ui basic green button">打开</div>
+                                            <div class="ui basic red button">添加</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card">
+                                    <div class="content">
+                                        <img class="right floated  ui  circular image m-img" src="/static/images/user.jpg">
+                                        <div class="header" style="padding-top: 15px!important;">Elliot Fu </div>
+                                        <div class="meta">New Member </div>
+
+                                    </div>
+                                    <div class="extra content">
+                                        <div class="ui two buttons">
+                                            <div class="ui basic green button">打开</div>
+                                            <div class="ui basic red button">添加</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card">
+                                    <div class="content">
+                                        <img class="right floated  ui  circular image m-img" src="/static/images/user.jpg">
+                                        <div class="header" style="padding-top: 15px!important;">Elliot Fu </div>
+                                        <div class="meta">New Member </div>
+
+                                    </div>
+                                    <div class="extra content">
+                                        <div class="ui two buttons">
+                                            <div class="ui basic green button">打开</div>
+                                            <div class="ui basic red button">添加</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card">
+                                    <div class="content">
+                                        <img class="right floated  ui  circular image m-img" src="/static/images/user.jpg">
+                                        <div class="header" style="padding-top: 15px!important;">Elliot Fu </div>
+                                        <div class="meta">New Member </div>
+
+                                    </div>
+                                    <div class="extra content">
+                                        <div class="ui two buttons">
+                                            <div class="ui basic green button">打开</div>
+                                            <div class="ui basic red button">添加</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card">
+                                    <div class="content">
+                                        <img class="right floated  ui  circular image m-img" src="/static/images/user.jpg">
+                                        <div class="header" style="padding-top: 15px!important;">Elliot Fu </div>
+                                        <div class="meta">New Member </div>
+
+                                    </div>
+                                    <div class="extra content">
+                                        <div class="ui two buttons">
+                                            <div class="ui basic green button">打开</div>
+                                            <div class="ui basic red button">添加</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card">
+                                    <div class="content">
+                                        <img class="right floated  ui  circular image m-img" src="/static/images/user.jpg">
+                                        <div class="header" style="padding-top: 15px!important;">Elliot Fu </div>
+                                        <div class="meta">New Member </div>
+
+                                    </div>
+                                    <div class="extra content">
+                                        <div class="ui two buttons">
+                                            <div class="ui basic green button">打开</div>
+                                            <div class="ui basic red button">添加</div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+
+                            </div>
+
+                            <div class="ui tab segment" data-tab="add/diy">
+                                <div class="ui grid">
+                                    <div class="five wide column">
+                                        <img class="ui  circular small image" src="/static/images/user.jpg">
+                                    </div>
+                                    <div class="eleven wide column">
+                                        <form class="ui form">
+                                            <div class="field">
+                                                <label>网站地址</label>
+                                                <input type="text" name="first-name" placeholder="http://">
+                                            </div>
+                                            <div class="field">
+                                                <label>网址名称</label>
+                                                <input type="text" name="last-name" placeholder="网站名称">
+                                            </div>
+
+                                            <div class="field">
+                                                <label>图片地址</label>
+                                                <input type="text" name="last-name" placeholder="图片地址">
+                                            </div>
+
+                                            <button class="ui button right floated" type="submit">提交</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="ui tab" data-tab="set">
+                            <div class="ui segment">
+                                <form class="ui form">
+                                    <p style="color: teal">选择你需要的布局</p>
+                                    <div class="inline fields">
+
+                                        <div class="field">
+                                            <div class="ui radio checkbox">
+                                                <input type="radio" name="show_type" checked="">
+                                                <label>2*4</label>
+                                            </div>
+                                        </div>
+                                        <div class="field">
+                                            <div class="ui radio checkbox">
+                                                <input type="radio" name="show_type">
+                                                <label>3*3</label>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <button class="ui button" type="submit">提交</button>
+
+
+
+
+
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+    </div>
+
+
+
+
+
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+     <script>
+
+         $('.ui.menu .item').click(function() {
+             $(this).siblings().removeClass('active');
+             $(this).addClass('active');
+         });
+         $('#context1 .menu .item')
+             .tab({
+                 context: $('#context1')
+             })
+         ;
+         $('#set-btn').click(function () {
+            $('#set-btn').hide();
+            $('#context1').show();
+         });
+        $('#close-btn').click(function () {
+            $('#set-btn').show();
+            $('#context1').hide();
+        });
+         $('.ui.radio.checkbox')
+             .checkbox()
+         ;
+         $(function(){
+             $('#carouselExampleIndicators').carousel({interval:1000000000});
+         });
+
+         // 页面第一次加载，自动局部载入评论的片段
+         $(function () {
+             var url = "/nav";
+             $('#nav_content').load(url);
+
+
+         });
+
+
+     </script>
+</body>
+</html>
