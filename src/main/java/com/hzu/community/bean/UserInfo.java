@@ -11,6 +11,7 @@ public class UserInfo {
     private Integer userType;//用户类型
     private Integer permission;//用户权限 0代表禁言
     private String token;
+    private Integer navType;
 
     public Integer getUserId() {
         return userId;
@@ -90,5 +91,13 @@ public class UserInfo {
 
     public void setToken(String token) {
         this.token = token;
+    }
+
+    public Integer getNavType() {
+        return navType;
+    }
+
+    public void setNavType(Integer navType) {
+        this.navType = navType;
     }
 }

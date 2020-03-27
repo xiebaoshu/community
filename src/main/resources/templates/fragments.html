@@ -22,75 +22,24 @@
             </div>
         </div>
         <div class="twelve wide column">
-            <div class="contain five">
+            <div class="contain five" th:if="${showType==2}">
                 <div class="ui grid">
-                    <div class="five column row" style="margin-left: 20px;display: none">
-                        <div class="column">
+                    <div class="five column row" style="margin-left: 20px;">
+                        <div class="column" th:each="nav:${pageInfo.getList()}">
                             <div align="center">
-                                <img src="/static/images/chengxiao2.jpg" alt="" class="ui small circular image m-img-big"><br>
-                                <a href="">爱奇艺</a>
+                                <img src="/static/images/chengxiao2.jpg" alt="" class="ui small circular image m-img-big"
+                                     th:src="${nav.imgUrl}"><br>
+                                <a href=""
+                                   th:href="${nav.url}" th:text="${nav.name}">爱奇艺</a>
                             </div>
                         </div>
-                        <div class="column">
-                            <div align="center">
-                                <img src="/static/images/chengxiao2.jpg" alt="" class="ui small circular image m-img-big"><br>
-                                <a href="">爱奇艺</a>
-                            </div>
-                        </div>
-                        <div class="column">
-                            <div align="center">
-                                <img src="/static/images/chengxiao2.jpg" alt="" class="ui small circular image m-img-big"><br>
-                                <a href="">爱奇艺</a>
-                            </div>
-                        </div>
-                        <div class="column">
-                            <div align="center">
-                                <img src="/static/images/chengxiao2.jpg" alt="" class="ui small circular image m-img-big"><br>
-                                <a href="">爱奇艺</a>
-                            </div>
-                        </div>
-                        <div class="column">
-                            <div align="center">
-                                <img src="/static/images/chengxiao2.jpg" alt="" class="ui small circular image m-img-big"><br>
-                                <a href="">爱奇艺</a>
-                            </div>
-                        </div>
-                        <div class="column">
-                            <div align="center">
-                                <img src="/static/images/chengxiao2.jpg" alt="" class="ui small circular image m-img-big"><br>
-                                <a href="">爱奇艺</a>
-                            </div>
-                        </div>
-                        <div class="column">
-                            <div align="center">
-                                <img src="/static/images/chengxiao2.jpg" alt="" class="ui small circular image m-img-big"><br>
-                                <a href="">爱奇艺</a>
-                            </div>
-                        </div>
-                        <div class="column">
-                            <div align="center">
-                                <img src="/static/images/chengxiao2.jpg" alt="" class="ui small circular image m-img-big"><br>
-                                <a href="">爱奇艺</a>
-                            </div>
-                        </div>
-                        <div class="column">
-                            <div align="center">
-                                <img src="/static/images/chengxiao2.jpg" alt="" class="ui small circular image m-img-big"><br>
-                                <a href="">爱奇艺</a>
-                            </div>
-                        </div>
-                        <div class="column">
-                            <div align="center">
-                                <img src="/static/images/chengxiao2.jpg" alt="" class="ui small circular image m-img-big"><br>
-                                <a href="">爱奇艺</a>
-                            </div>
-                        </div>
+
                     </div>
 
                 </div>
 
             </div>
-            <div class="contain four">
+            <div class="contain four" th:if="${showType==1}">
                 <div class="ui grid">
                     <div class="four wide column" th:each="nav:${pageInfo.getList()}"
                     >
@@ -145,6 +94,51 @@
                 var page = $(this).attr('page');
                 var url = "/nav?page="+page;
                 $('#nav_content').load(url);
+            });
+        </script>
+    </div>
+    <!--nav页面的我的添加-->
+    <div class="ui cards" th:fragment="my_set">
+        <div class="card" th:unless="${hasUser}">
+            <div class="content">
+                <div>您还未登陆，请<a href="/login">登陆</a></div>
+            </div>
+        </div>
+
+        <div class="card" th:if="${hasUser}"
+             th:each="diy:${navDiy}">
+            <div class="content">
+                <img class="right floated  ui  circular image m-img-small" src="/static/images/user.jpg"
+                     th:src="${diy.imgUrl}">
+                <div class="header" style="padding-top: 15px!important;"
+                     th:text="${diy.name}">Elliot Fu </div>
+            </div>
+            <div class="extra content">
+                <div class="ui right floated basic red button m-del-btn"
+                th:attr="id=${diy.id}">删除</div>
+            </div>
+        </div>
+        <script>
+            $('.m-del-btn').click(function () {
+                var url = "/nav/delete?id="+$(this).attr('id');
+                $.ajax({
+                    url:url,
+                    type:'POST',
+                    contentType:false,
+                    processData:false,
+                    cache:false,
+                    success:function (data) {
+                        if(data.success){
+                            //局部加载
+                            $('#nav_content').load("/nav");
+                            $('#my_set').load("/nav/mySet");
+                        }else{
+                            alert('删除失败'+data.errMsg);
+                        }
+
+                    }
+                });
+
             });
         </script>
     </div>

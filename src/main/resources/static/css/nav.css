@@ -34,6 +34,10 @@ a{
     color: #838f9c !important;
 }
 /*pic*/
+.m-img-small{
+    width: 40px !important;
+    height: 40px !important;
+}
 .m-img{
     width: 60px !important;
     height: 60px !important;

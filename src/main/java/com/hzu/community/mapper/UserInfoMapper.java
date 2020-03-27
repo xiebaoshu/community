@@ -18,6 +18,13 @@ public interface UserInfoMapper {
     @Select("select * from user_info where user_account=#{username} and user_password=#{password}")
     public List<UserInfo> sign(@Param("username") String username,@Param("password") String password);
 
-    @Update("update  user_info set token = #{token} where user_id = #{userId}")
+    @Update("<script> " +
+            "update  user_info " +
+            "<set>" +
+            "<if test=\"token != null\"> token = #{token},</if>" +
+            "<if test=\"navType != null\"> nav_type = #{navType}</if>" +
+            "</set>" +
+            "where user_id = #{userId}" +
+            " </script> ")
     public int update(UserInfo user);
 }

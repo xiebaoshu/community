@@ -73,7 +73,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="four wide column" style="height: 100%">
+                <div class="four wide column">
                     <button  id="set-btn">
                         <img src="/static/images/set.jpg"  class="rounded-circle" style="
                         width: 38px!important;height: 38px!important;position:absolute;right: 30px;
@@ -81,7 +81,7 @@
                         >
                     </button>
 
-                    <div class="ui  right fixed segment " style="min-height: 100%;display: none;" id="context1">
+                    <div class="ui segment " style="display: none;position: relative;overflow: auto;" id="context1">
                         <div class="ui secondary pointing menu">
                             <a class="item active" data-tab="add">添加 </a>
                             <a class="item" data-tab="set">设置 </a>
@@ -95,93 +95,24 @@
                                 <a class="item" data-tab="add/diy">自定义</a>
 
                             </div>
-                            <div class="ui  cards tab active" data-tab="add/default">
-                                <div class="card">
+                            <div class="ui cards tab active" data-tab="add/default">
+                                <div class="card" th:each="nav:${navDefault}">
                                     <div class="content">
-                                        <img class="right floated  ui  circular image m-img" src="/static/images/user.jpg">
-                                        <div class="header" style="padding-top: 15px!important;">Elliot Fu </div>
-                                        <div class="meta">New Member </div>
-
+                                        <img class="right floated  ui  circular image m-img" src="/static/images/user.jpg"
+                                       th:src="${nav.imgUrl}">
+                                        <div class="header" style="padding-top: 15px!important;"
+                                        th:text="${nav.name}">Elliot Fu </div>
+                                        <div class="meta"
+                                        th:text="${nav.description}">New Member </div>
                                     </div>
                                     <div class="extra content">
                                         <div class="ui two buttons">
-                                            <div class="ui basic green button">打开</div>
-                                            <div class="ui basic red button">添加</div>
+
+                                            <a th:href="${nav.url}" class="ui basic green button" target="_blank">打开</a>
+                                            <div class="ui basic red button m-add-btn">添加</div>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="card">
-                                    <div class="content">
-                                        <img class="right floated  ui  circular image m-img" src="/static/images/user.jpg">
-                                        <div class="header" style="padding-top: 15px!important;">Elliot Fu </div>
-                                        <div class="meta">New Member </div>
-
-                                    </div>
-                                    <div class="extra content">
-                                        <div class="ui two buttons">
-                                            <div class="ui basic green button">打开</div>
-                                            <div class="ui basic red button">添加</div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="card">
-                                    <div class="content">
-                                        <img class="right floated  ui  circular image m-img" src="/static/images/user.jpg">
-                                        <div class="header" style="padding-top: 15px!important;">Elliot Fu </div>
-                                        <div class="meta">New Member </div>
-
-                                    </div>
-                                    <div class="extra content">
-                                        <div class="ui two buttons">
-                                            <div class="ui basic green button">打开</div>
-                                            <div class="ui basic red button">添加</div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="card">
-                                    <div class="content">
-                                        <img class="right floated  ui  circular image m-img" src="/static/images/user.jpg">
-                                        <div class="header" style="padding-top: 15px!important;">Elliot Fu </div>
-                                        <div class="meta">New Member </div>
-
-                                    </div>
-                                    <div class="extra content">
-                                        <div class="ui two buttons">
-                                            <div class="ui basic green button">打开</div>
-                                            <div class="ui basic red button">添加</div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="card">
-                                    <div class="content">
-                                        <img class="right floated  ui  circular image m-img" src="/static/images/user.jpg">
-                                        <div class="header" style="padding-top: 15px!important;">Elliot Fu </div>
-                                        <div class="meta">New Member </div>
-
-                                    </div>
-                                    <div class="extra content">
-                                        <div class="ui two buttons">
-                                            <div class="ui basic green button">打开</div>
-                                            <div class="ui basic red button">添加</div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="card">
-                                    <div class="content">
-                                        <img class="right floated  ui  circular image m-img" src="/static/images/user.jpg">
-                                        <div class="header" style="padding-top: 15px!important;">Elliot Fu </div>
-                                        <div class="meta">New Member </div>
-
-                                    </div>
-                                    <div class="extra content">
-                                        <div class="ui two buttons">
-                                            <div class="ui basic green button">打开</div>
-                                            <div class="ui basic red button">添加</div>
-                                        </div>
-                                    </div>
-                                </div>
-
-
 
                             </div>
 
@@ -214,33 +145,41 @@
                         </div>
 
                         <div class="ui tab" data-tab="set">
-                            <div class="ui segment">
-                                <form class="ui form">
+                            <div class="ui  menu secondary">
+                                <a class="item active" data-tab="set/diy">预设布局</a>
+                                <a class="item" data-tab="set/my">我的添加</a>
+                            </div>
+                            <div class="ui tab active segment" data-tab="set/diy">
+                                <div class="ui form">
                                     <p style="color: teal">选择你需要的布局</p>
                                     <div class="inline fields">
 
                                         <div class="field">
                                             <div class="ui radio checkbox">
-                                                <input type="radio" name="show_type" checked="">
+                                                <input type="radio" name="show_type" value="1" checked="">
                                                 <label>2*4</label>
                                             </div>
                                         </div>
                                         <div class="field">
                                             <div class="ui radio checkbox">
-                                                <input type="radio" name="show_type">
-                                                <label>3*3</label>
+                                                <input type="radio" name="show_type" value="2">
+                                                <label>2*5</label>
                                             </div>
                                         </div>
 
                                     </div>
-                                    <button class="ui button" type="submit">提交</button>
+                                    <button class="ui button m-show-btn">确定</button>
 
 
 
 
 
-                                </form>
+                                </div>
                             </div>
+                            <div class="ui  tab" data-tab="set/my" id="my_set">
+
+                            </div>
+
                         </div>
                     </div>
                 </div>
@@ -259,6 +198,7 @@
     <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
      <script>
 
+        $('#context1').css("height",$(window).height());
          $('.ui.menu .item').click(function() {
              $(this).siblings().removeClass('active');
              $(this).addClass('active');
@@ -279,16 +219,64 @@
          $('.ui.radio.checkbox')
              .checkbox()
          ;
-         $(function(){
-             $('#carouselExampleIndicators').carousel({interval:1000000000});
-         });
+
 
          // 页面第一次加载，自动局部载入评论的片段
          $(function () {
-             var url = "/nav";
-             $('#nav_content').load(url);
 
+             $('#nav_content').load("/nav");
+             $('#my_set').load("/nav/mySet");
 
+         });
+         $('.m-add-btn').click(function () {
+            var url = "/nav/add";
+            var nav = {};
+            nav.url = $(this).siblings('a').attr('href');
+            nav.name = $(this).parent().parent().siblings('.content').find('.header').text();
+            nav.imgUrl = $(this).parent().parent().siblings('.content').find('img').attr('src');
+            var formData = new FormData();//创建表单
+            formData.append('navStr',JSON.stringify(nav));//将nav转化为JSON字符串并传入
+             $.ajax({
+                 url:url,
+                 type:'POST',
+                 data:formData,
+                 contentType:false,
+                 processData:false,
+                 cache:false,
+                 success:function (data) {
+                     if(data.success){
+                         alert('添加成功');
+                         //局部加载
+                         $('#nav_content').load("/nav");
+                         $('#my_set').load("/nav/mySet");
+                     }else{
+                         alert('添加失败'+data.errMsg);
+                     }
+
+                 }
+
+             });
+
+         });
+         $('.m-show-btn').click(function () {
+             var showType = $("input[name='show_type']:checked").val();
+             var url = "/navShow?showType=" + showType ;
+             $.ajax({
+                 url:url,
+                 type:'POST',
+                 contentType:false,
+                 processData:false,
+                 cache:false,
+                 success:function (data) {
+                     if(data.success){
+                         $('#nav_content').load("/nav"); //局部加载
+                     }else{
+                         alert('修改失败'+data.errMsg);
+                     }
+
+                 }
+
+             });
          });
 
 

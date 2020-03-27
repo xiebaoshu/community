@@ -6,6 +6,7 @@ public class Nav {
     private String url;
     private String name;
     private String imgUrl;
+    private String description;
 
     public Long getId() {
         return id;
@@ -37,6 +38,14 @@ public class Nav {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public String getImgUrl() {
