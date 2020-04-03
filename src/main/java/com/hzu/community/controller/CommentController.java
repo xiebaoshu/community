@@ -8,6 +8,7 @@ import com.hzu.community.bean.Notification;
 import com.hzu.community.bean.UserInfo;
 import com.hzu.community.enums.NotificationTypeEnum;
 import com.hzu.community.mapper.CommentMapper;
+import com.hzu.community.mapper.HelpArticleMapper;
 import com.hzu.community.mapper.LostArticleMapper;
 import com.hzu.community.service.CommentService;
 import com.hzu.community.service.NotificationService;
@@ -34,35 +35,27 @@ public class CommentController {
     private CommentService commentService;
     @Autowired
     private NotificationService notificationService;
-
+    @Autowired
+    private HelpArticleMapper helpArticleMapper;
 
 //    加载文章的评论，并返回评论区域代码块，供前端局部刷新
     @GetMapping("/{parCategory}/comment/{articleId}")
     public String comments(@PathVariable("parCategory") Integer parCategory,
                            @PathVariable("articleId") Integer articleId,
                            Model model, HttpServletRequest request) {
-        switch(parCategory){
-            case 1 :
-                //失物招领模块
-                model.addAttribute("commentList", lostArticleMapper.findArticleById(articleId).getCommentList());
-                break; //可选
-            case 2 :
-                //二手交易模块
 
-                break; //可选
-            case 3 :
-                //语句
-                break; //可选
-            case 4 :
-                //语句
-                break; //可选
-            case 5 :
-                //语句
-                break; //可选
-            case 6 :
-                //语句
-                break; //可选
+        if (parCategory.equals(1)){
+            model.addAttribute("commentList", lostArticleMapper.findArticleById(articleId).getCommentList());
+        }else if (parCategory.equals(2)){
 
+        }else if (parCategory.equals(3)){
+            model.addAttribute("commentList", helpArticleMapper.findArticleById(articleId).getCommentList());
+
+        }else if (parCategory.equals(4)){
+
+        }else if (parCategory.equals(5)){
+
+        }else if (parCategory.equals(6)){
 
         }
 
@@ -162,7 +155,23 @@ public class CommentController {
 //        设置文章父类别
         comment.setArticleParCategory(parCategory);
 //        与文章拥有者对比，判断是否为博主
-        UserInfo owner = lostArticleMapper.findArticleById(comment.getArticleId()).getUserInfo();
+        UserInfo owner = new UserInfo();
+        if (parCategory.equals(1)){
+            owner = lostArticleMapper.findArticleById(comment.getArticleId()).getUserInfo();
+        }else if (parCategory.equals(2)){
+
+        }else if (parCategory.equals(3)){
+            owner = helpArticleMapper.findArticleById(comment.getArticleId()).getUserInfo();
+
+        }else if (parCategory.equals(4)){
+
+        }else if (parCategory.equals(5)){
+
+        }else if (parCategory.equals(6)){
+
+        }
+
+
         if (owner.getUserId() == user.getUserId()){
             comment.setAdmin(true);
         }else {
@@ -181,12 +190,29 @@ public class CommentController {
             notification.setNotifier(comment.getUser());
 //              信息接收者
             notification.setReceiver(owner);
-//              文章id和文章类型id
+//              文章id
             notification.setArticleId(comment.getArticleId());
-            notification.setArticleParCategory(1);
+
             notification.setType(NotificationTypeEnum.REPLY_ARTICLE.getType());
             notification.setCreateTime(new Date());
-            notification.setOuterTitle(lostArticleMapper.findArticleById(comment.getArticleId()).getArticleTitle());
+            if (parCategory.equals(1)){
+                notification.setOuterTitle(lostArticleMapper.findArticleById(comment.getArticleId()).getArticleTitle());
+//                文章类型id
+                notification.setArticleParCategory(1);
+            }else if (parCategory.equals(2)){
+
+            }else if (parCategory.equals(3)){
+                notification.setOuterTitle(helpArticleMapper.findArticleById(comment.getArticleId()).getArticleTitle());
+                notification.setArticleParCategory(3);
+
+            }else if (parCategory.equals(4)){
+
+            }else if (parCategory.equals(5)){
+
+            }else if (parCategory.equals(6)){
+
+            }
+
 //             设置未读状态
             notification.setStatus(false);
 
@@ -196,7 +222,22 @@ public class CommentController {
             notification.setNotifier(comment.getUser());
             notification.setReceiver(comment.getReplyUser());
             notification.setArticleId(comment.getArticleId());
-            notification.setArticleParCategory(1);
+            if (parCategory.equals(1)){
+//                文章类型id
+                notification.setArticleParCategory(1);
+            }else if (parCategory.equals(2)){
+
+            }else if (parCategory.equals(3)){
+                notification.setArticleParCategory(3);
+
+            }else if (parCategory.equals(4)){
+
+            }else if (parCategory.equals(5)){
+
+            }else if (parCategory.equals(6)){
+
+            }
+
             notification.setType(NotificationTypeEnum.REPLY_COMMENT.getType());
             notification.setCreateTime(new Date());
             notification.setOuterTitle(commentMapper.findCommentById(comment.getParentComment().getCommentId()).getContent());

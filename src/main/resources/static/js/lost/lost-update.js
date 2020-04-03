@@ -1,9 +1,9 @@
 $(function () {
     var articleId =  getQueryString("articleId");
-    var updateUrl = '/1/update?articleId='+articleId;
+    var updateUrl = "/1/update";
     $('#submit').click(function(){
         var lostArticle = {};
-        lostArticle.lostArticleId = articleId;
+        lostArticle.id = articleId;
         lostArticle.articleCategory = {
             articleCategoryId:$('#article_category_id').val()
         };

@@ -37,7 +37,8 @@
                 <div>
                     <p th:text="'你好,'+${session.user.userName}">你好，用户</p>
                 </div>
-                <a href="http://www.baidu.com" style="padding-left: 10px">
+                <a  style="padding-left: 10px"
+                th:href="@{|/people/${session.user.userId}/1|}">
                     <img src="/static/images/user.jpg" alt="" class="ui avatar image"
                     th:src="${session.user.userImg}">
                 </a>
@@ -140,11 +141,11 @@
                             <tr th:each="list:${pageInfo.getList()}">
 
                                 <td><a href="" th:text="${list.articleTitle}"
-                                                th:href="@{|/${parCategory}/${list.lostArticleId}|}">文章标题</a></td>
+                                                th:href="@{|/${parCategory}/${list.id}|}">文章标题</a></td>
                                 <td th:if="${owner}">
-                                    <a th:href="@{'/'+${parCategory}+'/'+update(articleId=${list.lostArticleId})}" class="ui mini teal basic button">编辑</a>
+                                    <a th:href="@{'/'+${parCategory}+'/'+update(articleId=${list.id})}" class="ui mini teal basic button">编辑</a>
                                     <a href="#" class="ui mini red basic button delete-btn"
-                                    th:attr="del_uri=@{'/'+${parCategory}+'/'+delete(articleId=${list.lostArticleId})}">删除</a>
+                                    th:attr="del_uri=@{'/'+${parCategory}+'/'+delete(articleId=${list.id})}">删除</a>
                                 </td>
                             </tr>
                             </tbody>
@@ -185,8 +186,15 @@
                                         <span th:text="${notification.type}==1?'评论了文章':'回复了评论'">评论了文章</span>
                                         <a href="#" th:href="@{|/notification/${peopleId}/${notification.id}|}"
                                         th:text="${notification.outerTitle}">123</a>
+                                        <span th:if="${notification.articleParCategory==1}">（失物招领）</span>
+                                        <span th:if="${notification.articleParCategory==2}">（二手交易）</span>
+                                        <span th:if="${notification.articleParCategory==3}">（校园互助）</span>
+                                        <span th:if="${notification.articleParCategory==4}">（兼职信息）</span>
+                                        <span th:if="${notification.articleParCategory==5}">（校园公告）</span>
+                                        <span th:if="${notification.articleParCategory==6}">（企业信息）</span>
+                                        <!--满足信息通知为未读且是当前用户，则显示未读-->
                                         <div class="ui teal basic left pointing label"
-                                             th:unless="${notification.status} " th:text="未读">未读</div>
+                                             th:if="${!notification.status && owner } " th:text="未读">未读</div>
 
                                     </div>
 

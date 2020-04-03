@@ -4,7 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 public class LostArticle {
-    private Integer lostArticleId;
+    private Integer id;
     private ArticleCategory articleCategory;
     private UserInfo userInfo;
     private Area area;
@@ -37,12 +37,12 @@ public class LostArticle {
         this.phone = phone;
     }
 
-    public Integer getLostArticleId() {
-        return lostArticleId;
+    public Integer getId() {
+        return id;
     }
 
-    public void setLostArticleId(Integer lostArticleId) {
-        this.lostArticleId = lostArticleId;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public ArticleCategory getArticleCategory() {
@@ -143,7 +143,7 @@ public class LostArticle {
     @Override
     public String toString() {
         return "LostArticle{" +
-                "lostArticleId=" + lostArticleId +
+                "lostArticleId=" + id +
                 ", articleCategory=" + articleCategory +
                 ", userInfo=" + userInfo +
                 ", area=" + area +

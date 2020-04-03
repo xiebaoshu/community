@@ -2,6 +2,9 @@
 body {
     background: url("../images/bg.png");
 }
+
+
+
 /*pic*/
 .m-pic{
     width: 172px !important;
@@ -12,6 +15,7 @@ body {
     height: 22px !important;
 }
 /*内间距*/
+
 .m-padded-mini {
     padding: 0.2em !important;
 }
@@ -169,6 +173,9 @@ body {
 
 .m-mobile-show {
     display: none !important;
+}
+.tag-active{
+    color: red!important;
 }
 
 @media screen and (max-width: 768px){

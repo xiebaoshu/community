@@ -35,6 +35,8 @@ class CommunityApplicationTests {
     NavMapper navMapper;
     @Autowired
     NavService navService;
+    @Autowired
+    TagMapper tagMapper;
     @Test
     void areaMapperTest(){
         List<Area> areaList = areaMapper.getArea();
@@ -124,6 +126,14 @@ class CommunityApplicationTests {
         List<Nav> navList = navService.navDefault();
         for (Nav nav : navList) {
             System.out.println(nav);
+        }
+
+    }
+    @Test
+    void tagMapperTest(){
+        List<Tag> tagList = tagMapper.allTag();
+        for (Tag tag: tagList) {
+            System.out.println(tag);
         }
 
     }
