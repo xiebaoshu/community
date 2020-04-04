@@ -1,19 +1,15 @@
 package com.hzu.community.service.impl;
 
-import com.hzu.community.bean.Comment;
-import com.hzu.community.bean.HelpArticle;
-
-import com.hzu.community.bean.LostArticle;
-import com.hzu.community.bean.Notification;
+import com.hzu.community.bean.*;
+import com.hzu.community.bean.SecondArticle;
 import com.hzu.community.dto.ArticleExecution;
 import com.hzu.community.dto.ImageHolder;
 import com.hzu.community.enums.ArticleEnum;
 import com.hzu.community.exceptions.ArticleException;
 import com.hzu.community.mapper.CommentMapper;
-import com.hzu.community.mapper.HelpArticleMapper;
-
+import com.hzu.community.mapper.SecondArticleMapper;
 import com.hzu.community.mapper.NotificationMapper;
-import com.hzu.community.service.HelpArticleService;
+import com.hzu.community.service.SecondArticleService;
 import com.hzu.community.util.ImageUtil;
 import com.hzu.community.util.PathUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,16 +19,19 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Date;
 
 @Service
-public class HelpArticleServiceImpl implements HelpArticleService {
+public class SecondArticleServiceImpl implements SecondArticleService {
+
     @Autowired
-    private HelpArticleMapper helpArticleMapper;
+    private SecondArticleMapper secondArticleMapper;
     @Autowired
     private CommentMapper commentMapper;
     @Autowired
     private NotificationMapper notificationMapper;
+    
+    
     @Override
     @Transactional
-    public ArticleExecution saveArticle(HelpArticle article, ImageHolder imageHolder) throws ArticleException {
+    public ArticleExecution saveArticle(SecondArticle article, ImageHolder imageHolder) throws ArticleException {
         if (article == null) {
             return new ArticleExecution(ArticleEnum.NULL_Article);
         }
@@ -41,7 +40,7 @@ public class HelpArticleServiceImpl implements HelpArticleService {
                  所以成功插入后返回主键值到articleId
                  该值作为更新图片url的参数*/
             article.setCreateTime(new Date());
-            int insertNum = helpArticleMapper.add(article);
+            int insertNum = secondArticleMapper.add(article);
 
             if (insertNum <= 0) {
                    /* Spring事务回滚机制是这样的：当所拦截的方法有指定异常抛出，事务才会自动进行回滚！
@@ -58,7 +57,7 @@ public class HelpArticleServiceImpl implements HelpArticleService {
 //                            抛出的异常在上层处理。即控制器
                     }
 //                        更新图片url
-                    int updateImg = helpArticleMapper.update(article);
+                    int updateImg = secondArticleMapper.update(article);
                     if (updateImg<=0){
                         throw new ArticleException("更新图片地址失败");
                     }
@@ -72,16 +71,16 @@ public class HelpArticleServiceImpl implements HelpArticleService {
 
         }
         return new ArticleExecution(ArticleEnum.SUCCESS,article);
-
     }
-    @Transactional
+
     @Override
-    public ArticleExecution updateArticle(HelpArticle article, ImageHolder imageHolder) throws ArticleException {
+    @Transactional
+    public ArticleExecution updateArticle(SecondArticle article, ImageHolder imageHolder) throws ArticleException {
         try {
 //            判断是否需要处理图片
             if(imageHolder != null){
 //            若存在图片，则取出相应文章
-                HelpArticle oldArticle = helpArticleMapper.findArticleById(article.getId());
+                SecondArticle oldArticle = secondArticleMapper.findArticleById(article.getId());
                 if (oldArticle.getArticleImg()!= null){
 //                      根据文章的图片url删除本地下载的图片
                     ImageUtil.deleteFileOrpath(oldArticle.getArticleImg());
@@ -92,12 +91,12 @@ public class HelpArticleServiceImpl implements HelpArticleService {
 
 //           更新文章信息
             article.setCreateTime(new Date());
-            int updateNum = helpArticleMapper.update(article);
+            int updateNum = secondArticleMapper.update(article);
             if (updateNum<=0){
                 return new ArticleExecution(ArticleEnum.UPDATE_WRONG);
             }else {
 //                重新赋值，并将更新后的数据封装在execution返回
-                article = helpArticleMapper.findArticleById(article.getId());
+                article = secondArticleMapper.findArticleById(article.getId());
                 return new ArticleExecution(ArticleEnum.SUCCESS,article);
             }
 
@@ -113,7 +112,7 @@ public class HelpArticleServiceImpl implements HelpArticleService {
 //            删除文章所在路径
             String userStr = userId.toString();
             String lostArticleStr = id.toString();
-            String delePath = "/upload/item/"+userStr+"/helpArticle/"+lostArticleStr;
+            String delePath = "/upload/item/"+userStr+"/secondArticle/"+lostArticleStr;
 //            删除路径对应文件
             ImageUtil.deleteFileOrpath(delePath);
 
@@ -121,7 +120,7 @@ public class HelpArticleServiceImpl implements HelpArticleService {
 //                删除该文章下的信息通知
                 Notification notification = new Notification();
                 notification.setArticleId(id);
-                notification.setArticleParCategory(3);
+                notification.setArticleParCategory(2);
                 notificationMapper.delNotification(notification);
             }catch (Exception e){
                 throw new ArticleException("删除该文章的信息通知失败:"+e.getMessage());
@@ -131,7 +130,7 @@ public class HelpArticleServiceImpl implements HelpArticleService {
 //                删除该文章评论
                 Comment comment = new Comment();
                 comment.setArticleId(id);
-                comment.setArticleParCategory(3);
+                comment.setArticleParCategory(2);
                 commentMapper.deleArticleComment(comment);
             }catch (Exception e){
                 throw new ArticleException("删除该文章的评论失败:"+e.getMessage());
@@ -139,7 +138,7 @@ public class HelpArticleServiceImpl implements HelpArticleService {
 
             try {
 //                删除该文章
-                helpArticleMapper.deleById(id);
+                secondArticleMapper.deleById(id);
             }catch (Exception e){
                 throw new ArticleException("删除该文章失败:"+e.getMessage());
             }
@@ -150,12 +149,12 @@ public class HelpArticleServiceImpl implements HelpArticleService {
         }
     }
 
-    private void addArticleImg(HelpArticle article, ImageHolder ArticleInputStream){
+
+    private void addArticleImg(SecondArticle article, ImageHolder ArticleInputStream){
         //获取图片目录的相对值路径
         //通过userid,articleid划分文件地址，并传入下一个函数作为参数
-        String dest = PathUtil.getHelpArticleImagePath(article.getUserInfo(),article.getId());
+        String dest = PathUtil.getSecondArticleImagePath(article.getUserInfo(),article.getId());
         String ArticleAddr = ImageUtil.generateThumbnail(ArticleInputStream,dest);//处理图片。并返回图片地址
         article.setArticleImg(ArticleAddr);//设置图片地址
-
     }
 }

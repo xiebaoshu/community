@@ -26,12 +26,12 @@ public interface TagMapper {
     @Select("<script> " +
             "SELECT * " +
             "from tag " +
-            "where par_id is null" +
+            "where par_id is null and article_par_category=#{articleParCategory}" +
             " </script> ")
     @Results({
             @Result(id=true,column="id",property="id"),
             @Result(column="name",property="name"),
             @Result(column="id",property="tagList",many = @Many(select = "com.hzu.community.mapper.TagMapper.tagList"))
     })
-    public List<Tag> allTag();
+    public List<Tag> allTag(@Param("articleParCategory") Integer articleParCategory);
 }

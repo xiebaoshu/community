@@ -321,7 +321,7 @@ public class LostArticleController {
         LostArticle lostArticle = lostArticleMapper.findArticleById(articleId);
         model.addAttribute("article",lostArticle);
         lostArticleMapper.incReadCount(lostArticle);
-        return "article-detail";
+        return "/lost/article-detail";
     }
 
 

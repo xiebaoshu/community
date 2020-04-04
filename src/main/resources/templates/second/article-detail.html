@@ -112,8 +112,7 @@
                     <ui class="list">
                         <li>作者：<span th:text="${article.userInfo.userName}">用户</span></li>
                         <li>时间：<span th:text="${#dates.format(article.createTime,'yyyy-MM-dd')}">2020/2/29</span></li>
-
-
+                        <li>价格：<span th:text="|￥${article.price}|">2020/2/29</span></li>
                     </ui>
                 </div>
 
@@ -124,7 +123,7 @@
         <div class="ui bottom attached segment">
             <!--评论信息-->
             <div class="ui teal segment comment-area">
-              <!--在此处加载评论片段-->
+                <!--在此处加载评论片段-->
             </div>
             <!--发表评论区域-->
             <form  method="post" class="ui form segment" id="commentForm" style="display: none;" >

@@ -28,4 +28,10 @@ public class PathUtil {
         String imagePath = "/upload/item/" + owner.getUserId() +"/helpArticle/"+helpArticleId+"/" ;
         return imagePath;
     }
+
+    public static String getSecondArticleImagePath(UserInfo owner,long secondArticleId) {
+
+        String imagePath = "/upload/item/" + owner.getUserId() +"/secondArticle/"+secondArticleId+"/" ;
+        return imagePath;
+    }
 }

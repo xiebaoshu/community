@@ -10,6 +10,7 @@ import com.hzu.community.enums.NotificationTypeEnum;
 import com.hzu.community.mapper.CommentMapper;
 import com.hzu.community.mapper.HelpArticleMapper;
 import com.hzu.community.mapper.LostArticleMapper;
+import com.hzu.community.mapper.SecondArticleMapper;
 import com.hzu.community.service.CommentService;
 import com.hzu.community.service.NotificationService;
 import com.hzu.community.util.HttpServletRequestUtil;
@@ -37,6 +38,8 @@ public class CommentController {
     private NotificationService notificationService;
     @Autowired
     private HelpArticleMapper helpArticleMapper;
+    @Autowired
+    private SecondArticleMapper secondArticleMapper;
 
 //    加载文章的评论，并返回评论区域代码块，供前端局部刷新
     @GetMapping("/{parCategory}/comment/{articleId}")
@@ -47,6 +50,7 @@ public class CommentController {
         if (parCategory.equals(1)){
             model.addAttribute("commentList", lostArticleMapper.findArticleById(articleId).getCommentList());
         }else if (parCategory.equals(2)){
+            model.addAttribute("commentList", secondArticleMapper.findArticleById(articleId).getCommentList());
 
         }else if (parCategory.equals(3)){
             model.addAttribute("commentList", helpArticleMapper.findArticleById(articleId).getCommentList());
@@ -64,7 +68,7 @@ public class CommentController {
         UserInfo user = (UserInfo) request.getSession().getAttribute("user");
         model.addAttribute("user",user);
 
-        return "article-detail :: commentList";
+        return "fragments :: commentList";
     }
 
 
@@ -88,7 +92,7 @@ public class CommentController {
         }
 //        设置comment数据并生成信息通知notification
          Notification notification = new Notification();
-         getCandN(request, comment,notification,parCategory);
+         getCandN(request,comment,notification,parCategory);
 
 //        将评论插入数据库中,且新增信息通知
         try {
@@ -159,7 +163,7 @@ public class CommentController {
         if (parCategory.equals(1)){
             owner = lostArticleMapper.findArticleById(comment.getArticleId()).getUserInfo();
         }else if (parCategory.equals(2)){
-
+            owner = secondArticleMapper.findArticleById(comment.getArticleId()).getUserInfo();
         }else if (parCategory.equals(3)){
             owner = helpArticleMapper.findArticleById(comment.getArticleId()).getUserInfo();
 
@@ -200,6 +204,8 @@ public class CommentController {
 //                文章类型id
                 notification.setArticleParCategory(1);
             }else if (parCategory.equals(2)){
+                notification.setOuterTitle(secondArticleMapper.findArticleById(comment.getArticleId()).getArticleTitle());
+                notification.setArticleParCategory(2);
 
             }else if (parCategory.equals(3)){
                 notification.setOuterTitle(helpArticleMapper.findArticleById(comment.getArticleId()).getArticleTitle());
@@ -226,6 +232,7 @@ public class CommentController {
 //                文章类型id
                 notification.setArticleParCategory(1);
             }else if (parCategory.equals(2)){
+                notification.setArticleParCategory(2);
 
             }else if (parCategory.equals(3)){
                 notification.setArticleParCategory(3);

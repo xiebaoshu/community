@@ -3,12 +3,10 @@ package com.hzu.community.controller;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.hzu.community.bean.HelpArticle;
-import com.hzu.community.bean.LostArticle;
-import com.hzu.community.bean.Notification;
-import com.hzu.community.bean.UserInfo;
+import com.hzu.community.bean.*;
 import com.hzu.community.mapper.HelpArticleMapper;
 import com.hzu.community.mapper.LostArticleMapper;
+import com.hzu.community.mapper.SecondArticleMapper;
 import com.hzu.community.mapper.UserInfoMapper;
 import com.hzu.community.service.ArticleCategoryService;
 import com.hzu.community.service.NotificationService;
@@ -34,6 +32,8 @@ public class AdminController {
     private LostArticleMapper lostArticleMapper;
     @Autowired
     private HelpArticleMapper helpArticleMapper;
+    @Autowired
+    private SecondArticleMapper secondArticleMapper;
     @Autowired
     private NotificationService notificationService;
     @Autowired
@@ -72,6 +72,12 @@ public class AdminController {
             model.addAttribute("pageInfo",pageInfo);
 
         }else if (parCategory.equals("2")){
+            SecondArticle secondArticle = new SecondArticle();
+            secondArticle.setUserInfo(people);
+            List<SecondArticle> list = new ArrayList<>();
+            list=secondArticleMapper.getArticleList(secondArticle,null,null,null);
+            PageInfo<SecondArticle> pageInfo = new PageInfo<>(list);
+            model.addAttribute("pageInfo",pageInfo);
 
         }else if (parCategory.equals("3")){
             HelpArticle helpArticle = new HelpArticle();

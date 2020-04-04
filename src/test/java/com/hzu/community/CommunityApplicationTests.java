@@ -5,12 +5,14 @@ import com.github.pagehelper.PageInfo;
 import com.hzu.community.bean.*;
 import com.hzu.community.mapper.*;
 import com.hzu.community.service.NavService;
+import jdk.nashorn.internal.ir.annotations.Ignore;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 
 import javax.validation.constraints.Null;
+import java.security.acl.Owner;
 import java.text.SimpleDateFormat;
 
 import java.util.ArrayList;
@@ -37,6 +39,8 @@ class CommunityApplicationTests {
     NavService navService;
     @Autowired
     TagMapper tagMapper;
+    @Autowired
+    SecondArticleMapper secondArticleMapper;
     @Test
     void areaMapperTest(){
         List<Area> areaList = areaMapper.getArea();
@@ -131,12 +135,23 @@ class CommunityApplicationTests {
     }
     @Test
     void tagMapperTest(){
-        List<Tag> tagList = tagMapper.allTag();
+        List<Tag> tagList = tagMapper.allTag(3);
         for (Tag tag: tagList) {
             System.out.println(tag);
         }
 
     }
+    @Test
+    @Ignore
+    void secondMapperTest(){
+        UserInfo owner = new UserInfo();
+        SecondArticle secondArticle= secondArticleMapper.findArticleById(13);
+        owner = secondArticle.getUserInfo();
+        System.out.println(owner);
+        System.out.println(secondArticle);
+
+    }
+
 
 
 }

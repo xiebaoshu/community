@@ -142,6 +142,145 @@
             });
         </script>
     </div>
+    <!--文章评论区域-->
+    <div th:fragment="commentList">
+        <!--因为该代码局部刷新，所以对应的js代码放在这里-->
+        <script>
+            $(function () {
+                $(".reply").click(function () {
+                    $("#commentForm").show();
+                    $("#comment-btn").hide();
+                    $("#parentId").val($(this).attr("parentId"));
+                    $("#replyUserId").val($(this).attr("replyUserId"));
 
+                });
+
+                $(".del").click(function () {
+                    var msg = "您确定要删除该评论？";
+                    if (confirm(msg)==true){
+                        var comment = {};
+                        var parentId = $(this).attr("parentId");
+                        var url = "/"+parCategory+"/comment/del";
+                        comment.commentId = $(this).attr("commentId");
+                        if (parentId!=null) {
+                            comment.parentComment = {
+                                commentId : parentId
+                            } ;
+                        }
+
+                        var formData = new FormData();
+                        formData.append('commentStr',JSON.stringify(comment));
+                        $.ajax({
+                            url:url,
+                            type:'POST',
+                            data:formData,
+                            contentType:false,
+                            processData:false,
+                            cache:false,
+                            success:function (data) {
+                                if(data.success){
+
+                                    var commentUrl = "/"+parCategory+"/comment/"+$("#articleId").val();
+                                    //局部刷新
+                                    $('.comment-area').load(commentUrl);
+
+                                }else {
+                                    alert('删除失败'+data.msg);
+                                }
+
+                            }
+
+                        });
+                    }
+
+
+                });
+
+            });
+
+        </script>
+        <div class="ui threaded comments">
+            <h3 class="ui dividing header">Comments</h3>
+
+            <div class="comment" th:each="coment:${commentList}">
+                <a class="avatar"
+                   th:href="@{|/people/${coment.user.userId}/1|}">
+                    <img src="/static/images/user.jpg"
+                         th:src="${coment.user.userImg}"
+                    >
+                </a>
+                <div class="content">
+                    <a class="author"
+                       th:text="${coment.user.userName}"
+                       th:href="@{|/people/${coment.user.userId}/1|}">Elliot Fu</a>
+                    <div class="ui mini basic teal left pointing label m-padded-mini"
+                         th:if="${coment.isAdmin()}">
+                        博主</div>
+                    <div class="metadata">
+                                <span class="date"
+                                      th:text="${coment.createTime}">Yesterday at 12:30AM</span>
+                    </div>
+                    <div class="text">
+                        <p th:text="${coment.content}">This has been very useful for my research. Thanks as well!</p>
+                    </div>
+                    <div class="actions">
+                        <a class="reply"
+                           th:unless="${user.userId}==${coment.user.userId}"
+                           th:attr="parentId=${coment.commentId},replyUserId=${coment.user.userId}"
+                        >回复</a>
+                        <a class="del"
+                           th:if="${user.userId}==${coment.user.userId}"
+                           th:attr="parentId=null,commentId=${coment.commentId}"
+                        >删除</a>
+                    </div>
+                </div>
+                <div class="comments"
+                     th:if="${coment.commentList.size()>0}">
+                    <div class="commentList">
+                        <div class="comment"
+                             th:each="comments:${coment.commentList}"
+                        >
+                            <a class="avatar"
+                               th:href="@{|/people/${comments.user.userId}/1|}">
+                                <img src="/static/images/user.jpg"
+                                     th:src="${comments.user.userImg}"
+                                >
+                            </a>
+                            <div class="content">
+                                <a class="author"
+                                   th:text="${comments.user.userName}"
+                                   th:href="@{|/people/${comments.user.userId}/1|}">Jenny Hess</a>
+                                <div class="ui mini basic teal left pointing label m-padded-mini"
+                                     th:if="${comments.isAdmin()}">博主
+                                </div>
+                                <span th:text="'@'+${comments.replyUser.userName}"
+                                      class="m-text-color">@小红</span>
+                                <div class="ui mini basic teal left pointing label m-padded-mini"
+                                     th:if="${comments.replyIsAdmin}">博主</div>
+                                <div class="metadata">
+                                        <span class="date"
+                                              th:text="${comments.createTime}">Just now</span>
+                                </div>
+                                <div class="text"
+                                     th:text="${comments.content}">
+                                    Elliot you are always so right :)
+                                </div>
+                                <div class="actions">
+                                    <a class="reply"
+                                       th:unless="${user.userId}==${comments.user.userId}"
+                                       th:attr="parentId=${coment.commentId},replyUserId=${comments.user.userId}">回复</a>
+                                    <a class="del"
+                                       th:if="${user.userId}==${comments.user.userId}"
+                                       th:attr="parentId=${coment.commentId},commentId=${comments.commentId}">删除</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
 </body>
 </html>
