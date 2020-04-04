@@ -17,8 +17,16 @@ public class JobArticle {
     //    一级评论
     private List<Comment> commentList;
     //日结还是月结
-    private Integer type;
+    private Integer knots;
     private Salary salary;
+
+    public String getTag() {
+        return tag;
+    }
+
+    public void setTag(String tag) {
+        this.tag = tag;
+    }
 
     public Integer getId() {
         return id;
@@ -76,13 +84,7 @@ public class JobArticle {
         this.articleContent = articleContent;
     }
 
-    public String getTag() {
-        return tag;
-    }
 
-    public void setTag(String tag) {
-        this.tag = tag;
-    }
 
     public Date getCreateTime() {
         return createTime;
@@ -108,12 +110,12 @@ public class JobArticle {
         this.commentList = commentList;
     }
 
-    public Integer getType() {
-        return type;
+    public Integer getKnots() {
+        return knots;
     }
 
-    public void setType(Integer type) {
-        this.type = type;
+    public void setKnots(Integer knots) {
+        this.knots = knots;
     }
 
     public Salary getSalary() {
@@ -138,7 +140,7 @@ public class JobArticle {
                 ", createTime=" + createTime +
                 ", readCount=" + readCount +
                 ", commentList=" + commentList +
-                ", type=" + type +
+
                 ", salary=" + salary +
                 '}';
     }

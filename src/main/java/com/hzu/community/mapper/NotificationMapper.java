@@ -17,7 +17,8 @@ public interface NotificationMapper {
     public int addNotification(Notification notification);
 
     //    信息通知，以未读排序
-    @Select("select * from notification where receiver_id = #{userId} and notifier_id != #{userId} order by status asc")
+    @Select("select * from notification where receiver_id = #{userId} and notifier_id != #{userId} " +
+            "order by status asc,create_time DESC")
     @Results({
             @Result(id=true,column="id",property="id"),
             @Result(column="notifier_id",property="notifier",one = @One(select = "com.hzu.community.mapper.UserInfoMapper.findUserInfoById")),

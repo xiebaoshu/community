@@ -4,10 +4,7 @@ package com.hzu.community.controller;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.hzu.community.bean.*;
-import com.hzu.community.mapper.HelpArticleMapper;
-import com.hzu.community.mapper.LostArticleMapper;
-import com.hzu.community.mapper.SecondArticleMapper;
-import com.hzu.community.mapper.UserInfoMapper;
+import com.hzu.community.mapper.*;
 import com.hzu.community.service.ArticleCategoryService;
 import com.hzu.community.service.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +31,8 @@ public class AdminController {
     private HelpArticleMapper helpArticleMapper;
     @Autowired
     private SecondArticleMapper secondArticleMapper;
+    @Autowired
+    private JobArticleMapper jobArticleMapper;
     @Autowired
     private NotificationService notificationService;
     @Autowired
@@ -87,6 +86,12 @@ public class AdminController {
             PageInfo<HelpArticle> pageInfo = new PageInfo<>(list);
             model.addAttribute("pageInfo",pageInfo);
         }else if (parCategory.equals("4")){
+            JobArticle jobArticle = new JobArticle();
+            jobArticle.setUserInfo(people);
+            List<JobArticle> list = new ArrayList<>();
+            list=jobArticleMapper.getArticleList(jobArticle,null);
+            PageInfo<JobArticle> pageInfo = new PageInfo<>(list);
+            model.addAttribute("pageInfo",pageInfo);
 
         }else if (parCategory.equals("5")){
 

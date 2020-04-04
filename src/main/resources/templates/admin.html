@@ -192,6 +192,7 @@
                                         <span th:if="${notification.articleParCategory==4}">（兼职信息）</span>
                                         <span th:if="${notification.articleParCategory==5}">（校园公告）</span>
                                         <span th:if="${notification.articleParCategory==6}">（企业信息）</span>
+                                        <span th:text="${#dates.format(notification.createTime,'yyyy-MM-dd')}">（企业信息）</span>
                                         <!--满足信息通知为未读且是当前用户，则显示未读-->
                                         <div class="ui teal basic left pointing label"
                                              th:if="${!notification.status && owner } " th:text="未读">未读</div>

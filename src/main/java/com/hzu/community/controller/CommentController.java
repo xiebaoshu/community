@@ -7,10 +7,7 @@ import com.hzu.community.bean.LostArticle;
 import com.hzu.community.bean.Notification;
 import com.hzu.community.bean.UserInfo;
 import com.hzu.community.enums.NotificationTypeEnum;
-import com.hzu.community.mapper.CommentMapper;
-import com.hzu.community.mapper.HelpArticleMapper;
-import com.hzu.community.mapper.LostArticleMapper;
-import com.hzu.community.mapper.SecondArticleMapper;
+import com.hzu.community.mapper.*;
 import com.hzu.community.service.CommentService;
 import com.hzu.community.service.NotificationService;
 import com.hzu.community.util.HttpServletRequestUtil;
@@ -40,6 +37,8 @@ public class CommentController {
     private HelpArticleMapper helpArticleMapper;
     @Autowired
     private SecondArticleMapper secondArticleMapper;
+    @Autowired
+    private JobArticleMapper jobArticleMapper;
 
 //    加载文章的评论，并返回评论区域代码块，供前端局部刷新
     @GetMapping("/{parCategory}/comment/{articleId}")
@@ -56,7 +55,7 @@ public class CommentController {
             model.addAttribute("commentList", helpArticleMapper.findArticleById(articleId).getCommentList());
 
         }else if (parCategory.equals(4)){
-
+            model.addAttribute("commentList", jobArticleMapper.findArticleById(articleId).getCommentList());
         }else if (parCategory.equals(5)){
 
         }else if (parCategory.equals(6)){
@@ -166,8 +165,8 @@ public class CommentController {
             owner = secondArticleMapper.findArticleById(comment.getArticleId()).getUserInfo();
         }else if (parCategory.equals(3)){
             owner = helpArticleMapper.findArticleById(comment.getArticleId()).getUserInfo();
-
         }else if (parCategory.equals(4)){
+            owner = jobArticleMapper.findArticleById(comment.getArticleId()).getUserInfo();
 
         }else if (parCategory.equals(5)){
 
@@ -212,6 +211,8 @@ public class CommentController {
                 notification.setArticleParCategory(3);
 
             }else if (parCategory.equals(4)){
+                notification.setOuterTitle(jobArticleMapper.findArticleById(comment.getArticleId()).getArticleTitle());
+                notification.setArticleParCategory(4);
 
             }else if (parCategory.equals(5)){
 
@@ -238,6 +239,7 @@ public class CommentController {
                 notification.setArticleParCategory(3);
 
             }else if (parCategory.equals(4)){
+                notification.setArticleParCategory(4);
 
             }else if (parCategory.equals(5)){
 
