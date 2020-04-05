@@ -3,7 +3,7 @@ package com.hzu.community.bean;
 import java.util.Date;
 import java.util.List;
 
-public class HelpArticle {
+public class SchoolArticle {
     private Integer id;
     private ArticleCategory articleCategory;
     private UserInfo userInfo;
@@ -97,4 +97,21 @@ public class HelpArticle {
     }
 
 
+
+    @Override
+    public String toString() {
+        return "SchoolArticle{" +
+                "id=" + id +
+                ", articleCategory=" + articleCategory +
+                ", userInfo=" + userInfo +
+                ", articleImg='" + articleImg + '\'' +
+                ", articleTitle='" + articleTitle + '\'' +
+                ", description='" + description + '\'' +
+                ", articleContent='" + articleContent + '\'' +
+                ", tag='" + tag + '\'' +
+                ", createTime=" + createTime +
+                ", readCount=" + readCount +
+
+                '}';
+    }
 }

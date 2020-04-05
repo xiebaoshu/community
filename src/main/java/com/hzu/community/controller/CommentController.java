@@ -39,28 +39,17 @@ public class CommentController {
     private SecondArticleMapper secondArticleMapper;
     @Autowired
     private JobArticleMapper jobArticleMapper;
+    @Autowired
+    private SchoolArticleMapper schoolArticleMapper;
 
 //    加载文章的评论，并返回评论区域代码块，供前端局部刷新
     @GetMapping("/{parCategory}/comment/{articleId}")
     public String comments(@PathVariable("parCategory") Integer parCategory,
                            @PathVariable("articleId") Integer articleId,
                            Model model, HttpServletRequest request) {
-
-        if (parCategory.equals(1)){
-            model.addAttribute("commentList", lostArticleMapper.findArticleById(articleId).getCommentList());
-        }else if (parCategory.equals(2)){
-            model.addAttribute("commentList", secondArticleMapper.findArticleById(articleId).getCommentList());
-
-        }else if (parCategory.equals(3)){
-            model.addAttribute("commentList", helpArticleMapper.findArticleById(articleId).getCommentList());
-
-        }else if (parCategory.equals(4)){
-            model.addAttribute("commentList", jobArticleMapper.findArticleById(articleId).getCommentList());
-        }else if (parCategory.equals(5)){
-
-        }else if (parCategory.equals(6)){
-
-        }
+        List<Comment> commentList = new ArrayList<>();
+        commentList = commentMapper.findCommentListById(articleId,parCategory);
+        model.addAttribute("commentList", commentList);
 
 //        用于判断当前评论是否属于自己，是否能操作
 
@@ -167,9 +156,8 @@ public class CommentController {
             owner = helpArticleMapper.findArticleById(comment.getArticleId()).getUserInfo();
         }else if (parCategory.equals(4)){
             owner = jobArticleMapper.findArticleById(comment.getArticleId()).getUserInfo();
-
         }else if (parCategory.equals(5)){
-
+            owner = schoolArticleMapper.findArticleById(comment.getArticleId()).getUserInfo();
         }else if (parCategory.equals(6)){
 
         }
@@ -201,24 +189,26 @@ public class CommentController {
             if (parCategory.equals(1)){
                 notification.setOuterTitle(lostArticleMapper.findArticleById(comment.getArticleId()).getArticleTitle());
 //                文章类型id
-                notification.setArticleParCategory(1);
+
             }else if (parCategory.equals(2)){
                 notification.setOuterTitle(secondArticleMapper.findArticleById(comment.getArticleId()).getArticleTitle());
-                notification.setArticleParCategory(2);
+
 
             }else if (parCategory.equals(3)){
                 notification.setOuterTitle(helpArticleMapper.findArticleById(comment.getArticleId()).getArticleTitle());
-                notification.setArticleParCategory(3);
+
 
             }else if (parCategory.equals(4)){
                 notification.setOuterTitle(jobArticleMapper.findArticleById(comment.getArticleId()).getArticleTitle());
-                notification.setArticleParCategory(4);
+
 
             }else if (parCategory.equals(5)){
+                notification.setOuterTitle(schoolArticleMapper.findArticleById(comment.getArticleId()).getArticleTitle());
 
             }else if (parCategory.equals(6)){
 
             }
+            notification.setArticleParCategory(parCategory);
 
 //             设置未读状态
             notification.setStatus(false);
@@ -229,24 +219,7 @@ public class CommentController {
             notification.setNotifier(comment.getUser());
             notification.setReceiver(comment.getReplyUser());
             notification.setArticleId(comment.getArticleId());
-            if (parCategory.equals(1)){
-//                文章类型id
-                notification.setArticleParCategory(1);
-            }else if (parCategory.equals(2)){
-                notification.setArticleParCategory(2);
-
-            }else if (parCategory.equals(3)){
-                notification.setArticleParCategory(3);
-
-            }else if (parCategory.equals(4)){
-                notification.setArticleParCategory(4);
-
-            }else if (parCategory.equals(5)){
-
-            }else if (parCategory.equals(6)){
-
-            }
-
+            notification.setArticleParCategory(parCategory);
             notification.setType(NotificationTypeEnum.REPLY_COMMENT.getType());
             notification.setCreateTime(new Date());
             notification.setOuterTitle(commentMapper.findCommentById(comment.getParentComment().getCommentId()).getContent());

@@ -32,6 +32,7 @@ public interface CommentMapper {
             "from comment " +
             " <where> " +
             " <if test=\"articleId != null\">and article_id = #{articleId}</if> " +
+            " <if test=\"parCategory != null\">and article_par_category = #{parCategory}</if> " +
             "and parent_id is null"+
             " </where> "+
             " </script> ")
@@ -46,7 +47,8 @@ public interface CommentMapper {
 
 
     })
-    public List<Comment> findCommentListById(@Param("articleId") Integer articleId);
+    public List<Comment> findCommentListById(@Param("articleId") Integer articleId,
+                                             @Param("parCategory") Integer parCategory);
 
 
 //    通过commentId获取评论

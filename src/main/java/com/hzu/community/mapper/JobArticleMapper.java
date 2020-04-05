@@ -94,7 +94,6 @@ public interface JobArticleMapper {
             @Result(column="description",property="description"),
             @Result(column="tag",property="tag"),
             @Result(column="read_count",property="readCount"),
-            @Result(column="id",property="commentList",many = @Many(select = "com.hzu.community.mapper.CommentMapper.findCommentListById")),
             @Result(column="knots",property="knots"),
             @Result(column="salary",property="salary",one = @One(select = "com.hzu.community.mapper.SalaryMapper.findSalaryById",fetchType= FetchType.EAGER))
     })

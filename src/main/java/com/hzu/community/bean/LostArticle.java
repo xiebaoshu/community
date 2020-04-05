@@ -18,16 +18,8 @@ public class LostArticle {
     private Date finishTime;
     private UserInfo finishUser;
     private Integer readCount;
-//    一级评论
-    private List<Comment> commentList;
 
-    public List<Comment> getCommentList() {
-        return commentList;
-    }
 
-    public void setCommentList(List<Comment> commentList) {
-        this.commentList = commentList;
-    }
 
     public String getPhone() {
         return phone;
@@ -157,7 +149,7 @@ public class LostArticle {
                 ", finishTime=" + finishTime +
                 ", finishUser=" + finishUser +
                 ", readCount=" + readCount +
-                ", commentList=" + commentList +
+
                 '}';
     }
 }

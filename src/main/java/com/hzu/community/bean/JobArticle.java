@@ -14,8 +14,7 @@ public class JobArticle {
     private String tag;
     private Date createTime;
     private Integer readCount;
-    //    一级评论
-    private List<Comment> commentList;
+
     //日结还是月结
     private Integer knots;
     private Salary salary;
@@ -102,13 +101,6 @@ public class JobArticle {
         this.readCount = readCount;
     }
 
-    public List<Comment> getCommentList() {
-        return commentList;
-    }
-
-    public void setCommentList(List<Comment> commentList) {
-        this.commentList = commentList;
-    }
 
     public Integer getKnots() {
         return knots;
@@ -139,7 +131,7 @@ public class JobArticle {
                 ", tag='" + tag + '\'' +
                 ", createTime=" + createTime +
                 ", readCount=" + readCount +
-                ", commentList=" + commentList +
+
 
                 ", salary=" + salary +
                 '}';

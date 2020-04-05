@@ -111,8 +111,7 @@ public interface LostArticleMapper {
             @Result(column="finisher_id",property="finishUser",one = @One(select = "com.hzu.community.mapper.UserInfoMapper.findUserInfoById")),
             @Result(column="article_img",property="articleImg"),
             @Result(column="description",property="description"),
-            @Result(column="read_count",property="readCount"),
-            @Result(column="id",property="commentList",many = @Many(select = "com.hzu.community.mapper.CommentMapper.findCommentListById"))
+            @Result(column="read_count",property="readCount")
     })
     public LostArticle findArticleById(@Param("articleId") Integer articleId);
 

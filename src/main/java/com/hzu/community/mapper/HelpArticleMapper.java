@@ -88,8 +88,7 @@ public interface HelpArticleMapper {
             @Result(column="article_img",property="articleImg"),
             @Result(column="description",property="description"),
             @Result(column="tag",property="tag"),
-            @Result(column="read_count",property="readCount"),
-            @Result(column="id",property="commentList",many = @Many(select = "com.hzu.community.mapper.CommentMapper.findCommentListById"))
+            @Result(column="read_count",property="readCount")
     })
     public HelpArticle findArticleById(@Param("articleId") Integer articleId);
 
