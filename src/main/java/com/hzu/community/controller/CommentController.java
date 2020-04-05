@@ -41,6 +41,8 @@ public class CommentController {
     private JobArticleMapper jobArticleMapper;
     @Autowired
     private SchoolArticleMapper schoolArticleMapper;
+    @Autowired
+    private CompanyArticleMapper companyArticleMapper;
 
 //    加载文章的评论，并返回评论区域代码块，供前端局部刷新
     @GetMapping("/{parCategory}/comment/{articleId}")
@@ -159,7 +161,7 @@ public class CommentController {
         }else if (parCategory.equals(5)){
             owner = schoolArticleMapper.findArticleById(comment.getArticleId()).getUserInfo();
         }else if (parCategory.equals(6)){
-
+            owner = companyArticleMapper.findArticleById(comment.getArticleId()).getUserInfo();
         }
 
 
@@ -206,7 +208,7 @@ public class CommentController {
                 notification.setOuterTitle(schoolArticleMapper.findArticleById(comment.getArticleId()).getArticleTitle());
 
             }else if (parCategory.equals(6)){
-
+                notification.setOuterTitle(companyArticleMapper.findArticleById(comment.getArticleId()).getArticleTitle());
             }
             notification.setArticleParCategory(parCategory);
 

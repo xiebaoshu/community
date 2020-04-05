@@ -36,6 +36,8 @@ public class AdminController {
     @Autowired
     private SchoolArticleMapper schoolArticleMapper;
     @Autowired
+    private CompanyArticleMapper companyArticleMapper;
+    @Autowired
     private NotificationService notificationService;
     @Autowired
     private UserInfoMapper userInfoMapper;
@@ -104,6 +106,12 @@ public class AdminController {
             model.addAttribute("pageInfo",pageInfo);
 
         }else if (parCategory.equals("6")){
+            CompanyArticle companyArticle = new CompanyArticle();
+            companyArticle.setUserInfo(people);
+            List<CompanyArticle> list = new ArrayList<>();
+            list=companyArticleMapper.getArticleList(companyArticle,null);
+            PageInfo<CompanyArticle> pageInfo = new PageInfo<>(list);
+            model.addAttribute("pageInfo",pageInfo);
 
         }else {
             List<Notification> notificationList = new ArrayList<>();
