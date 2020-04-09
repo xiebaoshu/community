@@ -27,4 +27,12 @@ public interface UserInfoMapper {
             "where user_id = #{userId}" +
             " </script> ")
     public int update(UserInfo user);
+
+    @Select("select * from user_info where user_name LIKE '%${search}%'")
+    public List<UserInfo> searchList(@Param("search") String search);
+
+    @Select("select count(1) from user_info where user_name LIKE '%${search}%'")
+    public Integer searchCount(@Param("search") String search);
+
+
 }

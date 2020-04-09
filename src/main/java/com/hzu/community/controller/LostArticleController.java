@@ -71,6 +71,8 @@ public class LostArticleController {
         model.addAttribute("dateCondition",date);
         model.addAttribute("categoryCondition",category);
         model.addAttribute("searchCondition",search);
+        //判断属于哪种文章，高亮
+        model.addAttribute("articleParCategory",1);
 
         // 从session获取用户信息，并返回给前台显示在页面上
 

@@ -12,56 +12,7 @@
 <!--导航栏-->
 <!--inverter反转，segment片段-->
 <nav class="ui inverted attached segment">
-    <div class="ui container">
-        <div class="ui inverted secondary stackable menu">
-            <h2 class="ui teal header item">Blog</h2>
-            <!--m-item无样式作用，用于js绑定-->
-            <a href="#" class="item m-mobile-hide m-item"><i class="home icon"></i>首页</a>
-            <a href="#" class="item m-mobile-hide m-item"><i class="idea icon"></i>分类</a>
-            <a href="" class="item m-mobile-hide m-item"
-            th:href="@{|/people/${session.user.userId}/notification|}"><i class="alarm icon"></i>通知
-                <div class="ui inverted basic left pointing label"
-                      th:text="${session.unreadCount}">未读
-                </div>
-            </a>
-            <a href="#" class="item m-mobile-hide m-item"><i class="info icon"></i>关于我</a>
-            <div class="right item m-mobile-hide m-item-search">
-                <div class="ui icon input inverted">
-                    <input type="text" placeholder="Search....">
-                    <i class="search link icon"></i>
-
-                </div>
-            </div>
-
-            <div class="right item  m-mobile-hide">
-                <div>
-                    <p th:text="'你好,'+${session.user.userName}">你好，用户</p>
-                </div>
-                <a  style="padding-left: 10px"
-                th:href="@{|/people/${session.user.userId}/1|}">
-                    <img src="/static/images/user.jpg" alt="" class="ui avatar image"
-                    th:src="${session.user.userImg}">
-                </a>
-                <span>&nbsp;&nbsp;</span>
-                <a href="/logout">  退出</a>
-            </div>
-            <!--手机端自适应右上角菜单按钮-->
-            <div class="ui inverted secondary m-mobile-show m-right-top menu ">
-                <a href="#" class="ui black icon button" id="mobile-btn">
-                    <i class="sidebar icon"></i>
-                </a>
-                <a href="#" class="ui black icon button" id="mobile-btn1">
-                    <i class="search link icon"></i>
-                </a>
-                <a href="#" class="ui black icon button" id="mobile-btn2">
-                    <img src="/static/images/user.jpg" alt="" class="ui avatar image">
-                </a>
-            </div>
-
-
-
-        </div>
-    </div>
+   <div th:insert="fragments :: nav"></div>
 </nav>
 
 <!--中间内容-->
@@ -229,53 +180,7 @@
                 <!--右边列表-->
                 <div class="five wide column">
                     <!--分类-->
-                    <div class="ui segments">
-                        <div class="ui secondary segment">
-                            <div class="ui two column grid">
-                                <div class="column">
-                                    <i class="idea icon"></i>发帖
-                                </div>
-                                <div class="right aligned column">
-                                    <a href="#" target="_blank">more <i class="angle double right icon"></i></a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="ui teal segment">
-                            <div class="ui fluid vertical menu">
-                                <a href="#" class="item">
-                                    失物招领
-
-                                </a>
-                                <a href="#" class="item">
-                                    二手交易
-
-                                </a>
-                                <a href="#" class="item">
-                                    校园互助
-
-                                </a>
-                                <a href="#" class="item">
-                                    校园公告
-
-                                </a>
-                                <a href="#" class="item">
-                                    企业信息
-
-                                </a>
-                                <a href="#" class="item">
-                                    兼职信息
-
-                                </a>
-
-                            </div>
-                        </div>
-
-                    </div>
-
-
-
-
-
+                    <div th:replace="fragments :: right-type"></div>
                 </div>
             </div>
         </div>
@@ -360,6 +265,12 @@
         }
 
 
+    });
+    // 导航栏下拉列表选中
+    $(function () {
+        $('.nav-dropdown').dropdown({
+            on : 'hover'
+        });
     });
 
 </script>

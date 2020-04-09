@@ -3,6 +3,7 @@ package com.hzu.community;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.hzu.community.bean.*;
+import com.hzu.community.dto.SearchDto;
 import com.hzu.community.mapper.*;
 import com.hzu.community.service.NavService;
 import jdk.nashorn.internal.ir.annotations.Ignore;
@@ -41,6 +42,11 @@ class CommunityApplicationTests {
     TagMapper tagMapper;
     @Autowired
     SecondArticleMapper secondArticleMapper;
+    @Autowired
+    SearchMapper searchMapper;
+    @Autowired
+    CompanyArticleMapper companyArticleMapper;
+
     @Test
     void areaMapperTest(){
         List<Area> areaList = areaMapper.getArea();
@@ -149,6 +155,19 @@ class CommunityApplicationTests {
         owner = secondArticle.getUserInfo();
         System.out.println(owner);
         System.out.println(secondArticle);
+
+    }
+    @Test
+    void searchMapperTest(){
+        List<SearchDto> searchDtoList = searchMapper.getAll("123",null);
+        Integer a = searchMapper.getCount("123",null);
+        Integer b =userInfoMapper.searchCount("谢");
+
+        for (SearchDto searchDto: searchDtoList) {
+            System.out.println(searchDto);
+        }
+        System.out.println(a);
+        System.out.println(b);
 
     }
 

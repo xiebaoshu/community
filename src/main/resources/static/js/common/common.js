@@ -1,3 +1,4 @@
+//通过正则表达式，从url中获取属性的值
 function getQueryString(name) {
     var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
     var r = window.location.search.substr(1).match(reg);
@@ -6,4 +7,5 @@ function getQueryString(name) {
     }
     return '';
 }
-//通过正则表达式，从url中获取属性的值
+
+

@@ -12,47 +12,7 @@
 <!--导航栏-->
 <!--inverter反转，segment片段-->
 <nav class="ui inverted attached segment">
-    <div class="ui container">
-        <div class="ui inverted secondary stackable menu">
-            <h2 class="ui teal header item">Blog</h2>
-            <!--m-item无样式作用，用于js绑定-->
-            <a href="#" class="item m-mobile-hide m-item"><i class="home icon"></i>首页</a>
-            <a href="#" class="item m-mobile-hide m-item"><i class="idea icon"></i>分类</a>
-            <a href="#" class="item m-mobile-hide m-item"><i class="tag icon"></i>标签</a>
-            <a href="#" class="item m-mobile-hide m-item"><i class="info icon"></i>关于我</a>
-            <div class="righ item m-mobile-hide m-item-search">
-                <div class="ui icon input inverted">
-                    <input type="text" placeholder="Search....">
-                    <i class="search link icon"></i>
-
-                </div>
-            </div>
-
-            <div class="right item  m-mobile-hide">
-                <div>
-                    <p>你好，用户</p>
-                </div>
-                <a href="http://www.baidu.com" style="padding-left: 10px">
-                    <img src="../../static/images/user.jpg" alt="" class="ui avatar image">
-                </a>
-            </div>
-            <!--手机端自适应右上角菜单按钮-->
-            <div class="ui inverted secondary m-mobile-show m-right-top menu ">
-                <a href="#" class="ui black icon button" id="mobile-btn">
-                    <i class="sidebar icon"></i>
-                </a>
-                <a href="#" class="ui black icon button" id="mobile-btn1">
-                    <i class="search link icon"></i>
-                </a>
-                <a href="#" class="ui black icon button" id="mobile-btn2">
-                    <img src="../../static/images/user.jpg" alt="" class="ui avatar image">
-                </a>
-            </div>
-
-
-
-        </div>
-    </div>
+    <div th:insert="fragments :: nav"></div>
 </nav>
 
 <!--中间内容-->
@@ -264,6 +224,7 @@
     $('.ui.dropdown').dropdown({
         on : 'hover'
     });
+
 
 
 

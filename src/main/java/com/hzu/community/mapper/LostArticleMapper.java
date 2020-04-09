@@ -60,7 +60,7 @@ public interface LostArticleMapper {
             " <where> " +
             " <if test=\"articleCondition.articleCategory != null and articleCondition.articleCategory.articleCategoryId != null\">and article_category_id = #{articleCondition.articleCategory.articleCategoryId}</if> " +
             " <if test=\"articleCondition.userInfo != null and articleCondition.userInfo.userId != null\">and user_id = #{articleCondition.userInfo.userId}</if> " +
-            " <if test=\"articleCondition.articleTitle != null \">and article_title like '%${articleCondition.articleTitle}%'</if> " +
+            " <if test=\"articleCondition.articleTitle != null \">and article_title like '%${articleCondition.articleTitle}%' or description like '%${articleCondition.articleTitle}%'</if> " +
             " <if test=\"articleCondition.area != null and articleCondition.area.areaId != null\">and area_id = #{articleCondition.area.areaId}</if> " +
             " <if test=\"articleCondition.itemCategory != null and articleCondition.itemCategory.itemCategoryId != null\">and item_category_id = #{articleCondition.itemCategory.itemCategoryId}</if> " +
             " <if test=\"dateCondition != null\">and DATE_SUB(CURDATE(), INTERVAL #{dateCondition} DAY) <![CDATA[<=date(CREATE_TIME)]]></if>" +
@@ -121,4 +121,20 @@ public interface LostArticleMapper {
 
     @Update("update lost_article set read_count = read_count+1 where id = #{id}")
     void incReadCount(LostArticle lostArticle);
+
+    @Select("<script> " +
+            "SELECT count(1) " +
+            "from lost_article " +
+            " <where> " +
+            " <if test=\"articleCondition.articleCategory != null and articleCondition.articleCategory.articleCategoryId != null\">and article_category_id = #{articleCondition.articleCategory.articleCategoryId}</if> " +
+            " <if test=\"articleCondition.userInfo != null and articleCondition.userInfo.userId != null\">and user_id = #{articleCondition.userInfo.userId}</if> " +
+            " <if test=\"articleCondition.articleTitle != null \">and article_title like '%${articleCondition.articleTitle}%' or description like '%${articleCondition.articleTitle}%'</if> " +
+            " <if test=\"articleCondition.area != null and articleCondition.area.areaId != null\">and area_id = #{articleCondition.area.areaId}</if> " +
+            " <if test=\"articleCondition.itemCategory != null and articleCondition.itemCategory.itemCategoryId != null\">and item_category_id = #{articleCondition.itemCategory.itemCategoryId}</if> " +
+            " <if test=\"dateCondition != null\">and DATE_SUB(CURDATE(), INTERVAL #{dateCondition} DAY) <![CDATA[<=date(CREATE_TIME)]]></if>" +
+            " </where> " +
+            "order by create_time desc" +
+            " </script> ")
+    public Integer searchCount(@Param("articleCondition") LostArticle articleCondition,
+                                            @Param("dateCondition")Integer dateCondition);
 }

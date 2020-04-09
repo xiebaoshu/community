@@ -13,49 +13,7 @@
     <!--导航栏-->
     <!--inverter反转，segment片段-->
     <nav class="ui inverted attached segment">
-        <div class="ui container">
-            <div class="ui inverted secondary stackable menu">
-                <h2 class="ui teal header item">Blog</h2>
-                <!--m-item无样式作用，用于js绑定-->
-                <a href="#" class="item m-mobile-hide m-item"><i class="home icon"></i>首页</a>
-                <a href="#" class="item m-mobile-hide m-item"><i class="idea icon"></i>分类</a>
-                <a href="#" class="item m-mobile-hide m-item"><i class="tag icon"></i>标签</a>
-                <a href="#" class="item m-mobile-hide m-item"><i class="info icon"></i>关于我</a>
-                <div class="right item m-mobile-hide m-item-search">
-                    <form action="/1" method="get" name="searchForm">
-                        <div class="ui icon input inverted">
-                            <input type="text" placeholder="Search...." name="search" th:value="${searchCondition}">
-                            <i class="search link icon" onclick="document.searchForm.submit()"></i>
-
-                        </div>
-                    </form>
-                </div>
-
-                <div class="right item  m-mobile-hide">
-                   <div>
-                       <p>你好，用户</p>
-                   </div>
-                    <a href="http://www.baidu.com" style="padding-left: 10px">
-                        <img src="../../static/images/user.jpg" alt="" class="ui avatar image">
-                    </a>
-                </div>
-                <!--手机端自适应右上角菜单按钮-->
-                <div class="ui inverted secondary m-mobile-show m-right-top menu ">
-                    <a href="#" class="ui black icon button" id="mobile-btn">
-                        <i class="sidebar icon"></i>
-                    </a>
-                    <a href="#" class="ui black icon button" id="mobile-btn1">
-                        <i class="search link icon"></i>
-                    </a>
-                    <a href="#" class="ui black icon button" id="mobile-btn2">
-                        <img src="../../static/images/user.jpg" alt="" class="ui avatar image">
-                    </a>
-                </div>
-
-
-
-            </div>
-        </div>
+        <div th:insert="fragments :: nav"></div>
     </nav>
 
     <!--中间内容-->
@@ -275,48 +233,7 @@
                   <!--右边列表-->
                   <div class="five wide column">
                         <!--文章分类-->
-                      <div class="ui segments">
-                          <div class="ui secondary segment">
-                              <div class="ui two column grid">
-                                  <div class="column">
-                                      <i class="idea icon"></i>文章
-                                  </div>
-                                  <div class="right aligned column">
-                                      <a href="#" target="_blank">more <i class="angle double right icon"></i></a>
-                                  </div>
-                              </div>
-                          </div>
-                          <div class="ui teal segment">
-                              <div class="ui fluid vertical menu">
-                                  <a href="#" class="active item"
-                                  th:href="@{/1}">
-                                      失物招领
-                                      <div class="ui teal basic left pointing label">13</div>
-                                  </a>
-                                  <a href="#" class="item">
-                                      二手交易
-                                      <div class="ui teal basic left pointing label">13</div>
-                                  </a>
-                                  <a href="#" class="item">
-                                      校园互助
-                                      <div class="ui teal basic left pointing label">13</div>
-                                  </a>
-                                  <a href="#" class="item">
-                                      校园公告
-                                      <div class="ui teal basic left pointing label">13</div>
-                                  </a>
-                                  <a href="#" class="item">
-                                      企业信息
-                                      <div class="ui teal basic left pointing label">13</div>
-                                  </a>
-                                  <a href="#" class="item">
-                                      兼职信息
-                                      <div class="ui teal basic left pointing label">13</div>
-                                  </a>
-                              </div>
-                          </div>
-
-                      </div>
+                      <div th:replace="fragments :: right-type"></div>
 
                       <!--文章子分类-->
                       <div class="ui segments m-margin-top-large">
@@ -445,6 +362,7 @@
     <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
     <script src="../../static/layui.js"></script>
 
+
     <script>
 
        // 手机端右上角按钮点击事件
@@ -455,6 +373,12 @@
         $('#mobile-btn1').click(function () {
             $('.m-item-search').toggleClass('m-mobile-hide');
         });
+       // 导航栏下拉列表选中
+       $(function () {
+           $('.nav-dropdown').dropdown({
+               on : 'hover'
+           });
+       });
 
     </script>
 </body>

@@ -105,4 +105,21 @@ public interface JobArticleMapper {
     @Update("update job_article set read_count = read_count+1 where id = #{id}")
     void incReadCount(JobArticle article);
 
+    @Select("<script> " +
+            "SELECT count(1) " +
+            "from job_article " +
+            " <where> " +
+            " <if test=\"articleCondition.articleCategory != null and articleCondition.articleCategory.articleCategoryId != null\">and article_category_id = #{articleCondition.articleCategory.articleCategoryId}</if> " +
+            " <if test=\"articleCondition.userInfo != null and articleCondition.userInfo.userId != null\">and user_id = #{articleCondition.userInfo.userId}</if> " +
+            " <if test=\"articleCondition.articleTitle != null \">and article_title like '%${articleCondition.articleTitle}%'</if> " +
+            " <if test=\"articleCondition.tag != null \">and tag like '%${articleCondition.tag}%'</if> " +
+            " <if test=\"dateCondition != null\">and DATE_SUB(CURDATE(), INTERVAL #{dateCondition} DAY) <![CDATA[<=date(CREATE_TIME)]]></if>" +
+            " <if test=\"articleCondition.knots != null \">and knots =#{articleCondition.knots}</if> " +
+            " <if test=\"articleCondition.salary != null and articleCondition.salary.id != null \">and salary = #{articleCondition.salary.id}</if> " +
+            " </where> " +
+            "order by create_time desc" +
+            " </script> ")
+    public Integer searchCount(@Param("articleCondition") JobArticle articleCondition,
+                                           @Param("dateCondition")Integer dateCondition);
+
 }
