@@ -17,4 +17,29 @@ public class ArticleCategoryServiceImpl implements ArticleCategoryService {
     public List<ArticleCategory> getArticleCategories(@Param("parentId") Integer parentId){
         return articleCategoryMapper.getArticleCategory(parentId);
     }
+
+    @Override
+    public ArticleCategory findArticleCategoryById(Integer id) {
+        return articleCategoryMapper.findArticleCategoryById(id);
+    }
+
+    @Override
+    public ArticleCategory findByName(ArticleCategory articleCategory) {
+        return articleCategoryMapper.findByName(articleCategory);
+    }
+
+    @Override
+    public int add(ArticleCategory articleCategory) {
+        return articleCategoryMapper.add(articleCategory);
+    }
+
+    @Override
+    public int update(ArticleCategory articleCategory) {
+        return articleCategoryMapper.update(articleCategory);
+    }
+
+    @Override
+    public void del(Integer id) {
+         articleCategoryMapper.del(id);
+    }
 }

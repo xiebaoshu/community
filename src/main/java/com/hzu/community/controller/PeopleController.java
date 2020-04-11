@@ -22,7 +22,7 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/people")
-public class AdminController {
+public class PeopleController {
     @Autowired
     private ArticleCategoryService articleCategoryService;
     @Autowired

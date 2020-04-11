@@ -170,6 +170,13 @@ class CommunityApplicationTests {
         System.out.println(b);
 
     }
+    @Test
+    void tagTest(){
+       List<ArticleCategory> articleCategories =articleCategoryMapper.articleTags();
+        for (ArticleCategory articleCategory : articleCategories) {
+            System.out.println(articleCategory);
+        }
+    }
 
 
 

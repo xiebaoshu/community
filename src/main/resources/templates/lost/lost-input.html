@@ -106,15 +106,47 @@
                 </div>
 
             </div>
+            <div class="two fields">
 
-            <div class="required field">
-                <div class="ui left labeled input">
-                    <div class="ui teal basic label">
-                        <div class="text">联系方式</div>
+                <div class="required field">
+                    <div class="ui left labeled input">
+                        <div class="ui teal basic label">
+                            <div class="text">联系方式</div>
+                        </div>
+                        <input type="text" name="phone" id="phone" placeholder="请输入手机号">
                     </div>
-                    <input type="text" name="phone" id="phone" placeholder="请输入手机号">
                 </div>
+
+                <div class="field">
+                    <div class="ui left labeled action  input">
+                        <label class="ui compact teal basic label">标签</label>
+                        <!--multiple 可多选-->
+                        <!--fluid 填满-->
+                        <div class="ui fluid inline segment multiple  attached dropdown">
+                            <input type="hidden" id="tagIds" name="tagIds"
+                                   th:value="${article!=null}?${article.tag}">
+                            <i class="dropdown icon" style="padding-top: 7px !important;"></i>
+                            <div class="default text">标签</div>
+                            <div class="menu">
+                                <div class="item" th:each="parTag:${tagList}">
+                                    <i class="dropdown icon" ></i>
+                                    <span class="text" th:text="${parTag.name}">Dogs</span>
+                                    <div class="menu">
+                                        <div class="item" th:each="tag:${parTag.tagList}"
+                                             th:text="${tag.name}"
+                                             th:data-value="${tag.name}">Shiba Inu</div>
+
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
+
+
             <div class="field">
                 <textarea name="description" id="description"  placeholder="文章描述..."></textarea>
             </div>

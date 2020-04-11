@@ -1,0 +1,221 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>标签管理</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
+    <link rel="stylesheet" href="/static/css/me.css" >
+</head>
+<body>
+
+<!--导航-->
+<nav th:replace="admin/fragments :: menu(3)" class="ui inverted attached segment m-padded-tb-mini m-shadow-small" >
+
+</nav>
+<div class="ui attached pointing menu">
+    <div class="ui container">
+        <div class="right menu">
+            <div class="ui pointing dropdown  item">
+                新增
+                <div class="menu">
+                    <a href="#" th:href="@{/admin/tags/input?type=1}" class="item">一级标签</a>
+                    <a href="#" th:href="@{/admin/tags/input?type=2}" class="item">二级标签</a>
+                </div>
+            </div>
+
+            <a href="#" th:href="@{/admin/tags}" class="teal active item">列表</a>
+        </div>
+    </div>
+</div>
+
+<!--中间内容-->
+<div  class="m-container-small m-padded-tb-big">
+
+    <div class="ui container">
+        <div class="ui pointing secondary menu">
+
+            <a class="active item" th:href="@{/admin/tags(type=1)}"
+               th:class="${typeCondition eq 1}?'active item':'item'">
+                <i class="privacy icon"></i> 失物招领
+            </a>
+            <a class="item" th:href="@{/admin/tags(type=2)}"
+               th:class="${typeCondition eq 2}?'active item':'item'">
+                <i class="shop icon"></i> 二手交易
+            </a>
+            <a class="item" th:href="@{/admin/tags(type=3)}"
+               th:class="${typeCondition eq 3}?'active item':'item'">
+                <i class="exchange icon"></i> 校园互助
+            </a>
+            <a class="item" th:href="@{/admin/tags(type=4)}"
+               th:class="${typeCondition eq 4}?'active item':'item'">
+                <i class="money icon"></i> 兼职信息
+            </a>
+            <a class="item" th:href="@{/admin/tags(type=5)}"
+               th:class="${typeCondition eq 5}?'active item':'item'">
+                <i class="student icon"></i> 校园公告
+            </a>
+            <a class="item" th:href="@{/admin/tags(type=6)}"
+               th:class="${typeCondition eq 6}?'active item':'item'">
+                <i class="travel icon"></i> 企业信息
+            </a>
+        </div>
+        <div class="ui success message" th:unless="${#strings.isEmpty(message)}">
+            <i class="close icon"></i>
+            <div class="header">提示：</div>
+            <p th:text="${message}">恭喜，操作成功！</p>
+        </div>
+        <!--一级标签-->
+        <!--celled分割线-->
+        <table class="ui celled compact teal table" style="margin-top: 20px;">
+            <thead>
+            <tr>
+                <th></th>
+                <th>名称</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="tag,iterStat : ${firstTagList}">
+                <td th:text="${iterStat.count}">1</td>
+                <td th:text="${tag.name}">一级标签</td>
+                <td>
+                    <a href="#" th:href="@{|/admin/tags/update/${tag.id}?type=1|}" class="ui mini teal basic button">编辑</a>
+                    <a href="#" th:href="@{|/admin/tags/delete/${tag.id}?type=1|}" class="ui mini red basic button">删除</a>
+                </td>
+            </tr>
+            </tbody>
+            <tfoot>
+            <tr>
+                <th colspan="6">
+                    <a href="#" class="ui mini right floated teal basic button"
+                       th:href="@{/admin/tags/input?type=1}"
+                    >新增</a>
+                </th>
+            </tr>
+            </tfoot>
+        </table>
+        <!--二级标签-->
+        <div class="ui secondary menu">
+
+            <a class="active item"
+                 th:each="firstTag:${firstTagList}"
+                 th:href="@{/admin/tags(type=${typeCondition},parTag=${firstTag.id})}"
+                 th:class="${firstTag.id}==${parTagCondition}?'active item':'item'"
+                 th:text="${firstTag.name}">
+
+            </a>
+
+        </div>
+        <table class="ui celled compact teal table" style="margin-top: 20px;">
+            <thead>
+            <tr>
+                <th></th>
+                <th>名称</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="secondTag,iterStat : ${pageInfo.getList()}">
+                <td th:text="${iterStat.count}">1</td>
+                <td th:text="${secondTag.name}">二级标签</td>
+                <td>
+                    <a href="#" th:href="@{|/admin/tags/update/${secondTag.id}?type=2|}" class="ui mini teal basic button">编辑</a>
+                    <a href="#" th:href="@{|/admin/tags/delete/${secondTag.id}?type=2|}" class="ui mini red basic button">删除</a>
+                </td>
+            </tr>
+            </tbody>
+            <tfoot>
+            <tr>
+                <th colspan="6">
+                    <div class="ui mini pagination menu">
+                        <a class="item"
+                           th:href="@{/admin/tags(page=${pageInfo.getPrePage()},type=${typeCondition},parTag=${parTagCondition})}"
+                           th:style="${pageInfo.hasPreviousPage}?'pointer-events: true;':'pointer-events:none'">
+                            上一页
+                        </a>
+                        <a class="item"
+                           th:href="@{/admin/tags(page=${pageInfo.getNextPage()},type=${typeCondition},parTag=${parTagCondition})}"
+                           th:style="${pageInfo.hasNextPage}?'pointer-events: true;':'pointer-events:none'"
+                        >
+                            下一页
+                        </a>
+                    </div>
+                    <a href="#" class="ui mini right floated teal basic button"
+                       th:href="@{/admin/tags/input?type=2}"
+                    >新增</a>
+                </th>
+            </tr>
+            </tfoot>
+        </table>
+
+
+    </div>
+
+</div>
+
+<br>
+<br>
+<!--底部footer-->
+<footer th:replace="admin/fragments :: footer" class="ui inverted vertical segment m-padded-tb-massive">
+    <div class="ui center aligned container">
+        <div class="ui inverted divided stackable grid">
+            <div class="three wide column">
+                <div class="ui inverted link list">
+                    <div class="item">
+                        <img src="../../static/images/wechat.jpg" class="ui rounded image" alt="" style="width: 110px">
+                    </div>
+                </div>
+            </div>
+            <div class="three wide column">
+                <h4 class="ui inverted header m-text-thin m-text-spaced " >最新博客</h4>
+                <div class="ui inverted link list">
+                    <a href="#" class="item m-text-thin">用户故事（User Story）</a>
+                    <a href="#" class="item m-text-thin">用户故事（User Story）</a>
+                    <a href="#" class="item m-text-thin">用户故事（User Story）</a>
+                </div>
+            </div>
+            <div class="three wide column">
+                <h4 class="ui inverted header m-text-thin m-text-spaced ">联系我</h4>
+                <div class="ui inverted link list">
+                    <a href="#" class="item m-text-thin">Email：lirenmi@163.com</a>
+                    <a href="#" class="item m-text-thin">QQ：865729312</a>
+                </div>
+            </div>
+            <div class="seven wide column">
+                <h4 class="ui inverted header m-text-thin m-text-spaced ">Blog</h4>
+                <p class="m-text-thin m-text-spaced m-opacity-mini">这是我的个人博客、会分享关于编程、写作、思考相关的任何内容，希望可以给来到这儿的人有所帮助...</p>
+            </div>
+        </div>
+        <div class="ui inverted section divider"></div>
+        <p class="m-text-thin m-text-spaced m-opacity-tiny">Copyright © 2016 - 2017 Lirenmi Designed by Lirenmi</p>
+    </div>
+
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+<script src="/static/js/common/common.js"></script>
+
+<script>
+    $('.menu.toggle').click(function () {
+        $('.m-item').toggleClass('m-mobile-hide');
+    });
+
+    $('.ui.dropdown').dropdown({
+        on : 'hover'
+    });
+
+    //消息提示关闭点击绑定时间
+    $('.message .close')
+        .on('click', function () {
+            $(this)
+                .closest('.message')
+                .transition('fade');
+        });
+  
+
+</script>
+</body>
+</html>

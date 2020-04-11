@@ -18,6 +18,7 @@ public class LostArticle {
     private Date finishTime;
     private UserInfo finishUser;
     private Integer readCount;
+    private String tag;
 
 
 
@@ -130,6 +131,14 @@ public class LostArticle {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getTag() {
+        return tag;
+    }
+
+    public void setTag(String tag) {
+        this.tag = tag;
     }
 
     @Override

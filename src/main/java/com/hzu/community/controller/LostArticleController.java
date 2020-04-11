@@ -8,6 +8,7 @@ import com.hzu.community.enums.ArticleEnum;
 import com.hzu.community.exceptions.ArticleException;
 import com.hzu.community.mapper.CommentMapper;
 import com.hzu.community.mapper.LostArticleMapper;
+import com.hzu.community.mapper.TagMapper;
 import com.hzu.community.mapper.UserInfoMapper;
 import com.hzu.community.service.*;
 import com.hzu.community.util.HttpServletRequestUtil;
@@ -45,6 +46,8 @@ public class LostArticleController {
     CommentMapper commentMapper;
     @Autowired
     CommentService commentService;
+    @Autowired
+    private TagMapper tagMapper;
 
     @GetMapping("")
     public String lostArticleList(Model model,
@@ -54,6 +57,8 @@ public class LostArticleController {
                                   @RequestParam(name = "item", required = false) Integer item,
                                   @RequestParam(name = "area", required = false) Integer area,
                                   @RequestParam(name = "category", required = false) Integer category,
+                                  @RequestParam(name = "tag", required = false) String tag,
+                                  @RequestParam(name = "tagPar", defaultValue = "56") Integer tagPar,
                                   @RequestParam(name = "date", required = false) Integer date
 
     ){
@@ -62,6 +67,8 @@ public class LostArticleController {
         model.addAttribute("areaList",areaList);
         List<ItemCategory> itemCategoryList = itemCategoryService.getItemCategoryist();
         model.addAttribute("itemCategoryList",itemCategoryList);
+        List<Tag> tagList = tagMapper.allTag(1);
+        model.addAttribute("tagList",tagList);
 //        取出失物招领子类别
         List<ArticleCategory> articleCategories = articleCategoryService.getArticleCategories(1);
         model.addAttribute("articleCategories",articleCategories);
@@ -71,6 +78,8 @@ public class LostArticleController {
         model.addAttribute("dateCondition",date);
         model.addAttribute("categoryCondition",category);
         model.addAttribute("searchCondition",search);
+        model.addAttribute("tagCondition",tag);
+        model.addAttribute("tagParCondition",tagPar);
         //判断属于哪种文章，高亮
         model.addAttribute("articleParCategory",1);
 
@@ -93,7 +102,7 @@ public class LostArticleController {
         ItemCategory itemCategory = new ItemCategory();
         itemCategory.setItemCategoryId(item);
         lostArticle.setItemCategory(itemCategory);
-
+        lostArticle.setTag(tag);
         lostArticle.setArticleTitle(search);
         //开启分页，并使用pageHelp插件进行分页和返回数据，pageHelp插件需要先配置pom和yml。
         PageHelper.startPage(page,10);
@@ -110,7 +119,7 @@ public class LostArticleController {
     //    获取失物招领新增页面初始化信息
     @GetMapping("/add")
     public String toAddPage(Map<String,Object> modelMap){
-
+        List<Tag> tagList = new ArrayList<>();
         List<Area> areaList = new ArrayList<>();
         List<ItemCategory> itemCategoryList = new ArrayList<>();
         List<ArticleCategory> articleCategoryList = new ArrayList<>();
@@ -118,9 +127,11 @@ public class LostArticleController {
             areaList = areaService.getAreaList();
             itemCategoryList = itemCategoryService.getItemCategoryist();
             articleCategoryList = articleCategoryService.getArticleCategories(1);
+            tagList = tagMapper.allTag(1);
 //            将需要初始化的数据放进去map
             modelMap.put("areaList",areaList);
             modelMap.put("itemCategoryList",itemCategoryList);
+            modelMap.put("tagList",tagList);
             modelMap.put("articleCategoryList",articleCategoryList);
             modelMap.put("init",true);
         }catch (Exception e){
@@ -217,13 +228,16 @@ public class LostArticleController {
                                @RequestParam(name = "articleId") Integer articleId){
         List<Area> areaList = new ArrayList<>();
         List<ItemCategory> itemCategoryList = new ArrayList<>();
+        List<Tag> tagList = new ArrayList<>();
         List<ArticleCategory> articleCategoryList = new ArrayList<>();
         areaList = areaService.getAreaList();
         itemCategoryList = itemCategoryService.getItemCategoryist();
+        tagList = tagMapper.allTag(1);
         articleCategoryList = articleCategoryService.getArticleCategories(1);
 //       将需要下拉列表选项的数据放进去model
         model.addAttribute("areaList",areaList);
         model.addAttribute("itemCategoryList",itemCategoryList);
+        model.addAttribute("tagList",tagList);
         model.addAttribute("articleCategoryList",articleCategoryList);
         //通过articleId回显article里面的数据
         LostArticle lostArticle = lostArticleMapper.findArticleById(articleId);

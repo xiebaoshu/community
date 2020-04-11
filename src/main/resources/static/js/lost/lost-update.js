@@ -17,7 +17,7 @@ $(function () {
         lostArticle.phone = $('#phone').val();
         lostArticle.description = $('#description').val();
         lostArticle.articleContent = $('#article_content').val();
-
+        lostArticle.tag = $('#tagIds').val();
         lostArticle.createTime = $('#create_time').val();
         lostArticle.finishTime = $('#finish_time').val();
         lostArticle.finishUser = {

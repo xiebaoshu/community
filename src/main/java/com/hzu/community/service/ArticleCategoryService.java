@@ -7,4 +7,9 @@ import java.util.List;
 
 public interface ArticleCategoryService {
     public List<ArticleCategory> getArticleCategories(@Param("parentId") Integer parentId);
+    public ArticleCategory findArticleCategoryById(@Param("id") Integer id);
+    public ArticleCategory findByName(ArticleCategory articleCategory);
+    public int add(ArticleCategory articleCategory);
+    public int update(ArticleCategory articleCategory);
+    public void del(Integer id);
 }

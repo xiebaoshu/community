@@ -14,7 +14,7 @@ public interface LostArticleMapper {
     @Options(useGeneratedKeys = true,keyProperty = "id")
     @Insert("insert into lost_article(article_category_id,user_id,area_id,item_category_id," +
             "article_title,phone,article_content,description," +
-            "create_time,finish_time) " +
+            "create_time,tag) " +
             "values(#{articleCategory.articleCategoryId}," +
             "#{userInfo.userId}," +
             "#{area.areaId}," +
@@ -24,7 +24,7 @@ public interface LostArticleMapper {
             "#{articleContent}," +
             "#{description}," +
             "#{createTime}," +
-            "#{finishTime}" +
+            "#{tag}" +
 
             ")")
     public int addLostArticle(LostArticle lostArticle);
@@ -41,6 +41,7 @@ public interface LostArticleMapper {
             " <if test=\"articleImg != null\"> article_img = #{articleImg},</if> " +
             " <if test=\"articleTitle != null\"> article_title = #{articleTitle},</if> " +
             " <if test=\"phone != null\"> phone = #{phone},</if> " +
+            " <if test=\"tag != null\"> tag = #{tag},</if> " +
             " <if test=\"articleContent != null\"> article_content = #{articleContent},</if> " +
             " <if test=\"createTime != null\"> create_time = #{createTime},</if> " +
             " <if test=\"description != null\"> description = #{description},</if> " +
@@ -63,6 +64,7 @@ public interface LostArticleMapper {
             " <if test=\"articleCondition.articleTitle != null \">and article_title like '%${articleCondition.articleTitle}%' or description like '%${articleCondition.articleTitle}%'</if> " +
             " <if test=\"articleCondition.area != null and articleCondition.area.areaId != null\">and area_id = #{articleCondition.area.areaId}</if> " +
             " <if test=\"articleCondition.itemCategory != null and articleCondition.itemCategory.itemCategoryId != null\">and item_category_id = #{articleCondition.itemCategory.itemCategoryId}</if> " +
+            " <if test=\"articleCondition.tag != null \">and tag like '%${articleCondition.tag}%'</if> " +
             " <if test=\"dateCondition != null\">and DATE_SUB(CURDATE(), INTERVAL #{dateCondition} DAY) <![CDATA[<=date(CREATE_TIME)]]></if>" +
             " </where> " +
             "order by create_time desc" +
@@ -75,6 +77,7 @@ public interface LostArticleMapper {
             @Result(column="item_category_id",property="itemCategory",one = @One(select = "com.hzu.community.mapper.ItemCategoryMapper.findItemCategoryById")),
             @Result(column="article_title",property="articleTitle"),
             @Result(column="phone",property="phone"),
+            @Result(column="tag",property="tag"),
             @Result(column="article_content",property="articleContent"),
             @Result(column="create_time",property="createTime"),
             @Result(column="finish_time",property="finishTime"),
@@ -108,6 +111,7 @@ public interface LostArticleMapper {
             @Result(column="article_content",property="articleContent"),
             @Result(column="create_time",property="createTime"),
             @Result(column="finish_time",property="finishTime"),
+            @Result(column="tag",property="tag"),
             @Result(column="finisher_id",property="finishUser",one = @One(select = "com.hzu.community.mapper.UserInfoMapper.findUserInfoById")),
             @Result(column="article_img",property="articleImg"),
             @Result(column="description",property="description"),
@@ -130,6 +134,7 @@ public interface LostArticleMapper {
             " <if test=\"articleCondition.userInfo != null and articleCondition.userInfo.userId != null\">and user_id = #{articleCondition.userInfo.userId}</if> " +
             " <if test=\"articleCondition.articleTitle != null \">and article_title like '%${articleCondition.articleTitle}%' or description like '%${articleCondition.articleTitle}%'</if> " +
             " <if test=\"articleCondition.area != null and articleCondition.area.areaId != null\">and area_id = #{articleCondition.area.areaId}</if> " +
+            " <if test=\"articleCondition.tag != null \">and tag like '%${articleCondition.tag}%'</if> " +
             " <if test=\"articleCondition.itemCategory != null and articleCondition.itemCategory.itemCategoryId != null\">and item_category_id = #{articleCondition.itemCategory.itemCategoryId}</if> " +
             " <if test=\"dateCondition != null\">and DATE_SUB(CURDATE(), INTERVAL #{dateCondition} DAY) <![CDATA[<=date(CREATE_TIME)]]></if>" +
             " </where> " +

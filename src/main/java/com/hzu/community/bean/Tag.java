@@ -6,7 +6,17 @@ public class Tag {
     private Integer id;
     private String name;
     private Integer parId;
+    private Integer articleParCategory;
     private List<Tag> tagList;
+
+
+    public Integer getArticleParCategory() {
+        return articleParCategory;
+    }
+
+    public void setArticleParCategory(Integer articleParCategory) {
+        this.articleParCategory = articleParCategory;
+    }
 
     public List<Tag> getTagList() {
         return tagList;
