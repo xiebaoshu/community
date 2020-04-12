@@ -46,7 +46,7 @@ public interface ArticleCategoryMapper {
     @Delete("delete from article_category where article_category_id = #{id}")
     public void del(Integer id);
 
-//    用于获取文章标签
+//    用于获取文章标签列表，用于管理员界面
     @Select("<script> " +
             "SELECT * " +
             "from article_category " +
@@ -58,6 +58,19 @@ public interface ArticleCategoryMapper {
             @Result(column="article_category_id",property="tagList",many = @Many(select = "com.hzu.community.mapper.TagMapper.allTag"))
     })
     public List<ArticleCategory> articleTags();
+
+    //    用于获取文章类别列表,用于管理员界面
+    @Select("<script> " +
+            "SELECT * " +
+            "from article_category " +
+            "where parent_id is null" +
+            " </script> ")
+    @Results({
+            @Result(id=true,column="article_category_id",property="articleCategoryId"),
+            @Result(column="article_category_name",property="articleCategoryName"),
+            @Result(column="article_category_id",property="typeList",many = @Many(select = "com.hzu.community.mapper.ArticleCategoryMapper.getArticleCategory"))
+    })
+    public List<ArticleCategory> categoryList();
 
 
 

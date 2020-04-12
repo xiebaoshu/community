@@ -18,6 +18,8 @@ public class JobArticle {
     //日结还是月结
     private Integer knots;
     private Salary salary;
+    private Boolean top;
+
 
     public String getTag() {
         return tag;
@@ -116,6 +118,14 @@ public class JobArticle {
 
     public void setSalary(Salary salary) {
         this.salary = salary;
+    }
+
+    public Boolean getTop() {
+        return top;
+    }
+
+    public void setTop(Boolean top) {
+        this.top = top;
     }
 
     @Override

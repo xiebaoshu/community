@@ -22,6 +22,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
@@ -225,7 +226,20 @@ public class LostArticleController {
 
     @RequestMapping("/update")
     public String toUpdatePage(Model model,
-                               @RequestParam(name = "articleId") Integer articleId){
+                               @RequestParam(name = "articleId") Integer articleId,
+                                HttpServletRequest request){
+        //通过articleId回显article里面的数据
+        LostArticle lostArticle = lostArticleMapper.findArticleById(articleId);
+        model.addAttribute("lostArticle",lostArticle);
+//        判断是否为非法操作
+        UserInfo user = lostArticle.getUserInfo();
+        UserInfo nowUser = (UserInfo)request.getSession().getAttribute("user");
+//        如果是非法操作，则重定向到当前用户界面
+        if (!user.getUserId().equals(nowUser.getUserId()) && !nowUser.getUserType().equals(3)){
+            return "redirect:/people/"+nowUser.getUserId()+"/1";
+        }
+
+//        页面初始化所需数据
         List<Area> areaList = new ArrayList<>();
         List<ItemCategory> itemCategoryList = new ArrayList<>();
         List<Tag> tagList = new ArrayList<>();
@@ -239,9 +253,7 @@ public class LostArticleController {
         model.addAttribute("itemCategoryList",itemCategoryList);
         model.addAttribute("tagList",tagList);
         model.addAttribute("articleCategoryList",articleCategoryList);
-        //通过articleId回显article里面的数据
-        LostArticle lostArticle = lostArticleMapper.findArticleById(articleId);
-        model.addAttribute("lostArticle",lostArticle);
+
         return "/lost/lost-update";
     }
     @PostMapping("/update")
@@ -271,9 +283,9 @@ public class LostArticleController {
         }
 
         if (lostArticle != null && lostArticle.getId()!= null) {
-//            从session获取数据
-            UserInfo owner = (UserInfo) request.getSession().getAttribute("user");
-            lostArticle.setUserInfo(owner);
+//            从session获取用户数据，用于前台js判断当前是否为管理员操作
+            UserInfo user = (UserInfo) request.getSession().getAttribute("user");
+            modelMap.put("user",user);
             ArticleExecution le;
             try {
                 if (articleImg == null){
@@ -285,10 +297,9 @@ public class LostArticleController {
                       le = lostArticleService.updateArticle(lostArticle,imageHolder);
                 }
 
-
                 if(le.getState() == ArticleEnum.SUCCESS.getState()){
                     modelMap.put("success",true);
-                    modelMap.put("user",owner);
+
 
                 }else{
                     modelMap.put("success",false);
@@ -318,16 +329,41 @@ public class LostArticleController {
 
     @PostMapping("/delete")
     public String lostArticleList(@RequestParam(name = "articleId") Integer articleId,
+                                  RedirectAttributes attributes,
                                   HttpServletRequest request){
-        UserInfo user = (UserInfo) request.getSession().getAttribute("user");
-        Integer userId = user.getUserId();
+        LostArticle article = lostArticleMapper.findArticleById(articleId);
+//        文章作者
+        UserInfo user = article.getUserInfo();
+//        当前用户
+        UserInfo nowUser = (UserInfo)request.getSession().getAttribute("user");
+//        如果当前用户与文章作者相等，则为合法操作
+        if (user.getUserId().equals(nowUser.getUserId())){
+            Integer userId = user.getUserId();
 //        userId用于删除本地存储图片和所在文件夹
-        try {
-            lostArticleService.deleteArticle(articleId,userId);
-        }catch (ArticleException e){
-            System.out.println(e.getMessage());
+            try {
+                lostArticleService.deleteArticle(articleId,userId);
+            }catch (ArticleException e){
+                System.out.println(e.getMessage());
+            }
+            return "redirect:/people/"+userId+"/1";
+        }else if (nowUser.getUserType().equals(3)){
+//          如果是管理员权限，也可进行操作
+            Integer userId = user.getUserId();
+//        userId用于删除本地存储图片和所在文件夹
+            try {
+                lostArticleService.deleteArticle(articleId,userId);
+            }catch (ArticleException e){
+                attributes.addFlashAttribute("message", "删除失败"+e.getMessage());
+                System.out.println(e.getMessage());
+            }
+            attributes.addFlashAttribute("message", "删除成功");
+            return "redirect:/admin/article";
+        }else {
+//            非法操作，不进行操作，返回用户界面
+            return "redirect:/people/"+nowUser.getUserId()+"/1";
         }
-        return "redirect:/people/"+userId+"/1";
+
+
 
     }
 

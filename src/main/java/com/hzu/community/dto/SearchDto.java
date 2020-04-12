@@ -14,6 +14,8 @@ public class SearchDto {
     private UserInfo userInfo;
     private Date createTime;
     private String articleImg;
+    private Boolean top;
+    private Integer date;
 
     public Integer getId() {
         return id;
@@ -69,6 +71,22 @@ public class SearchDto {
 
     public void setArticleImg(String articleImg) {
         this.articleImg = articleImg;
+    }
+
+    public Boolean getTop() {
+        return top;
+    }
+
+    public void setTop(Boolean top) {
+        this.top = top;
+    }
+
+    public Integer getDate() {
+        return date;
+    }
+
+    public void setDate(Integer date) {
+        this.date = date;
     }
 
     @Override

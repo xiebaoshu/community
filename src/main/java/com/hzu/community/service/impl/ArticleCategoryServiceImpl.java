@@ -42,4 +42,9 @@ public class ArticleCategoryServiceImpl implements ArticleCategoryService {
     public void del(Integer id) {
          articleCategoryMapper.del(id);
     }
+
+    @Override
+    public List<ArticleCategory> categoryList() {
+        return articleCategoryMapper.categoryList();
+    }
 }

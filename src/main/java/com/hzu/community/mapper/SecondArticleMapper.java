@@ -38,6 +38,7 @@ public interface SecondArticleMapper {
             " <if test=\"createTime != null\"> create_time = #{createTime},</if> " +
             " <if test=\"description != null\"> description = #{description},</if> " +
             " <if test=\"tag != null\"> tag = #{tag},</if> " +
+            " <if test=\"top != null\"> top = #{top},</if> " +
             " <if test=\"price != null\"> price = #{price}</if> " +
             " </set> " +
             "where id = #{id}" +
@@ -57,7 +58,7 @@ public interface SecondArticleMapper {
             " <if test=\"nextPrice != null \">and price &lt;= #{nextPrice}</if> " +
             " <if test=\"dateCondition != null\">and DATE_SUB(CURDATE(), INTERVAL #{dateCondition} DAY) <![CDATA[<=date(CREATE_TIME)]]></if>" +
             " </where> " +
-            "order by create_time desc" +
+            "order by top desc,create_time desc" +
             " </script> ")
     @Results({
             @Result(id=true,column="id",property="id"),
@@ -70,6 +71,7 @@ public interface SecondArticleMapper {
             @Result(column="description",property="description"),
             @Result(column="tag",property="tag"),
             @Result(column="read_count",property="readCount"),
+            @Result(column="top",property="top"),
             @Result(column="price",property="price")
     })
     public List<SecondArticle> getArticleList(@Param("articleCondition") SecondArticle articleCondition,
@@ -96,6 +98,7 @@ public interface SecondArticleMapper {
             @Result(column="description",property="description"),
             @Result(column="tag",property="tag"),
             @Result(column="read_count",property="readCount"),
+            @Result(column="top",property="top"),
             @Result(column="price",property="price")
     })
     public SecondArticle findArticleById(@Param("articleId") Integer articleId);

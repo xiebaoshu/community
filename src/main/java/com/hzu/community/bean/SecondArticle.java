@@ -17,6 +17,8 @@ public class SecondArticle {
     private Integer readCount;
 
     private Double price;
+    private Boolean top;
+
 
     public Integer getId() {
         return id;
@@ -98,7 +100,13 @@ public class SecondArticle {
         this.readCount = readCount;
     }
 
+    public Boolean getTop() {
+        return top;
+    }
 
+    public void setTop(Boolean top) {
+        this.top = top;
+    }
 
     public Double getPrice() {
         return price;

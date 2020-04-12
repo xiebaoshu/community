@@ -46,6 +46,7 @@ public interface LostArticleMapper {
             " <if test=\"createTime != null\"> create_time = #{createTime},</if> " +
             " <if test=\"description != null\"> description = #{description},</if> " +
             " <if test=\"finishTime != null\"> finish_time = #{finishTime},</if> " +
+            " <if test=\"top != null\"> top = #{top},</if> " +
             " <if test=\"finishUser != null\"> finisher_id = #{finishUser.userId}</if> " +
             " </set> " +
             "where id = #{id}" +
@@ -67,7 +68,7 @@ public interface LostArticleMapper {
             " <if test=\"articleCondition.tag != null \">and tag like '%${articleCondition.tag}%'</if> " +
             " <if test=\"dateCondition != null\">and DATE_SUB(CURDATE(), INTERVAL #{dateCondition} DAY) <![CDATA[<=date(CREATE_TIME)]]></if>" +
             " </where> " +
-            "order by create_time desc" +
+            "order by top desc,create_time desc" +
             " </script> ")
     @Results({
             @Result(id=true,column="id",property="id"),
@@ -84,6 +85,7 @@ public interface LostArticleMapper {
             @Result(column="finisher_id",property="finishUser",one = @One(select = "com.hzu.community.mapper.UserInfoMapper.findUserInfoById")),
             @Result(column="article_img",property="articleImg"),
             @Result(column="description",property="description"),
+            @Result(column="top",property="top"),
             @Result(column="read_count",property="readCount")
     })
     public List<LostArticle> getArticleList(@Param("articleCondition") LostArticle articleCondition,
@@ -115,6 +117,7 @@ public interface LostArticleMapper {
             @Result(column="finisher_id",property="finishUser",one = @One(select = "com.hzu.community.mapper.UserInfoMapper.findUserInfoById")),
             @Result(column="article_img",property="articleImg"),
             @Result(column="description",property="description"),
+            @Result(column="top",property="top"),
             @Result(column="read_count",property="readCount")
     })
     public LostArticle findArticleById(@Param("articleId") Integer articleId);

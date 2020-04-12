@@ -13,6 +13,7 @@ public class CompanyArticle {
     private String tag;
     private Date createTime;
     private Integer readCount;
+    private Boolean top;
 
     public Integer getId() {
         return id;
@@ -92,6 +93,14 @@ public class CompanyArticle {
 
     public void setReadCount(Integer readCount) {
         this.readCount = readCount;
+    }
+
+    public Boolean getTop() {
+        return top;
+    }
+
+    public void setTop(Boolean top) {
+        this.top = top;
     }
 
     @Override

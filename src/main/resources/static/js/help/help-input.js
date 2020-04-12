@@ -35,7 +35,12 @@ $(function () {
                 if(data.success){
 
                     alert('提交成功');
-                    window.location.href = '/people/'+data.user.userId+'/3';
+
+                    if (data.user.userType==3){
+                        window.location.href = '/admin/article';
+                    }else {
+                        window.location.href = '/people/'+data.user.userId+'/3';
+                    }
 
                 }else{
                     alert('提交失败'+data.errMsg);

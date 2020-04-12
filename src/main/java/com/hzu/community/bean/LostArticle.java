@@ -19,6 +19,8 @@ public class LostArticle {
     private UserInfo finishUser;
     private Integer readCount;
     private String tag;
+    private Boolean top;
+
 
 
 
@@ -139,6 +141,14 @@ public class LostArticle {
 
     public void setTag(String tag) {
         this.tag = tag;
+    }
+
+    public Boolean getTop() {
+        return top;
+    }
+
+    public void setTop(Boolean top) {
+        this.top = top;
     }
 
     @Override

@@ -14,6 +14,8 @@ public class HelpArticle {
     private String tag;
     private Date createTime;
     private Integer readCount;
+    private Boolean top;
+
 
 
     public Integer getId() {
@@ -96,5 +98,11 @@ public class HelpArticle {
         this.readCount = readCount;
     }
 
+    public Boolean getTop() {
+        return top;
+    }
 
+    public void setTop(Boolean top) {
+        this.top = top;
+    }
 }

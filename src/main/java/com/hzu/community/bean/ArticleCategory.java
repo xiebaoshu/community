@@ -8,6 +8,7 @@ public class ArticleCategory {
     private String articleCategoryName;
     private Integer parentId;
     private List<Tag> tagList;
+    private List<ArticleCategory> typeList;
 
     public Integer getArticleCategoryId() {
         return articleCategoryId;
@@ -41,6 +42,14 @@ public class ArticleCategory {
         this.tagList = tagList;
     }
 
+    public List<ArticleCategory> getTypeList() {
+        return typeList;
+    }
+
+    public void setTypeList(List<ArticleCategory> typeList) {
+        this.typeList = typeList;
+    }
+
     @Override
     public String toString() {
         return "ArticleCategory{" +
@@ -48,6 +57,7 @@ public class ArticleCategory {
                 ", articleCategoryName='" + articleCategoryName + '\'' +
                 ", parentId=" + parentId +
                 ", tagList=" + tagList +
+                ", typeList=" + typeList +
                 '}';
     }
 }

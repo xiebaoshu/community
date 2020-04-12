@@ -46,10 +46,13 @@ public class SearchController {
         model.addAttribute("dateCondition",date);
         if (type.equals("all")){
 //            搜索结果使用插件分页
-            List<SearchDto> searchDtoList = searchMapper.getAll(search,date);
+            SearchDto searchDto = new SearchDto();
+            searchDto.setArticleTitle(search);
+            searchDto.setDate(date);
+            List<SearchDto> searchDtoList = searchMapper.getAll(searchDto);
             PageInfo<SearchDto> pageInfo = new PageInfo<>(searchDtoList);
             model.addAttribute("pageInfo",pageInfo);
-            Integer count = searchMapper.getCount(search,date);
+            Integer count = searchMapper.getCount(searchDto);
 //            统计搜索条数
             model.addAttribute("count",count);
 

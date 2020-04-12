@@ -11,23 +11,25 @@ import java.util.List;
 public interface SearchMapper {
     @Select("<script> " +
             "SELECT * FROM\n" +
-            "(select id,article_category_id,user_id,article_img,article_title,create_time,description from lost_article \n" +
+            "(select id,article_category_id,user_id,article_img,article_title,create_time,description,top from lost_article \n" +
             "union all\n" +
-            "select id,article_category_id,user_id,article_img,article_title,create_time,description from second_article \n" +
+            "select id,article_category_id,user_id,article_img,article_title,create_time,description,top from second_article \n" +
             "union all\n" +
-            "select id,article_category_id,user_id,article_img,article_title,create_time,description from help_article \n" +
+            "select id,article_category_id,user_id,article_img,article_title,create_time,description,top from help_article \n" +
             "union all\n" +
-            "select id,article_category_id,user_id,article_img,article_title,create_time,description from job_article \n" +
+            "select id,article_category_id,user_id,article_img,article_title,create_time,description,top from job_article \n" +
             "union all\n" +
-            "select id,article_category_id,user_id,article_img,article_title,create_time,description from school_article \n" +
+            "select id,article_category_id,user_id,article_img,article_title,create_time,description,top from school_article \n" +
             "union all\n" +
-            "select id,article_category_id,user_id,article_img,article_title,create_time,description from company_article) as a\n" +
+            "select id,article_category_id,user_id,article_img,article_title,create_time,description,top from company_article) as a\n" +
             "<where>" +
-                " <if test=\"search!= null\">and article_title LIKE '%${search}%' or description LIKE '%${search}%'</if> " +
-            " <if test=\"dateCondition != null\">and DATE_SUB(CURDATE(), INTERVAL #{dateCondition} DAY) <![CDATA[<=date(CREATE_TIME)]]></if>" +
+            " <if test=\"articleTitle!= null\">and article_title LIKE '%${articleTitle}%'</if> " +
+            " <if test=\"articleCategory!= null and articleCategory.articleCategoryId!= null\">and article_category_id =#{articleCategory.articleCategoryId}</if> " +
+            " <if test=\"top!= null \">and top =#{top}</if> " +
+            " <if test=\"date != null\">and DATE_SUB(CURDATE(), INTERVAL #{date} DAY) <![CDATA[<=date(CREATE_TIME)]]></if>" +
 
             "</where>" +
-            "order by create_time DESC" +
+            "order by top DESC,create_time DESC" +
             "</script>")
     @Results({
             @Result(id=true,column="id",property="id"),
@@ -36,32 +38,33 @@ public interface SearchMapper {
             @Result(column="article_title",property="articleTitle"),
             @Result(column="create_time",property="createTime"),
             @Result(column="article_img",property="articleImg"),
-            @Result(column="description",property="description")
+            @Result(column="description",property="description"),
+            @Result(column="top",property="top")
     })
-    public List<SearchDto> getAll(@Param("search") String search,
-                                  @Param("dateCondition") Integer dateCondition);
+    public List<SearchDto> getAll(SearchDto searchDto);
 
 
     @Select("<script> " +
             "SELECT count(1) FROM\n" +
-            "(select id,article_category_id,user_id,article_img,article_title,create_time,description from lost_article \n" +
+            "(select id,article_category_id,user_id,article_img,article_title,create_time,description,top from lost_article \n" +
             "union all\n" +
-            "select id,article_category_id,user_id,article_img,article_title,create_time,description from second_article \n" +
+            "select id,article_category_id,user_id,article_img,article_title,create_time,description,top from second_article \n" +
             "union all\n" +
-            "select id,article_category_id,user_id,article_img,article_title,create_time,description from help_article \n" +
+            "select id,article_category_id,user_id,article_img,article_title,create_time,description,top from help_article \n" +
             "union all\n" +
-            "select id,article_category_id,user_id,article_img,article_title,create_time,description from job_article \n" +
+            "select id,article_category_id,user_id,article_img,article_title,create_time,description,top from job_article \n" +
             "union all\n" +
-            "select id,article_category_id,user_id,article_img,article_title,create_time,description from school_article \n" +
+            "select id,article_category_id,user_id,article_img,article_title,create_time,description,top from school_article \n" +
             "union all\n" +
-            "select id,article_category_id,user_id,article_img,article_title,create_time,description from company_article) as a\n" +
+            "select id,article_category_id,user_id,article_img,article_title,create_time,description,top from company_article) as a\n" +
             "<where>" +
-            " <if test=\"search!= null\">and article_title LIKE '%${search}%' or description LIKE '%${search}%'</if> " +
-            " <if test=\"dateCondition != null\">and DATE_SUB(CURDATE(), INTERVAL #{dateCondition} DAY) <![CDATA[<=date(CREATE_TIME)]]></if>" +
+            " <if test=\"articleTitle!= null\">and article_title LIKE '%${articleTitle}%'</if> " +
+            " <if test=\"articleCategory!= null and articleCategory.articleCategoryId!= null\">and article_category_id =#{articleCategory.articleCategoryId}</if> " +
+            " <if test=\"top!= null \">and top =#{top}</if> " +
+            " <if test=\"date != null\">and DATE_SUB(CURDATE(), INTERVAL #{date} DAY) <![CDATA[<=date(CREATE_TIME)]]></if>" +
 
             "</where>" +
             "order by create_time DESC" +
             "</script>")
-    public Integer getCount(@Param("search") String search,
-                                  @Param("dateCondition") Integer dateCondition);
+    public Integer getCount(SearchDto searchDto);
 }

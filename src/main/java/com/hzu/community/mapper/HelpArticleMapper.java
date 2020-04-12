@@ -37,6 +37,7 @@ public interface HelpArticleMapper {
             " <if test=\"articleContent != null\"> article_content = #{articleContent},</if> " +
             " <if test=\"createTime != null\"> create_time = #{createTime},</if> " +
             " <if test=\"description != null\"> description = #{description},</if> " +
+            " <if test=\"top != null\"> top = #{top},</if> " +
             " <if test=\"tag != null\"> tag = #{tag}</if> " +
             " </set> " +
             "where id = #{id}" +
@@ -53,7 +54,7 @@ public interface HelpArticleMapper {
             " <if test=\"articleCondition.tag != null \">and tag like '%${articleCondition.tag}%'</if> " +
             " <if test=\"dateCondition != null\">and DATE_SUB(CURDATE(), INTERVAL #{dateCondition} DAY) <![CDATA[<=date(CREATE_TIME)]]></if>" +
             " </where> " +
-            "order by create_time desc" +
+            "order by top desc,create_time desc" +
             " </script> ")
     @Results({
             @Result(id=true,column="id",property="id"),
@@ -65,6 +66,7 @@ public interface HelpArticleMapper {
             @Result(column="article_img",property="articleImg"),
             @Result(column="description",property="description"),
             @Result(column="tag",property="tag"),
+            @Result(column="top",property="top"),
             @Result(column="read_count",property="readCount")
     })
     public List<HelpArticle> getArticleList(@Param("articleCondition") HelpArticle articleCondition,
@@ -88,6 +90,7 @@ public interface HelpArticleMapper {
             @Result(column="article_img",property="articleImg"),
             @Result(column="description",property="description"),
             @Result(column="tag",property="tag"),
+            @Result(column="top",property="top"),
             @Result(column="read_count",property="readCount")
     })
     public HelpArticle findArticleById(@Param("articleId") Integer articleId);

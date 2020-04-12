@@ -39,7 +39,12 @@ $(function () {
             success:function (data) {
                 if(data.success){
                     alert('更新成功');
-                    window.location.href = '/people/'+data.user.userId+'/1';
+                    if (data.user.userType==3){
+                        window.location.href = '/admin/article';
+                    }else {
+                        window.location.href = '/people/'+data.user.userId+'/1';
+                    }
+
                 }else{
                     alert('更新失败'+data.errMsg);
                 }

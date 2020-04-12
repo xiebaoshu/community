@@ -38,6 +38,7 @@ public interface JobArticleMapper {
             " <if test=\"description != null\"> description = #{description},</if> " +
             " <if test=\"tag != null\"> tag = #{tag},</if> " +
             " <if test=\"knots != null\"> knots = #{knots},</if> " +
+            " <if test=\"top != null\"> top = #{top},</if> " +
             " <if test=\"salary != null\"> salary = #{salary.id}</if> " +
             " </set> " +
             "where id = #{id}" +
@@ -56,7 +57,7 @@ public interface JobArticleMapper {
             " <if test=\"articleCondition.knots != null \">and knots =#{articleCondition.knots}</if> " +
             " <if test=\"articleCondition.salary != null and articleCondition.salary.id != null \">and salary = #{articleCondition.salary.id}</if> " +
             " </where> " +
-            "order by create_time desc" +
+            "order by top desc,create_time desc" +
             " </script> ")
     @Results({
             @Result(id=true,column="id",property="id"),
@@ -70,6 +71,7 @@ public interface JobArticleMapper {
             @Result(column="tag",property="tag"),
             @Result(column="read_count",property="readCount"),
             @Result(column="knots",property="knots"),
+            @Result(column="top",property="top"),
             @Result(column="salary",property="salary",one = @One(select = "com.hzu.community.mapper.SalaryMapper.findSalaryById",fetchType= FetchType.EAGER))
     })
     public List<JobArticle> getArticleList(@Param("articleCondition") JobArticle articleCondition,
@@ -95,6 +97,7 @@ public interface JobArticleMapper {
             @Result(column="tag",property="tag"),
             @Result(column="read_count",property="readCount"),
             @Result(column="knots",property="knots"),
+            @Result(column="top",property="top"),
             @Result(column="salary",property="salary",one = @One(select = "com.hzu.community.mapper.SalaryMapper.findSalaryById",fetchType= FetchType.EAGER))
     })
     public JobArticle findArticleById(@Param("articleId") Integer articleId);

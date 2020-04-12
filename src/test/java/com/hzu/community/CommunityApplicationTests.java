@@ -157,26 +157,20 @@ class CommunityApplicationTests {
         System.out.println(secondArticle);
 
     }
-    @Test
-    void searchMapperTest(){
-        List<SearchDto> searchDtoList = searchMapper.getAll("123",null);
-        Integer a = searchMapper.getCount("123",null);
-        Integer b =userInfoMapper.searchCount("谢");
 
-        for (SearchDto searchDto: searchDtoList) {
-            System.out.println(searchDto);
-        }
-        System.out.println(a);
-        System.out.println(b);
-
-    }
     @Test
-    void tagTest(){
-       List<ArticleCategory> articleCategories =articleCategoryMapper.articleTags();
+    void tagTest() {
+      /* List<ArticleCategory> articleCategories =articleCategoryMapper.articleTags();
+        for (ArticleCategory articleCategory : articleCategories) {
+            System.out.println(articleCategory);
+        }*/
+        List<ArticleCategory> articleCategories = articleCategoryMapper.categoryList();
         for (ArticleCategory articleCategory : articleCategories) {
             System.out.println(articleCategory);
         }
     }
+
+
 
 
 

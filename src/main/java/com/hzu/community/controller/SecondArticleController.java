@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
@@ -197,8 +198,19 @@ public class SecondArticleController {
 
     @RequestMapping("/update")
     public String toUpdatePage(Model model,
-                               @RequestParam(name = "articleId") Integer articleId){
-
+                               @RequestParam(name = "articleId") Integer articleId,
+                               HttpServletRequest request){
+        //通过articleId回显article里面的数据
+        SecondArticle article = secondArticleMapper.findArticleById(articleId);
+        model.addAttribute("article",article);
+        //        判断是否为非法操作
+        UserInfo user = article.getUserInfo();
+        UserInfo nowUser = (UserInfo)request.getSession().getAttribute("user");
+//        如果是非法操作，则重定向到当前用户界面
+        if (!user.getUserId().equals(nowUser.getUserId()) && !nowUser.getUserType().equals(3)){
+            return "redirect:/people/"+nowUser.getUserId()+"/2";
+        }
+        //        页面初始化所需数据
         List<ArticleCategory> categoryList = new ArrayList<>();
         List<Tag> tagList = new ArrayList<>();
         categoryList = articleCategoryService.getArticleCategories(2);
@@ -206,9 +218,7 @@ public class SecondArticleController {
 //       将需要下拉列表选项的数据放进去model
         model.addAttribute("categoryList",categoryList);
         model.addAttribute("tagList",tagList);
-        //通过articleId回显article里面的数据
-        SecondArticle article = secondArticleMapper.findArticleById(articleId);
-        model.addAttribute("article",article);
+
         return "/second/second-input";
     }
 
@@ -241,7 +251,6 @@ public class SecondArticleController {
         if (article != null && article.getId()!= null) {
 //            从session获取数据
             UserInfo owner = (UserInfo) request.getSession().getAttribute("user");
-            article.setUserInfo(owner);
             ArticleExecution le;
             try {
                 if (articleImg == null){
@@ -288,16 +297,39 @@ public class SecondArticleController {
 
     @PostMapping("/delete")
     public String del(@RequestParam(name = "articleId") Integer articleId,
+                      RedirectAttributes attributes,
                       HttpServletRequest request){
-        UserInfo user = (UserInfo) request.getSession().getAttribute("user");
+
+        SecondArticle article = secondArticleMapper.findArticleById(articleId);
+//        文章作者
+        UserInfo user = article.getUserInfo();
+//        当前用户
+        UserInfo nowUser = (UserInfo)request.getSession().getAttribute("user");
+        // userId用于删除本地存储图片和所在文件夹
         Integer userId = user.getUserId();
-//        userId用于删除本地存储图片和所在文件夹
-        try {
-            secondArticleService.deleteArticle(articleId,userId);
-        }catch (ArticleException e){
-            System.out.println(e.getMessage());
+        //如果当前用户与文章作者相等，则为合法操作
+        if (user.getUserId().equals(nowUser.getUserId())){
+            try {
+                secondArticleService.deleteArticle(articleId,userId);
+            }catch (ArticleException e){
+                System.out.println(e.getMessage());
+            }
+            return "redirect:/people/"+userId+"/2";
+        }else if (nowUser.getUserType().equals(3)){
+//          如果是管理员权限，也可进行操作
+            try {
+                secondArticleService.deleteArticle(articleId,userId);
+            }catch (ArticleException e){
+                attributes.addFlashAttribute("message", "删除失败"+e.getMessage());
+                System.out.println(e.getMessage());
+            }
+            attributes.addFlashAttribute("message", "删除成功");
+            return "redirect:/admin/article";
+        }else {
+//            非法操作，不进行操作，返回用户界面
+            return "redirect:/people/"+nowUser.getUserId()+"/2";
         }
-        return "redirect:/people/"+userId+"/2";
+
 
     }
 
