@@ -1,5 +1,7 @@
 package com.hzu.community.bean;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import java.util.Date;
 
 public class CompanyArticle {
@@ -14,6 +16,7 @@ public class CompanyArticle {
     private Date createTime;
     private Integer readCount;
     private Boolean top;
+    private MultipartFile upload;
 
     public Integer getId() {
         return id;
@@ -101,6 +104,14 @@ public class CompanyArticle {
 
     public void setTop(Boolean top) {
         this.top = top;
+    }
+
+    public MultipartFile getUpload() {
+        return upload;
+    }
+
+    public void setUpload(MultipartFile upload) {
+        this.upload = upload;
     }
 
     @Override

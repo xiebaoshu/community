@@ -48,7 +48,7 @@ public class SchoolArticleServiceImpl implements SchoolArticleService {
                         手动抛出异常,使事务回滚*/
                 throw new ArticleException("帖子数据插入失败");
             } else {
-                if (imageHolder.getImage() != null) {
+                if (imageHolder != null) {
                     try {
 //                            对图片进行处理，并把url设置在文章中
                         addArticleImg(article, imageHolder);
@@ -86,7 +86,8 @@ public class SchoolArticleServiceImpl implements SchoolArticleService {
 //                      根据文章的图片url删除本地下载的图片
                     ImageUtil.deleteFileOrpath(oldArticle.getArticleImg());
                 }
-//             对图片进行处理，并把url设置在文章中
+//             对图片进行处理，并把url设置在文章中,因为图片需要userId作为路径，所以重新赋值user
+                article.setUserInfo(oldArticle.getUserInfo());
                 addArticleImg(article, imageHolder);
             }
 

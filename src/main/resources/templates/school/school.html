@@ -82,12 +82,15 @@
                               <div class="ui segment padded vertical m-padded-tb-large"
                                    th:each="article:${pageInfo.getList()}">
                                   <!--vertical垂直，reversed显示顺序反转-->
-                                  <div class="ui mobile reversed stackable grid">
+                                  <!--有封面图片时的显示-->
+                                  <div class="ui mobile reversed stackable grid" th:if="${article.articleImg}">
                                       <div class="eleven wide column">
                                           <h3 class="ui header">
                                               <a th:href="@{|/5/${article.id}|}" target="_self"
                                                  th:text="${article.getArticleTitle()}"
                                               style="color: black">失物招领1</a>
+                                              <div href="javascript:;" class="ui  red basic left pointing label m-margin-tb-tiny"
+                                                   th:if="${article.top}">置顶</div>
                                           </h3>
                                           <p class="m-text" th:text="|${article.description}...|">正确做好任何一件事情的前提是清晰、正确的理解目标。而事实是，我们很多人很多时候根本没有对目标正确的定义，甚至根本从来就没有想过，只是大家都那么做而已…...</p>
                                           <div class="ui grid">
@@ -145,6 +148,63 @@
                                           </a>
                                       </div>
 
+                                  </div>
+                                  <!--无封面图片时的显示-->
+                                  <div class="ui mobile reversed stackable grid" th:unless="${article.articleImg}">
+                                      <div class="column">
+                                          <h3 class="ui header">
+                                              <a th:href="@{|/5/${article.id}|}" target="_self"
+                                                 th:text="${article.getArticleTitle()}"
+                                                 style="color: black">失物招领1</a>
+                                              <div href="javascript:;" class="ui  red basic left pointing label m-margin-tb-tiny"
+                                                   th:if="${article.top}">置顶</div>
+                                          </h3>
+                                          <p class="m-text" th:text="|${article.description}...|">正确做好任何一件事情的前提是清晰、正确的理解目标。而事实是，我们很多人很多时候根本没有对目标正确的定义，甚至根本从来就没有想过，只是大家都那么做而已…...</p>
+                                          <div class="ui grid">
+                                              <div class="row">
+                                                  <div class="eleven wide column">
+                                                      <!--horizontal link list 横形列表-->
+                                                      <div class="ui mini horizontal link list">
+                                                          <div class="item">
+                                                              <!--avatar圆形图片-->
+                                                              <img src="../../static/images/user.jpg" alt="" class="ui avatar image m-pic-avatar"
+                                                                   th:src="${article.userInfo.userImg}"
+                                                              >
+                                                              <div class="content">
+                                                                  <a href="#" class="header" th:text="${article.getUserInfo().getUserName()}"
+                                                                     th:href="@{|/people/${article.userInfo.userId}/5|}">用户</a>
+                                                              </div>
+
+                                                          </div>
+                                                          <div class="item">
+                                                              <i class="calendar icon"></i>
+                                                              <span th:text="${#dates.format(article.createTime, 'yyyy-MM-dd')}">2020-2-27</span>
+                                                          </div>
+
+                                                      </div>
+                                                  </div>
+                                                  <div class="right aligned five wide column">
+                                                      <a href="#" class="ui teal basic label  m-text-thin m-padded-tiny"
+                                                         th:text="${article.articleCategory.articleCategoryName}"
+                                                         th:href="@{/5(category=${article.articleCategory.articleCategoryId})}">
+                                                          问题求助</a>
+                                                  </div>
+                                              </div>
+
+                                              <div class="row">
+                                                  <div class="column">
+                                                      <a href="#" class="ui  basic left pointing label m-padded-mini m-text-thin"
+                                                         th:each="tag:${article.tag.split(',')}"
+                                                         th:text="${tag}"
+                                                         th:href="@{/5(tag=${tag})}">java</a>
+
+                                                  </div>
+                                              </div>
+                                          </div>
+
+
+
+                                      </div>
                                   </div>
                               </div>
 

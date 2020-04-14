@@ -79,6 +79,12 @@
 
                         </div>
 
+                        <div class="ui success message" th:unless="${#strings.isEmpty(message)}">
+                            <i class="close icon"></i>
+                            <div class="header">提示：</div>
+                            <p th:text="${message}">恭喜，操作成功！</p>
+                        </div>
+
                         <table class="ui celled stackable table"
                                th:unless="${notificationInfo}">
                             <thead class="m-mobile-hide">
@@ -272,6 +278,14 @@
             on : 'hover'
         });
     });
+
+    //消息提示关闭点击绑定事件
+    $('.message .close')
+        .on('click', function () {
+            $(this)
+                .closest('.message')
+                .transition('fade');
+        });
 
 </script>
 </body>

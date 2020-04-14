@@ -21,20 +21,21 @@
 <div  class="m-container-small m-padded-tb-big">
     <div class="ui container">
 
-        <div  class="ui form">
+        <form  class="ui form" enctype="multipart/form-data" method="post" th:action="${article}?@{/3/update}:@{/3/add}">
+            <input type="hidden" name="id" th:value="${article!=null}?${article.id}">
             <div class="required field">
                 <div class="ui left labeled input">
                     <div class="ui teal basic label">
                         <div class="text">标题</div>
                     </div>
-                    <input type="text" name="article_title" id="article_title" placeholder="请输入标题"
+                    <input type="text" name="articleTitle" id="article_title" placeholder="请输入标题"
                     th:value="${article!=null}?${article.articleTitle}">
                 </div>
             </div>
 
             <div class="required field">
                 <div id="md-content" style="z-index: 1 !important;">
-                    <textarea style="display: none" name="article_content"
+                    <textarea style="display: none" name="articleContent"
                               placeholder="请输入内容" id="article_content"
                               th:text="${article!=null}?${article.articleContent}"></textarea>
                 </div>
@@ -50,7 +51,7 @@
                     <div class="ui left labeled action input">
                         <label class="ui compact teal basic label">分类</label>
                         <div class="ui fluid selection dropdown">
-                            <input type="hidden" name="article_category_id" id="article_category_id"
+                            <input type="hidden" name="articleCategory.articleCategoryId" id="article_category_id"
                                    th:value="${article!=null}?${article.articleCategory.articleCategoryId}">
                             <i class="dropdown icon"></i>
                             <div class="default text m-text-color">分类</div>
@@ -71,7 +72,7 @@
                         <!--multiple 可多选-->
                         <!--fluid 填满-->
                         <div class="ui fluid inline segment multiple  attached dropdown">
-                            <input type="hidden" id="tagIds" name="tagIds"
+                            <input type="hidden" id="tagIds" name="tag"
                                    th:value="${article!=null}?${article.tag}">
                             <i class="dropdown icon" style="padding-top: 7px !important;"></i>
                             <div class="default text">标签</div>
@@ -98,8 +99,7 @@
                           th:text="${article!=null}?${article.description}"></textarea>
             </div>
 
-
-
+            <div class="ui error message"></div>
 
             <div class="ui grid">
                 <div class="eight wide column">
@@ -110,7 +110,7 @@
                 </div>
                 <div class="right aligned eight wide column">
                     <button type="button" class="ui button" onclick="window.history.go(-1)" >返回</button>
-                    <button class="ui teal button" id="submit">发布</button>
+                    <button class="ui teal submit button" id="submit">发布</button>
                 </div>
             </div>
 
@@ -119,7 +119,7 @@
 
 
 
-        </div>
+        </form>
     </div>
 
 </div>
@@ -174,7 +174,6 @@
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.js"></script>
 <script src="/static/js/common/common.js"></script>
-<script src="/static/js/help/help-input.js"></script>
 <script src="/static/plugins/editor/editormd.min.js"></script>
 
 <script>
@@ -207,6 +206,47 @@
     // 下拉列表
     $('.ui.dropdown').dropdown({
         on : 'hover'
+    });
+
+    $('.ui.form').form({
+        fields : {
+            articleTitle : {
+                identifier: 'articleTitle',
+                rules: [{
+                    type : 'empty',
+                    prompt: '标题：请输入文章标题'
+                }]
+            },
+            articleContent : {
+                identifier: 'articleContent',
+                rules: [{
+                    type : 'empty',
+                    prompt: '标题：请输入文章内容'
+                }]
+            },
+            articleCategoryArticleCategoryId : {
+                identifier: 'articleCategory.articleCategoryId',
+                rules: [{
+                    type : 'empty',
+                    prompt: '标题：请选择分类'
+                }]
+            },
+            tag : {
+                identifier: 'tag',
+                rules: [{
+                    type : 'empty',
+                    prompt: '标题：请选择标签'
+                }]
+            },
+            description : {
+                identifier: 'description',
+                rules: [{
+                    type : 'empty',
+                    prompt: '标题：请输入文章描述'
+                }]
+            }
+
+        }
     });
 
 

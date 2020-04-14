@@ -1,5 +1,7 @@
 package com.hzu.community.bean;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import java.util.Date;
 import java.util.List;
 
@@ -19,7 +21,15 @@ public class JobArticle {
     private Integer knots;
     private Salary salary;
     private Boolean top;
+    private MultipartFile upload;
 
+    public MultipartFile getUpload() {
+        return upload;
+    }
+
+    public void setUpload(MultipartFile upload) {
+        this.upload = upload;
+    }
 
     public String getTag() {
         return tag;

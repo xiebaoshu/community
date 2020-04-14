@@ -43,7 +43,8 @@
             </div>
         </div>
         <!--图片区域-->
-        <div class="ui attached segment">
+        <div class="ui attached segment"
+        th:if="${article.articleImg}">
             <img src="/static/images/chengxiao.jpg" alt="" class="ui fluid rounded image"
             th:src="${article.articleImg}">
         </div>

@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
@@ -124,82 +125,52 @@ public class JobArticleController {
     }
 
     //    校内互助新增页面数据处理,并加入数据库
-    @RequestMapping(value="/add",method = RequestMethod.POST)
-    @ResponseBody
-    public Map<String,Object> add(HttpServletRequest request){
-        Map<String,Object> modelMap = new HashMap<>();
+    @RequestMapping("/add")
+    public String add(@ModelAttribute("article") JobArticle article,
+                                  RedirectAttributes attributes,
+                                  HttpServletRequest request){
 
-
-        ObjectMapper mapper = new ObjectMapper();
-        JobArticle article = null;
-        String articleStr = HttpServletRequestUtil.getString(request, "articleStr");
-
-        try {
-
-            article = mapper.readValue(articleStr, JobArticle.class);
-
-            //将页面提交的article信息传入
-        } catch (Exception e){
-            modelMap.put("success",false);
-            modelMap.put("errMsg",e.getMessage());
-            return modelMap;
+//        从session获取用户信息
+        UserInfo user = (UserInfo) request.getSession().getAttribute("user");
+        // 根据用户类型，判断返回位置
+        String redirectUrl = new String();
+        if (user.getUserType()==3){
+            redirectUrl = "redirect:/admin/article";
+        }else {
+            redirectUrl = "redirect:/people/"+user.getUserId()+"/4";
         }
 
-
-        CommonsMultipartFile articleImg = null;
-        CommonsMultipartResolver commonsMultipartResolver = new CommonsMultipartResolver(
-                request.getSession().getServletContext());
-        //获取上传的图片文件，需要pom.xml配置commons-fileupload，需在springweb配置文件上传解析器multipartResolver
-        if(commonsMultipartResolver.isMultipart(request)){
-
-            MultipartHttpServletRequest MultipartHttpServletRequest = (MultipartHttpServletRequest) request;
-            articleImg = (CommonsMultipartFile) MultipartHttpServletRequest.getFile("articleImg");
-        }else{
-            modelMap.put("success",false);
-            modelMap.put("errMsg","无法获取图片文件流");
-            return modelMap;
-        }
-
+        MultipartFile articleImg = article.getUpload();
 //        新增兼职信息
-        if (article != null && articleImg != null){
-//            从session获取数据
-            UserInfo owner = (UserInfo) request.getSession().getAttribute("user");
-            article.setUserInfo(owner);
+        article.setUserInfo(user);
             ArticleExecution le;
             try {
-                //将文件转化为文件流，和获取文件名。方法都是CommonsMultipartFile函数包的，
-                ImageHolder imageHolder = new ImageHolder(articleImg.getOriginalFilename(),articleImg.getInputStream());
+                if (articleImg.isEmpty()){
+                    le = jobArticleService.saveArticle(article,null);
+                }else {
+                    //获取文件名和文件流，并作为封装到自定义类imageHolder里面.方法都是CommonsMultipartFile函数包的，
+                    ImageHolder imageHolder = new ImageHolder(articleImg.getOriginalFilename(),articleImg.getInputStream());
 //               调用service添加帖子信息和图片信息
-                le = jobArticleService.saveArticle(article,imageHolder);
+                    le = jobArticleService.saveArticle(article,imageHolder);
+                }
+
 
                 if(le.getState() == ArticleEnum.SUCCESS.getState()){
-                    modelMap.put("success",true);
-                    modelMap.put("user",owner);
+                    attributes.addFlashAttribute("message", "新增成功");
 
                 }else{
-                    modelMap.put("success",false);
-                    modelMap.put("errMsg","添加失败，请检查数据");
-                    return modelMap;
+                    attributes.addFlashAttribute("message", "新增失败");
                 }
             }catch(ArticleException e){
 //               处理service层抛出的异常
-                modelMap.put("success",false);
-                modelMap.put("errMsg",e.getMessage());
-                return modelMap;
+                attributes.addFlashAttribute("message", "新增失败"+e.getMessage());
             }catch(IOException e){
-                modelMap.put("success",false);
-                modelMap.put("errMsg",e.getMessage());
-                return modelMap;
+                attributes.addFlashAttribute("message", "新增失败"+e.getMessage());
             }
-            return modelMap;
+        return redirectUrl;
 
 
-        }else{
-            modelMap.put("success",false);
-            modelMap.put("errMsg","信息不全");
-            return modelMap;
 
-        }
 
     }
 
@@ -234,36 +205,27 @@ public class JobArticleController {
 
     @PostMapping("/update")
     @ResponseBody
-    public Map<String,Object> update(HttpServletRequest request){
-        Map<String,Object>modelMap = new HashMap<String,Object>();
-        ObjectMapper mapper = new ObjectMapper();
-        JobArticle article = null;
-        String articleStr = HttpServletRequestUtil.getString(request, "articleStr");
-        try {
-            article = mapper.readValue(articleStr, JobArticle.class);
-            //将页面提交的jobArticle信息传入
-        } catch (Exception e){
-            modelMap.put("success",false);
-            modelMap.put("errMsg",e.getMessage());
-            return modelMap;
-        }
-        CommonsMultipartFile articleImg = null;
-        CommonsMultipartResolver commonsMultipartResolver = new CommonsMultipartResolver(
-                request.getSession().getServletContext());
-        //获取上传的图片文件，需要pom.xml配置commons-fileupload，需在springweb配置文件上传解析器multipartResolver
-        if(commonsMultipartResolver.isMultipart(request)){
-
-            MultipartHttpServletRequest MultipartHttpServletRequest = (MultipartHttpServletRequest) request;
-            articleImg = (CommonsMultipartFile) MultipartHttpServletRequest.getFile("articleImg");
-            //        更新操作中，图片不是必须，所以不做else处理
+    public String update(@ModelAttribute("article") JobArticle article,
+                                     HttpServletRequest request,
+                                     RedirectAttributes attributes){
+        //从session获取用户信息
+        UserInfo user = (UserInfo) request.getSession().getAttribute("user");
+        // 根据用户类型，判断返回位置
+        String redirectUrl = new String();
+        if (user.getUserType()==3){
+            redirectUrl = "redirect:/admin/article";
+        }else {
+            redirectUrl = "redirect:/people/"+user.getUserId()+"/4";
         }
 
-        if (article != null && article.getId()!= null) {
+        MultipartFile articleImg = article.getUpload();
+
+        if (article.getId()!= null) {
 //            从session获取数据
-            UserInfo owner = (UserInfo) request.getSession().getAttribute("user");
+
             ArticleExecution le;
             try {
-                if (articleImg == null){
+                if (articleImg.isEmpty()){
                     le=jobArticleService.updateArticle(article,null);
                 }else {
                     //将文件转化为文件流，和获取文件名。方法都是CommonsMultipartFile函数包的，
@@ -274,30 +236,22 @@ public class JobArticleController {
 
 
                 if(le.getState() == ArticleEnum.SUCCESS.getState()){
-                    modelMap.put("success",true);
-                    modelMap.put("user",owner);
+                    attributes.addFlashAttribute("message", "修改成功");
 
                 }else{
-                    modelMap.put("success",false);
-                    modelMap.put("errMsg",le.getStateInfo());
-                    return modelMap;
+                    attributes.addFlashAttribute("message", "修改失败");
                 }
             }catch(ArticleException e){
 //               处理service层抛出的异常
-                modelMap.put("success",false);
-                modelMap.put("errMsg",e.getMessage());
-                return modelMap;
+                attributes.addFlashAttribute("message", "修改失败"+e.getMessage());
             }catch(IOException e){
-                modelMap.put("success",false);
-                modelMap.put("errMsg",e.getMessage());
-                return modelMap;
+                attributes.addFlashAttribute("message", "修改失败"+e.getMessage());
             }
-            return modelMap;
+            return redirectUrl;
 
         }else{
-            modelMap.put("success",false);
-            modelMap.put("errMsg","页面未返回文章id");
-            return modelMap;
+            attributes.addFlashAttribute("message", "修改失败,页面未返回id");
+            return redirectUrl;
 
         }
 
@@ -322,6 +276,7 @@ public class JobArticleController {
             }catch (ArticleException e){
                 System.out.println(e.getMessage());
             }
+            attributes.addFlashAttribute("message", "删除成功");
             return "redirect:/people/"+userId+"/4";
         }else if (nowUser.getUserType().equals(3)){
 //          如果是管理员权限，也可进行操作

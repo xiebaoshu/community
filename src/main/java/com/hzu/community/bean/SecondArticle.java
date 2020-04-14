@@ -1,5 +1,7 @@
 package com.hzu.community.bean;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
@@ -18,7 +20,15 @@ public class SecondArticle {
 
     private Double price;
     private Boolean top;
+    private MultipartFile upload;
 
+    public MultipartFile getUpload() {
+        return upload;
+    }
+
+    public void setUpload(MultipartFile upload) {
+        this.upload = upload;
+    }
 
     public Integer getId() {
         return id;

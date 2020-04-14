@@ -1,5 +1,8 @@
 package com.hzu.community.bean;
 
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.web.multipart.MultipartFile;
+
 import java.util.Date;
 import java.util.List;
 
@@ -20,9 +23,16 @@ public class LostArticle {
     private Integer readCount;
     private String tag;
     private Boolean top;
+    private MultipartFile upload;
 
 
+    public MultipartFile getUpload() {
+        return upload;
+    }
 
+    public void setUpload(MultipartFile upload) {
+        this.upload = upload;
+    }
 
     public String getPhone() {
         return phone;
