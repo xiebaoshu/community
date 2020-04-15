@@ -1,0 +1,138 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <!-- Standard Meta -->
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+    <!-- Site Properties -->
+    <title>Login Example - Semantic</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
+    <link rel="stylesheet" href="/static/css/me.css" >
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+
+    <style type="text/css">
+        body {
+            background-color: #DADADA;
+        }
+        body > .grid {
+            height: 100%;
+        }
+        .image {
+            margin-top: -100px;
+        }
+        .column {
+            max-width: 450px;
+        }
+    </style>
+    <script>
+        $(document)
+            .ready(function() {
+                $('.ui.form')
+                    .form({
+                        fields: {
+                            userAccount: {
+                                identifier  : 'userAccount',
+                                rules: [
+                                    {
+                                        type   : 'empty',
+                                        prompt : '请输入账号'
+                                    },
+
+                                ]
+                            },
+                            userPassword: {
+                                identifier  : 'userPassword',
+                                rules: [
+                                    {
+                                        type   : 'empty',
+                                        prompt : '请输入密码'
+                                    },
+                                    {
+                                        type   : 'length[6]',
+                                        prompt : '密码至少6位'
+                                    }
+                                ]
+                            }
+                        }
+                    })
+                ;
+            })
+        ;
+    </script>
+</head>
+<body>
+
+<div class="ui middle aligned center aligned grid">
+    <div class="column">
+        <h2 class="ui teal image header">
+            <img src="../../static/images/logo.png" class="image">
+            <div class="content">
+                Log-in to your account
+            </div>
+        </h2>
+        <p style="color: red" th:text="${message}" th:if="${not #strings.isEmpty(message)}"></p>
+        <form class="ui large form" th:action="@{/login}" method="post">
+            <div class="ui stacked segment">
+                <div class="field">
+                    <div class="ui left icon input">
+                        <i class="user icon"></i>
+                        <input type="text" name="userAccount" placeholder="Account">
+                    </div>
+                </div>
+                <div class="field">
+                    <div class="ui left icon input">
+                        <i class="lock icon"></i>
+                        <input type="password" name="userPassword" placeholder="Password">
+                    </div>
+                </div>
+                <div class="ui fluid large teal submit button">Login</div>
+                <div class="container ui"></div>
+                <div class="inline fields" style="position: relative;top: 10px;left: 25px;">
+                    <label>类型</label>
+                    <div class="field">
+                        <div class="ui radio checkbox">
+                            <input type="radio" name="userType" checked="checked" value="0">
+                            <label>学生</label>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <div class="ui radio checkbox">
+                            <input type="radio" name="userType" value="1">
+                            <label>教师</label>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <div class="ui radio checkbox">
+                            <input type="radio" name="userType" value="2">
+                            <label>企业</label>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <div class="ui radio checkbox">
+                            <input type="radio" name="userType" value="3">
+                            <label>管理员</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <div class="ui error message" th:text="${msg}"></div>
+
+
+        </form>
+
+        <div class="ui message">
+            New to us? <a th:href="@{/register}">Sign Up</a>
+        </div>
+    </div>
+</div>
+
+</body>
+
+</html>

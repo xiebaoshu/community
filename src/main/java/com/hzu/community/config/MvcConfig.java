@@ -35,7 +35,7 @@ public class MvcConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
 //        addPathPatterns拦截哪些路径，excludePathPatterns排除哪些路径
         registry.addInterceptor(loginHandlerInterceptor).addPathPatterns("/**")
-                .excludePathPatterns("/","/static/**","/login","/nav","/nav/mySet");
+                .excludePathPatterns("/","/static/**","/login","/nav","/nav/mySet","/register");
     }
 
     @Override

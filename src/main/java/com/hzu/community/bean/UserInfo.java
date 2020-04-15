@@ -1,5 +1,7 @@
 package com.hzu.community.bean;
 
+import org.springframework.web.multipart.MultipartFile;
+
 public class UserInfo {
     private Integer userId;
     private String userAccount;
@@ -13,6 +15,15 @@ public class UserInfo {
     private String token;
     private Integer navType;
     private String description;
+    private MultipartFile upload;
+
+    public MultipartFile getUpload() {
+        return upload;
+    }
+
+    public void setUpload(MultipartFile upload) {
+        this.upload = upload;
+    }
 
     public Integer getUserId() {
         return userId;

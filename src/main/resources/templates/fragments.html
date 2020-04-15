@@ -303,9 +303,9 @@
                 </div>
             </div>
             <a href="" class="item m-mobile-hide m-item"
-               th:href="@{|/people/${session.user.userId}/notification|}"><i class="alarm icon"></i>通知
-                <div class="ui inverted basic left pointing label"
-                     th:text="${session.unreadCount}">未读
+               th:href="${session.user}?@{|/people/${session.user.userId}/notification|}"><i class="alarm icon"></i>通知
+                <div class="ui inverted basic left pointing label" th:if="${session.user}"
+                     th:text="${session.user}?${session.unreadCount}">未读
                 </div>
             </a>
             <a href="#" class="item m-mobile-hide m-item"><i class="info icon"></i>资讯</a>
@@ -317,7 +317,7 @@
                 </div>
             </form>
 
-            <div class="right item  m-mobile-hide">
+            <div class="right item  m-mobile-hide" th:if="${session.user}">
                 <div>
                     <p th:text="'你好,'+${session.user.userName}">你好，用户</p>
                 </div>
@@ -328,6 +328,10 @@
                 </a>
                 <span>&nbsp;&nbsp;</span>
                 <a href="/logout">  退出</a>
+            </div>
+            <div class="right item  m-mobile-hide" th:unless="${session.user}">
+
+                <a href="/login">  请登录</a>
             </div>
             <!--手机端自适应右上角菜单按钮-->
             <div class="ui inverted secondary m-mobile-show m-right-top menu ">
