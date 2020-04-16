@@ -41,34 +41,34 @@
                     <div class="container m-padded-top">
                         <div class="row" style="padding-left: 60px;padding-right: 60px">
                             <div class="col-md-2">
-                                <button type="button" class="btn btn-outline-info" style="width: 100px">
-                                    <a href="/1"><i class="key icon"></i>失物招领</a>
-                                </button>
+                                <a type="button" href="/1" class="btn btn-outline-info" style="width: 100px">
+                                    <i class="key icon"></i>失物招领
+                                </a>
                             </div>
                             <div class="col-md-2">
-                                <button type="button" class="btn btn-outline-info" style="width: 100px">
-                                    <a href="/2"><i class="shop icon"></i>二手交易</a>
-                                </button>
+                                <a type="button" href="/2" class="btn btn-outline-info" style="width: 100px">
+                                    <i class="shop icon"></i>二手交易
+                                </a>
                             </div>
                             <div class="col-md-2">
-                                <button type="button" class="btn btn-outline-info" style="width: 100px">
-                                    <a href="/3"><i class="exchange icon"></i>校园互助</a>
-                                </button>
+                                <a type="button" href="/3" class="btn btn-outline-info" style="width: 100px">
+                                   <i class="exchange icon"></i>校园互助
+                                </a>
                             </div>
                             <div class="col-md-2">
-                                <button type="button" class="btn btn-outline-info" style="width: 100px">
-                                    <a href="/4"><i class="money icon"></i>兼职信息</a>
-                                </button>
+                                <a type="button" href="/4" class="btn btn-outline-info" style="width: 100px">
+                                    <i class="money icon"></i>兼职信息
+                                </a>
                             </div>
                             <div class="col-md-2">
-                                <button type="button" class="btn btn-outline-info" style="width: 100px">
-                                    <a href="/5"><i class="student icon"></i>校园公告</a>
-                                </button>
+                                <a type="button" href="/5" class="btn btn-outline-info" style="width: 100px">
+                                    <i class="student icon"></i>校园公告
+                                </a>
                             </div>
                             <div class="col-md-2">
-                                <button type="button" class="btn btn-outline-info" style="width: 100px">
-                                    <a href="/6"><i class="travel icon"></i>企业信息</a>
-                                </button>
+                                <a type="button" href="/6" class="btn btn-outline-info" style="width: 100px">
+                                   <i class="travel icon"></i>企业信息
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -119,25 +119,31 @@
                             <div class="ui tab segment" data-tab="add/diy">
                                 <div class="ui grid">
                                     <div class="five wide column">
-                                        <img class="ui  circular small image" src="/static/images/user.jpg">
+                                        <img class="ui  circular small image" src="/static/images/upload/ico128.png">
                                     </div>
                                     <div class="eleven wide column">
-                                        <form class="ui form">
+                                        <form class="ui form" enctype="multipart/form-data">
+
                                             <div class="field">
                                                 <label>网站地址</label>
-                                                <input type="text" name="first-name" placeholder="http://">
+                                                <input type="text" name="url" id="url" placeholder="http://">
                                             </div>
                                             <div class="field">
                                                 <label>网址名称</label>
-                                                <input type="text" name="last-name" placeholder="网站名称">
+                                                <input type="text" name="name" id="name" placeholder="网站名称">
                                             </div>
-
                                             <div class="field">
-                                                <label>图片地址</label>
-                                                <input type="text" name="last-name" placeholder="图片地址">
+                                                <input type="file" name="upload" id="upload" style="display: none;"
+                                                       accept="image/png, image/jpeg, image/gif, image/jpg"
+                                                       onchange="changepic(this)"/>
+                                                <img src="" id="show"  class="ui  circular  image m-img-big" onerror="this.style.display='none'"/>
+                                            </div>
+                                            <div class="ui error message"></div>
+                                            <div class="fields">
+                                                <div class="button ui" onclick="$('#upload').click()"><i class="ui upload icon"></i>图片上传</div>
+                                                <button class="ui button right floated" type="submit">提交</button>
                                             </div>
 
-                                            <button class="ui button right floated" type="submit">提交</button>
                                         </form>
                                     </div>
                                 </div>
@@ -221,13 +227,14 @@
          ;
 
 
-         // 页面第一次加载，自动局部载入评论的片段
+         // 页面第一次加载，自动局部载入导航栏和我的添加的代码片段
          $(function () {
 
              $('#nav_content').load("/nav");
              $('#my_set').load("/nav/mySet");
 
          });
+         //默认添加ajax
          $('.m-add-btn').click(function () {
             var url = "/nav/add";
             var nav = {};
@@ -258,6 +265,7 @@
              });
 
          });
+         // 布局设置ajax
          $('.m-show-btn').click(function () {
              var showType = $("input[name='show_type']:checked").val();
              var url = "/navShow?showType=" + showType ;
@@ -278,6 +286,89 @@
 
              });
          });
+        // 图片上传预览
+        function changepic() {
+            var reads= new FileReader();
+            if ($('#upload').val().length==0){
+                document.getElementById('show').src='';
+            } else {
+                var f=document.getElementById('upload').files[0];
+                reads.readAsDataURL(f);
+                reads.onload=function (ev) {
+                    document.getElementById('show').src=this.result;
+                    $("#show").css("display","block");
+
+                };
+            }
+        };
+        // 表单验证和ajax回调
+        $('.ui.form')
+            .form({
+                fields: {
+                    url: {
+                        identifier  : 'url',
+                        rules: [
+                            {
+                                type   : 'empty',
+                                prompt : '请输入网站链接'
+                            },
+                            {
+                                type   : 'url',
+                                prompt : '请输入链接格式'
+                            },
+
+                        ]
+                    },
+                    name: {
+                        identifier  : 'name',
+                        rules: [
+                            {
+                                type   : 'empty',
+                                prompt : '请输入网站名称'
+                            },
+
+                        ]
+                    }
+                },
+                onSuccess:function(e){
+                    //阻止表单的提交
+                    e.preventDefault();
+                    // 将数据封装成表单
+                    var nav = {};
+                    nav.url = $('#url').val();
+                    nav.name = $('#name').val();
+                    var navImg = $('#upload')[0].files[0];
+                    var formData = new FormData();//创建表单
+                    formData.append('navImg',navImg);
+                    formData.append('navStr',JSON.stringify(nav));//将article转化为JSON字符串并传入
+                    //调用ajax提交
+                    $.ajax({
+                        url:"/nav/diy",
+                        type:'POST',
+                        data:formData,
+                        contentType:false,
+                        processData:false,
+                        cache:false,
+                        success:function (data) {
+                            if(data.success){
+
+                                alert('提交成功');
+                                //局部加载
+                                $('#nav_content').load("/nav");
+                                $('#my_set').load("/nav/mySet");
+                            }else{
+                                alert('提交失败'+data.errMsg);
+                            }
+
+                        }
+
+                    });
+                }
+
+            })
+        ;
+
+
 
 
      </script>

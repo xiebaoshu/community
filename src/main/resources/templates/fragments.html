@@ -22,13 +22,17 @@
             </div>
         </div>
         <div class="twelve wide column">
+            <!--2*5格局-->
             <div class="contain five" th:if="${showType==2}">
                 <div class="ui grid">
                     <div class="five column row" style="margin-left: 20px;">
                         <div class="column" th:each="nav:${pageInfo.getList()}">
                             <div align="center">
-                                <img src="/static/images/chengxiao2.jpg" alt="" class="ui small circular image m-img-big"
-                                     th:src="${nav.imgUrl}"><br>
+                                <a th:href="${nav.url}">
+                                    <img src="/static/images/chengxiao2.jpg" alt="" class="ui small circular image m-img-big"
+                                         th:src="${nav.imgUrl}">
+                                </a>
+                               <br>
                                 <a href=""
                                    th:href="${nav.url}" th:text="${nav.name}">爱奇艺</a>
                             </div>
@@ -39,13 +43,17 @@
                 </div>
 
             </div>
+            <!--2*4格局-->
             <div class="contain four" th:if="${showType==1}">
                 <div class="ui grid">
                     <div class="four wide column" th:each="nav:${pageInfo.getList()}"
                     >
                         <div align="center">
-                            <img src="/static/images/chengxiao2.jpg" alt="" class="ui small circular image m-img-big"
-                                 th:src="${nav.imgUrl}"><br>
+                            <a th:href="${nav.url}">
+                                <img src="/static/images/chengxiao2.jpg" alt="" class="ui small circular image m-img-big"
+                                     th:src="${nav.imgUrl}">
+                            </a>
+                            <br>
                             <a href=""
                                th:href="${nav.url}" th:text="${nav.name}">爱奇艺</a>
                         </div>

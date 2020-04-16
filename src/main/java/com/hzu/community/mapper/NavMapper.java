@@ -1,11 +1,9 @@
 package com.hzu.community.mapper;
 
+import com.hzu.community.bean.LostArticle;
 import com.hzu.community.bean.Nav;
 import com.hzu.community.bean.UserInfo;
-import org.apache.ibatis.annotations.Delete;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -17,12 +15,26 @@ public interface NavMapper {
     @Select("select * from nav_diy where user_id = #{userId}")
     public List<Nav> navDiy(UserInfo userInfo);
 
+    @Select("select * from nav_diy where name = #{name} and user_id = #{userId}")
+    public Nav findByName(Nav nav);
+
     @Insert("insert into nav_diy(user_id,url,name,img_url) " +
             "values(#{userId},#{url},#{name},#{imgUrl})")
     public int add(Nav nav);
 
     @Delete("delete from nav_diy where id = #{id}")
     public void del(Integer id);
+
+    @Update("<script> " +
+            "update nav_diy " +
+            " <set> " +
+            " <if test=\"url != null\"> url = #{url},</if> " +
+            " <if test=\"name != null\"> name = #{name},</if> " +
+            " <if test=\"imgUrl != null\"> imgUrl = #{imgUrl}</if> " +
+            " </set> " +
+            "where id = #{id}" +
+            " </script> ")
+    public int update(Nav nav);
 
 
 }

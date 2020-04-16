@@ -24,9 +24,25 @@
                 <div class="eleven wide column">
                     <!--头像区域-->
                     <div class="ui segment top attached">
-                        <div class="ui horizontal link list">
+                        <div class="ui grid">
+                            <div class="five wide column">
+                                <img src="/static/images/user.jpg" alt="" class="ui avatar image" style="width: 160px!important;height: 160px!important;"
+                                     th:src="${people.userImg}">
+                            </div>
+                            <div class="eleven wide column">
+                                <h1 class="header" th:text="${people.userName}" style="padding-top: 40px;">用户</h1>
+                                <p th:text="${people.description}" class="m-text-thin" style="color: teal"></p>
+                                <div th:if="${owner}">
+                                    <a href=""
+                                       th:href="@{|/update?userId=${people.userId}|}"
+                                    style="color: #009a61 !important;text-decoration: none !important; line-height: 20px !important;margin-top:10px!important;">
+                                        编辑资料</a>
+                                </div>
+                            </div>
+                        </div>
+                        <!--<div class="ui horizontal link list">
                             <div class="item">
-                                <!--avatar圆形图片-->
+                                &lt;!&ndash;avatar圆形图片&ndash;&gt;
                                 <img src="/static/images/user.jpg" alt="" class="ui avatar image" style="width: 160px!important;height: 160px!important;"
                                 th:src="${people.userImg}">
 
@@ -38,7 +54,7 @@
                                     th:href="@{|/people/${peopleId}/4|}">编辑资料</a>
                                 </div>
                             </div>
-                        </div>
+                        </div>-->
                     </div>
                     <!--已发布信息区域-->
                     <div class="ui segment">

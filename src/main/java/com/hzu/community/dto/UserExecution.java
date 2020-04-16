@@ -20,7 +20,7 @@ public class UserExecution {
         this.state = userEnum.getState();
         this.stateInfo = userEnum.getStateInfo();
     }
-    //    LostUserInfo操作成功构造器，返回数据
+    //    UserInfo操作成功构造器，返回数据
     public UserExecution(UserEnum userEnum, UserInfo user) {
         this.state = userEnum.getState();
         this.stateInfo = userEnum.getStateInfo();

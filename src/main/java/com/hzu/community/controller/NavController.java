@@ -5,6 +5,14 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.hzu.community.bean.Nav;
 import com.hzu.community.bean.UserInfo;
+
+import com.hzu.community.dto.NavExecution;
+import com.hzu.community.dto.NavExecution;
+import com.hzu.community.dto.ImageHolder;
+import com.hzu.community.enums.ArticleEnum;
+import com.hzu.community.enums.NavEnum;
+import com.hzu.community.exceptions.ArticleException;
+import com.hzu.community.exceptions.NavException;
 import com.hzu.community.mapper.UserInfoMapper;
 import com.hzu.community.service.NavService;
 import com.hzu.community.util.HttpServletRequestUtil;
@@ -12,9 +20,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
+import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
 import javax.naming.Name;
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -99,6 +111,13 @@ public class NavController {
         }
         UserInfo user = (UserInfo) request.getSession().getAttribute("user");
         nav.setUserId(user.getUserId());
+//        该查询需要userID和name作为查询条件
+        Nav nav1 =navService.findByName(nav);
+        if (nav1!=null){
+            modelMap.put("success",false);
+            modelMap.put("errMsg","该导航已存在，请不要重复添加");
+            return modelMap;
+        }
         int num = navService.add(nav);
         if (num>0){
             modelMap.put("success",true);
@@ -149,6 +168,70 @@ public class NavController {
         }
         modelMap.put("success",true);
         return modelMap;
+        
+    }
+    //自定义导航新增数据处理,并加入数据库
+    @RequestMapping(value="/nav/diy",method = RequestMethod.POST)
+    @ResponseBody
+    public Map<String,Object> diy(HttpServletRequest request){
+        Map<String,Object> modelMap = new HashMap<>();
+        ObjectMapper mapper = new ObjectMapper();
+        Nav nav = null;
+        String navStr = HttpServletRequestUtil.getString(request, "navStr");
+        try {
+            nav = mapper.readValue(navStr, Nav.class);
+            //将页面提交的nav信息传入
+        }catch (Exception e){
+            modelMap.put("success",false);
+            modelMap.put("errMsg",e.getMessage());
+            return modelMap;
+        }
+        CommonsMultipartFile navImg = null;
+        CommonsMultipartResolver commonsMultipartResolver = new CommonsMultipartResolver(
+                request.getSession().getServletContext());
+        //获取上传的图片文件，需要pom.xml配置commons-fileupload，需在springweb配置文件上传解析器multipartResolver
+        if(commonsMultipartResolver.isMultipart(request)){
+
+            MultipartHttpServletRequest MultipartHttpServletRequest = (MultipartHttpServletRequest) request;
+            navImg = (CommonsMultipartFile) MultipartHttpServletRequest.getFile("navImg");
+        }
+
+//        新增diy导航
+//        从session获取数据
+            UserInfo user = (UserInfo) request.getSession().getAttribute("user");
+            nav.setUserId(user.getUserId());
+            NavExecution le;
+            try {
+                if (navImg == null){
+                    le = navService.diySave(nav,null);
+                }else {
+                    //将文件转化为文件流，和获取文件名。方法都是CommonsMultipartFile函数包的，
+                    ImageHolder imageHolder = new ImageHolder(navImg.getOriginalFilename(),navImg.getInputStream());
+//               调用service添加帖子信息和图片信息
+                    le = navService.diySave(nav,imageHolder);
+                }
+
+
+                if(le.getState() == NavEnum.SUCCESS.getState()){
+                    modelMap.put("success",true);
+
+                }else{
+                    modelMap.put("success",false);
+                    modelMap.put("errMsg",le.getStateInfo());
+                    return modelMap;
+                }
+            }catch(NavException e){
+//               处理service层抛出的异常
+                modelMap.put("success",false);
+                modelMap.put("errMsg",e.getMessage());
+                return modelMap;
+            }catch(IOException e){
+                modelMap.put("success",false);
+                modelMap.put("errMsg",e.getMessage());
+                return modelMap;
+            }
+            return modelMap;
+
 
 
 
