@@ -16,7 +16,13 @@ public interface NavService {
     public List<Nav> navDiy(UserInfo userInfo);
     public int add(Nav nav);
     public void del(Integer id);
+    public void delDefault(Integer id);
     public NavExecution diySave(Nav nav, ImageHolder imageHolder)
             throws NavException;
     public Nav findByName(Nav nav);
+    public Nav findDefaultByName(Nav nav);
+    public Nav findDefaultById(Nav nav);
+    public NavExecution defaultSave(Nav nav, ImageHolder imageHolder)
+            throws NavException;
+    public NavExecution defaultUpdate(Nav nav, ImageHolder imageHolder) throws NavException;
 }

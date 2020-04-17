@@ -60,4 +60,9 @@ public class PathUtil {
         String imagePath = "/upload/item/" + userId +"/Nav/"+NavId+"/" ;
         return imagePath;
     }
+    public static String getNavDefaultImagePath() {
+
+        String imagePath = "/upload/item/NavDefault/" ;
+        return imagePath;
+    }
 }

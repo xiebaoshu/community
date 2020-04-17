@@ -94,7 +94,7 @@ public class NavController {
     }
 
 
-
+//    从默认列表添加导航
     @PostMapping("/nav/add")
     @ResponseBody
     public Map<String,Object> add(HttpServletRequest request){

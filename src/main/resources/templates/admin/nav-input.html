@@ -1,0 +1,195 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>导航新增</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
+    <link rel="stylesheet" href="/static/css/me.css" >
+</head>
+<body>
+
+<!--导航-->
+<nav th:replace="admin/fragments :: menu(3)"  class="ui inverted attached segment m-padded-tb-mini m-shadow-small" >
+
+</nav>
+<div class="ui attached pointing menu">
+    <div class="ui container">
+        <div class="right menu">
+            <a href="#" th:href="@{/admin/nav/input}" class="active item">新增</a>
+            <a href="#" th:href="@{/admin/nav}" class="teal  item">列表</a>
+        </div>
+    </div>
+</div>
+
+<!--中间内容-->
+<div  class="m-container-small m-padded-tb-big">
+    <div class="ui container">
+        <form action="#" method="post" th:object="${nav}" th:action="${id}==null ? @{/admin/nav/input} : @{/admin/nav/update/{id}(id=${id})}"
+              class="ui form" enctype="multipart/form-data">
+            <input type="hidden" name="id" th:value="${id}">
+            <div class=" field">
+                <div class="ui left labeled input">
+                    <div class="ui teal basic label">
+                        <div class="text">网址</div>
+                    </div>
+                    <input type="text" name="url" id="url" placeholder="请输入网址"
+                           th:value="${nav!=null}?${nav.url}">
+                </div>
+            </div>
+
+            <div class=" field">
+                <div class="ui left labeled input">
+                    <div class="ui teal basic label">
+                        <div class="text">网站名称</div>
+                    </div>
+                    <input type="text" name="name" id="name" placeholder="请输入网站名称"
+                           th:value="${nav!=null}?${nav.name}">
+                </div>
+            </div>
+
+            <div class="field">
+                <div class="ui left labeled input">
+                    <div class="ui teal basic label">
+                        <div class="text">描述</div>
+                    </div>
+                    <input type="text" name="description" id="description" placeholder="请输入描述"
+                           th:value="${nav!=null}?${nav.description}">
+                </div>
+            </div>
+            <div class="field">
+                <input type="file" name="upload" id="upload" style="display: none;"
+                       accept="image/png, image/jpeg, image/gif, image/jpg"
+                       onchange="changepic(this)"/>
+                <img src="" id="show"  class="ui  circular  image" style="width: 85px;height: 85px;" onerror="this.style.display='none'"/>
+            </div>
+
+            <div class="ui error message"></div>
+
+            <div class="ui grid">
+                <div class="eight wide column">
+                    <div class="button ui" onclick="$('#upload').click()"><i class="ui upload icon"></i>图片上传</div>
+                </div>
+                <div class="right aligned eight wide column">
+                    <button type="button" class="ui button" onclick="window.history.go(-1)" >返回</button>
+                    <button class="ui teal submit button">提交</button>
+                </div>
+            </div>
+
+
+
+        </form>
+    </div>
+</div>
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<!--底部footer-->
+<footer th:replace="admin/fragments :: footer" class="ui inverted vertical segment m-padded-tb-massive">
+    <div class="ui center aligned container">
+        <div class="ui inverted divided stackable grid">
+            <div class="three wide column">
+                <div class="ui inverted link list">
+                    <div class="item">
+                        <img src="../../static/images/wechat.jpg" class="ui rounded image" alt="" style="width: 110px">
+                    </div>
+                </div>
+            </div>
+            <div class="three wide column">
+                <h4 class="ui inverted header m-text-thin m-text-spaced " >最新博客</h4>
+                <div class="ui inverted link list">
+                    <a href="#" class="item m-text-thin">用户故事（User Story）</a>
+                    <a href="#" class="item m-text-thin">用户故事（User Story）</a>
+                    <a href="#" class="item m-text-thin">用户故事（User Story）</a>
+                </div>
+            </div>
+            <div class="three wide column">
+                <h4 class="ui inverted header m-text-thin m-text-spaced ">联系我</h4>
+                <div class="ui inverted link list">
+                    <a href="#" class="item m-text-thin">Email：lirenmi@163.com</a>
+                    <a href="#" class="item m-text-thin">QQ：865729312</a>
+                </div>
+            </div>
+            <div class="seven wide column">
+                <h4 class="ui inverted header m-text-thin m-text-spaced ">Blog</h4>
+                <p class="m-text-thin m-text-spaced m-opacity-mini">这是我的个人博客、会分享关于编程、写作、思考相关的任何内容，希望可以给来到这儿的人有所帮助...</p>
+            </div>
+        </div>
+        <div class="ui inverted section divider"></div>
+        <p class="m-text-thin m-text-spaced m-opacity-tiny">Copyright © 2016 - 2017 Lirenmi Designed by Lirenmi</p>
+    </div>
+
+</footer>
+
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+
+
+<script>
+
+    $('.menu.toggle').click(function () {
+        $('.m-item').toggleClass('m-mobile-hide');
+    });
+
+    $('.ui.dropdown').dropdown({
+        on : 'hover'
+    });
+
+    $('.ui.form').form({
+        fields : {
+            url : {
+                identifier: 'url',
+                rules: [{
+                    type   : 'empty',
+                    prompt : '请输入网站链接'
+                },
+                    {
+                        type   : 'url',
+                        prompt : '请输入链接格式'
+                    },]
+            },
+            name : {
+                identifier: 'name',
+                rules: [{
+                    type : 'empty',
+                    prompt: '请输入网站名称'
+                }]
+            },
+            description : {
+                identifier: 'description',
+                rules: [{
+                    type : 'empty',
+                    prompt: '请输入网站描述'
+                }]
+            },
+        }
+    });
+    // 图片上传预览
+    function changepic() {
+        var reads= new FileReader();
+        if ($('#upload').val().length==0){
+            document.getElementById('show').src='';
+        } else {
+            var f=document.getElementById('upload').files[0];
+            reads.readAsDataURL(f);
+            reads.onload=function (ev) {
+                document.getElementById('show').src=this.result;
+                $("#show").css("display","block");
+
+            };
+        }
+    };
+
+
+
+</script>
+</body>
+</html>

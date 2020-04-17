@@ -1,5 +1,7 @@
 package com.hzu.community.bean;
 
+import org.springframework.web.multipart.MultipartFile;
+
 public class Nav {
     private Long id;
     private Integer userId;
@@ -7,6 +9,7 @@ public class Nav {
     private String name;
     private String imgUrl;
     private String description;
+    private MultipartFile upload;
 
     public Long getId() {
         return id;
@@ -54,6 +57,14 @@ public class Nav {
 
     public void setImgUrl(String imgUrl) {
         this.imgUrl = imgUrl;
+    }
+
+    public MultipartFile getUpload() {
+        return upload;
+    }
+
+    public void setUpload(MultipartFile upload) {
+        this.upload = upload;
     }
 
     @Override
