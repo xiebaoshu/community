@@ -3,19 +3,17 @@ package com.hzu.community.controller.information;
 
 import java.io.File;
 
-import com.hzu.community.bean.Nav;
-import com.hzu.community.dto.InformationDto;
+import com.hzu.community.dto.JobFair;
+import com.hzu.community.dto.NoticeDto;
 import net.sf.json.JSONArray;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.io.*;
-import java.util.LinkedHashMap;
 import java.util.List;
 
 
@@ -25,8 +23,8 @@ public class InformationController {
 
     private static final Logger logger = LogManager.getLogger(InformationController.class);
 
-    @RequestMapping("/zhaoping")
-    public String zhaoPing(Model model){
+    @RequestMapping("/jobFair")
+    public String JobFair(Model model){
 
         File myFile = new File("E:/workspace/community/src/main/resources/static/json/jsonzhaoping.json");
         if (!myFile.exists()) {
@@ -34,11 +32,26 @@ public class InformationController {
         }else{
             String jsonStr  = readJsonFile(myFile);
             JSONArray json = JSONArray.fromObject(jsonStr);
-            List<InformationDto> informationList= (List<InformationDto>)JSONArray.toCollection(json, InformationDto.class);
+            List<JobFair> informationList= (List<JobFair>)JSONArray.toCollection(json, JobFair.class);
             model.addAttribute("informationList",informationList);
         }
-        return "information/zhaoping";
+        return "information/jobfair";
     }
+    @RequestMapping("/notice")
+    public String notice(Model model){
+
+        File myFile = new File("E:/workspace/community/src/main/resources/static/json/notice.json");
+        if (!myFile.exists()) {
+            System.out.println("json文件不存在");
+        }else{
+            String jsonStr  = readJsonFile(myFile);
+            JSONArray json = JSONArray.fromObject(jsonStr);
+            List<NoticeDto> informationList= (List<NoticeDto>)JSONArray.toCollection(json, JobFair.class);
+            model.addAttribute("informationList",informationList);
+        }
+        return "information/notice";
+    }
+
 
     public String readJsonFile(File jsonFile) {
         String jsonStr = "";

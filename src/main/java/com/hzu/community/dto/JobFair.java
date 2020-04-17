@@ -1,6 +1,6 @@
 package com.hzu.community.dto;
 
-public class InformationDto {
+public class JobFair {
     private String title;
     private String city;
     private String address;

@@ -316,7 +316,15 @@
                      th:text="${session.user}?${session.unreadCount}">未读
                 </div>
             </a>
-            <a href="#" class="item m-mobile-hide m-item"><i class="info icon"></i>资讯</a>
+            <div class="nav-dropdown ui dropdown link item">
+                <i class="info icon"></i>
+                资讯
+                <i class="dropdown icon"></i>
+                <div class="menu">
+                    <a th:href="@{/information/jobFair}" class="item">招聘公告</a>
+                    <a th:href="@{/information/notice}" class="item">招聘会</a>
+                </div>
+            </div>
             <form action="/search" class="right item m-mobile-hide m-item-search" name="searchForm" method="get">
                 <div class="ui icon input inverted">
                     <input type="text" placeholder="Search...." name="search"
