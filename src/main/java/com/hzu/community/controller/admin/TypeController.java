@@ -91,6 +91,7 @@ public class TypeController {
             articleCategoryService.del(id);
         }catch (Exception e){
             System.out.println(e.getMessage());
+            attributes.addFlashAttribute("message", "删除失败"+e.getMessage());
         }
         attributes.addFlashAttribute("message", "删除成功");
         return "redirect:/admin/types";
