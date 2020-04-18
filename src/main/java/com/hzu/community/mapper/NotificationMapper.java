@@ -81,5 +81,11 @@ public interface NotificationMapper {
     @Delete("delete from notification where article_id = #{articleId} and article_par_category = #{articleParCategory}")
     public int delNotification(Notification notification);
 
+    @Delete( " <script>" +
+            "delete from notification where article_par_category = #{parId} and article_id in" +
+            " <foreach collection='List' open='(' item='article' separator=',' close=')'> #{article.id}</foreach> "+
+            " </script>" )
+    public void batchDel(@Param("parId") Integer parId,  @Param( "List" ) List  List);
+
 
 }

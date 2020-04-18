@@ -106,6 +106,13 @@ public interface SecondArticleMapper {
     @Delete("delete from second_article where id = #{articleId}")
     public int deleById(@Param("articleId") Integer articleId);
 
+    //    批量删除
+    @Delete( " <script>" +
+            "delete from second_article where id in" +
+            " <foreach collection='List' open='(' item='article' separator=',' close=')'> #{article.id}</foreach> "+
+            " </script>" )
+    public void batchDel(@Param( "List" ) List  List);
+
     @Update("update second_article set read_count = read_count+1 where id = #{id}")
     void incReadCount(SecondArticle article);
 

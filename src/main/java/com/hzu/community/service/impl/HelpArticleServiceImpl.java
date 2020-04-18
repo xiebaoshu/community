@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class HelpArticleServiceImpl implements HelpArticleService {
@@ -30,6 +31,12 @@ public class HelpArticleServiceImpl implements HelpArticleService {
     private CommentMapper commentMapper;
     @Autowired
     private NotificationMapper notificationMapper;
+
+    @Override
+    public void batchDel(List List) {
+        helpArticleMapper.batchDel(List);
+    }
+
     @Override
     @Transactional
     public ArticleExecution saveArticle(HelpArticle article, ImageHolder imageHolder) throws ArticleException {
@@ -111,12 +118,7 @@ public class HelpArticleServiceImpl implements HelpArticleService {
     @Transactional
     public ArticleExecution deleteArticle(Integer id, Integer userId) throws ArticleException {
         try {
-//            删除文章所在路径
-            String userStr = userId.toString();
-            String lostArticleStr = id.toString();
-            String delePath = "/upload/item/"+userStr+"/helpArticle/"+lostArticleStr;
-//            删除路径对应文件
-            ImageUtil.deleteFileOrpath(delePath);
+
 
             try {
 //                删除该文章下的信息通知
@@ -144,6 +146,12 @@ public class HelpArticleServiceImpl implements HelpArticleService {
             }catch (Exception e){
                 throw new ArticleException("删除该文章失败:"+e.getMessage());
             }
+            //            删除文章所在路径
+            String userStr = userId.toString();
+            String idStr = id.toString();
+            String delePath = "/upload/item/"+userStr+"/helpArticle/"+idStr;
+//            删除路径对应文件
+            ImageUtil.deleteFileOrpath(delePath);
             return new ArticleExecution(ArticleEnum.SUCCESS);
 
         }catch (Exception e){

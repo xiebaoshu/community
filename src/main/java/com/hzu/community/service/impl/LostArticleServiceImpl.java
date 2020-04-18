@@ -18,6 +18,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 public class LostArticleServiceImpl implements LostArticleService {
     @Autowired
@@ -26,6 +28,12 @@ public class LostArticleServiceImpl implements LostArticleService {
     CommentMapper commentMapper;
     @Autowired
     NotificationMapper notificationMapper;
+
+    @Override
+    public void batchDel(List List) {
+        lostArticleMapper.batchDel(List);
+    }
+
     @Override
     @Transactional
     public ArticleExecution saveArticle(LostArticle lostArticle, ImageHolder imageHolder) {
@@ -106,12 +114,7 @@ public class LostArticleServiceImpl implements LostArticleService {
     @Override
     public ArticleExecution deleteArticle(Integer id, Integer userId) throws ArticleException {
         try {
-//            删除文章所在路径
-            String userStr = userId.toString();
-            String lostArticleStr = id.toString();
-            String delePath = "/upload/item/"+userStr+"/lostArticle/"+lostArticleStr;
-//            删除路径对应文件
-           ImageUtil.deleteFileOrpath(delePath);
+
 
             try {
 //                删除该文章下的信息通知
@@ -139,6 +142,12 @@ public class LostArticleServiceImpl implements LostArticleService {
             }catch (Exception e){
                 throw new ArticleException("删除该文章失败:"+e.getMessage());
             }
+            //            删除文章所在路径
+            String userStr = userId.toString();
+            String idStr = id.toString();
+            String delePath = "/upload/item/"+userStr+"/lostArticle/"+idStr;
+//            删除路径对应文件
+            ImageUtil.deleteFileOrpath(delePath);
             return new ArticleExecution(ArticleEnum.SUCCESS);
 
         }catch (Exception e){

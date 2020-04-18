@@ -52,17 +52,32 @@ public interface UserInfoMapper {
             "<if test=\"description != null\"> description = #{description},</if>" +
             "<if test=\"navType != null\"> nav_type = #{navType},</if>" +
             "<if test=\"token != null\"> token = #{token},</if>" +
+            "<if test=\"permission != null\"> permission = #{permission},</if>" +
             "<if test=\"navType != null\"> nav_type = #{navType}</if>" +
             "</set>" +
             "where user_id = #{userId}" +
             " </script> ")
     public int update(UserInfo user);
 
-    @Select("select * from user_info where user_name LIKE '%${search}%'")
-    public List<UserInfo> searchList(@Param("search") String search);
+    @Select("<script> " +
+            "select * from user_info " +
+            " <where> " +
+            " <if test=\"userName != null\">and user_name LIKE '%${userName}%'</if> " +
+            " <if test=\"userType != null\">and user_type = #{userType}</if> " +
+            " <if test=\"permission != null\">and permission = #{permission}</if> " +
+            " </where> " +
+            " </script> ")
+    public List<UserInfo> searchList(UserInfo userInfo);
 
-    @Select("select count(1) from user_info where user_name LIKE '%${search}%'")
-    public Integer searchCount(@Param("search") String search);
+    @Select("<script> " +
+            "select count(1) from user_info " +
+            " <where> " +
+            " <if test=\"userName != null\">and user_name LIKE '%${userName}%'</if> " +
+            " <if test=\"userType != null\">and user_type = #{userType}</if> " +
+            " <if test=\"permission != null\">and permission = #{permission}</if> " +
+            " </where> " +
+            " </script> ")
+    public Integer searchCount(UserInfo userInfo);
 
 
 }

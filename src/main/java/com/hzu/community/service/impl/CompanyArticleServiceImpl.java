@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class CompanyArticleServiceImpl implements CompanyArticleService {
@@ -28,7 +29,12 @@ public class CompanyArticleServiceImpl implements CompanyArticleService {
     private CommentMapper commentMapper;
     @Autowired
     private NotificationMapper notificationMapper;
-    
+
+    @Override
+    public void batchDel(List List) {
+         companyArticleMapper.batchDel(List);
+    }
+
     @Override
     @Transactional
     public ArticleExecution saveArticle(CompanyArticle article, ImageHolder imageHolder) throws ArticleException {
@@ -112,12 +118,7 @@ public class CompanyArticleServiceImpl implements CompanyArticleService {
     @Transactional
     public ArticleExecution deleteArticle(Integer id, Integer userId) throws ArticleException {
         try {
-//            删除文章所在路径
-            String userStr = userId.toString();
-            String lostArticleStr = id.toString();
-            String delePath = "/upload/item/"+userStr+"/companyArticle/"+lostArticleStr;
-//            删除路径对应文件
-            ImageUtil.deleteFileOrpath(delePath);
+
 
             try {
 //                删除该文章下的信息通知
@@ -145,6 +146,12 @@ public class CompanyArticleServiceImpl implements CompanyArticleService {
             }catch (Exception e){
                 throw new ArticleException("删除该文章失败:"+e.getMessage());
             }
+            //            删除文章所在路径
+            String userStr = userId.toString();
+            String idStr = id.toString();
+            String delePath = "/upload/item/"+userStr+"/companyArticle/"+idStr;
+//            删除路径对应文件
+            ImageUtil.deleteFileOrpath(delePath);
             return new ArticleExecution(ArticleEnum.SUCCESS);
 
         }catch (Exception e){

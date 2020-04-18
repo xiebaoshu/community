@@ -5,6 +5,7 @@ import com.github.pagehelper.PageInfo;
 import com.hzu.community.bean.*;
 import com.hzu.community.dto.SearchDto;
 import com.hzu.community.mapper.*;
+import com.hzu.community.service.UserInfoService;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -31,7 +32,7 @@ public class SearchController {
     @Autowired
     private CompanyArticleMapper companyArticleMapper;
     @Autowired
-    private UserInfoMapper userInfoMapper;
+    private UserInfoService userInfoService;
 
     @GetMapping("/search")
     public String SearchPage(@RequestParam(name = "search") String search,
@@ -111,12 +112,13 @@ public class SearchController {
             Integer count = companyArticleMapper.searchCount(companyArticle,date);
             model.addAttribute("count",count);
         }else if (type.equals("user")){
-
-            List<UserInfo> userInfoList  = userInfoMapper.searchList(search);
+            UserInfo userInfo = new UserInfo();
+            userInfo.setUserName(search);
+            List<UserInfo> userInfoList  = userInfoService.searchList(userInfo);
             PageInfo<UserInfo> pageUser = new PageInfo<>(userInfoList);
             model.addAttribute("pageUser",pageUser);
 
-            Integer count = userInfoMapper.searchCount(search);
+            Integer count = userInfoService.searchCount(userInfo);
             model.addAttribute("count",count);
 
         }

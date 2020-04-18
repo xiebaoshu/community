@@ -91,4 +91,10 @@ public interface CommentMapper {
 //    删除文章评论
     @Delete("delete from comment where article_id = #{articleId} and article_par_category = #{articleParCategory}")
     public int deleArticleComment(Comment comment);
+//    批量删除文章评论
+    @Delete( " <script>" +
+            "delete from comment where article_par_category = #{parId} and article_id in" +
+            " <foreach collection='List' open='(' item='article' separator=',' close=')'> #{article.id}</foreach> "+
+            " </script>" )
+    public void batchDel(@Param("parId") Integer parId,  @Param( "List" ) List  List);
 }

@@ -19,11 +19,28 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
+import java.util.List;
+
 @Service
 public class UserInfoServiceImpl implements UserInfoService {
     @Autowired
     private UserInfoMapper userInfoMapper;
-    
+
+    @Override
+    public List<UserInfo> searchList(UserInfo userInfo) {
+        return userInfoMapper.searchList(userInfo);
+    }
+
+    @Override
+    public Integer searchCount(UserInfo userInfo) {
+        return userInfoMapper.searchCount(userInfo);
+    }
+
+    @Override
+    public int updatePermission(UserInfo user) {
+        return userInfoMapper.update(user);
+    }
+
     @Override
     @Transactional
     public UserExecution save(UserInfo user, ImageHolder imageHolder) throws UserException {

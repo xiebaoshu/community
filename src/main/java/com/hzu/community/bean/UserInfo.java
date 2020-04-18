@@ -11,7 +11,7 @@ public class UserInfo {
     private String userClass;//用户班级或者企业部门信息
     private String userImg;
     private Integer userType;//用户类型
-    private Integer permission;//用户权限 0代表禁言
+    private Boolean permission;//用户权限 1代表禁言
     private String token;
     private Integer navType;
     private String description;
@@ -89,11 +89,11 @@ public class UserInfo {
         this.userType = userType;
     }
 
-    public Integer getPermission() {
+    public Boolean getPermission() {
         return permission;
     }
 
-    public void setPermission(Integer permission) {
+    public void setPermission(Boolean permission) {
         this.permission = permission;
     }
 
