@@ -15,6 +15,7 @@ public class JobArticle {
     private String articleContent;
     private String tag;
     private Date createTime;
+    private Date editTime;
     private Integer readCount;
 
     //日结还是月结
@@ -136,6 +137,14 @@ public class JobArticle {
 
     public void setTop(Boolean top) {
         this.top = top;
+    }
+
+    public Date getEditTime() {
+        return editTime;
+    }
+
+    public void setEditTime(Date editTime) {
+        this.editTime = editTime;
     }
 
     @Override

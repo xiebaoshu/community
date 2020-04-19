@@ -40,27 +40,12 @@
                                 </div>
                             </div>
                         </div>
-                        <!--<div class="ui horizontal link list">
-                            <div class="item">
-                                &lt;!&ndash;avatar圆形图片&ndash;&gt;
-                                <img src="/static/images/user.jpg" alt="" class="ui avatar image" style="width: 160px!important;height: 160px!important;"
-                                th:src="${people.userImg}">
 
-                            </div>
-                            <div class="item tear">
-                                <h1 class="header" th:text="${people.userName}">用户</h1>
-                                <div th:if="${owner}">
-                                    <a href="" style="margin-top:10px!important;"
-                                    th:href="@{|/people/${peopleId}/4|}">编辑资料</a>
-                                </div>
-                            </div>
-                        </div>-->
                     </div>
                     <!--已发布信息区域-->
                     <div class="ui segment">
 
-                        <div class="ui menu stackable"
-                       >
+                        <div class="ui menu stackable">
                             <a th:class="${parCategory}=='1'?'active item':'item'"
                                th:href="@{|/people/${peopleId}/1|}"
                                 >
@@ -79,20 +64,31 @@
                                 <i class="money icon"></i> 兼职信息
                             </a>
                             <a th:class="${parCategory}=='5'?'active item':'item'"
-                               th:href="@{|/people/${peopleId}/5|}">
+                               th:href="@{|/people/${peopleId}/5|}"
+                               th:if="${people.userType==1}">
                                 <i class="student icon"></i> 校园公告
                             </a>
                             <a th:class="${parCategory}=='6'?'active item':'item'"
-                               th:href="@{|/people/${peopleId}/6|}">
+                               th:href="@{|/people/${peopleId}/6|}"
+                               th:if="${people.userType==2}">
                                 <i class="travel icon"></i> 企业信息
                             </a>
+                            <div class="ui dropdown link item" th:if="${people.userType==3}">
+                                <i class="bookmark icon"></i>
+                                更多
+                                <i class="dropdown icon"></i>
+                                <div class="menu">
+                                    <a th:href="@{|/people/${peopleId}/5|}"
+                                       th:class="${parCategory}=='5'?'active item':'item'">校园公告</a>
+                                    <a th:href="@{|/people/${peopleId}/6|}"
+                                       th:class="${parCategory}=='6'?'active item':'item'">企业信息</a>
+                                </div>
+                            </div>
                             <a th:class="${parCategory}=='notification'?'active item':'item'"
                                th:href="@{'/people/'+${peopleId}+'/notification'}">
                                 <i class="alarm icon"></i>
                                 <span th:text="${owner}?'我的通知':'他的回复'">我的通知</span>
                             </a>
-
-
                         </div>
 
                         <div class="ui success message" th:unless="${#strings.isEmpty(message)}">
@@ -100,40 +96,50 @@
                             <div class="header">提示：</div>
                             <p th:text="${message}">恭喜，操作成功！</p>
                         </div>
-
-                        <table class="ui celled stackable table"
-                               th:unless="${notificationInfo}">
+                        <!--文章列表-->
+                        <table class="ui celled stackable table" th:unless="${notificationInfo}">
+                            <!--tr表格中的一行-->
+                            <!--th是定义表格内的表头中的单元格，td是代表HTML表格中的一个单元版格。-->
                             <thead class="m-mobile-hide">
                             <tr>
-
                                 <th>标题</th>
+                                <th>时间</th>
                                 <th th:if="${owner}">操作</th>
+                            </tr>
+                            <tr th:if="${#lists.isEmpty(pageInfo.getList())}">
+                                <th colspan="3">暂未发布文章</th>
                             </tr>
                             </thead>
                             <tbody>
-                            <tr th:each="list:${pageInfo.getList()}">
 
-                                <td><a href="" th:text="${list.articleTitle}"
-                                                th:href="@{|/${parCategory}/${list.id}|}">文章标题</a></td>
-                                <td th:if="${owner}">
-                                    <a th:href="@{'/'+${parCategory}+'/'+update(articleId=${list.id})}" class="ui mini teal basic button">编辑</a>
-                                    <a href="#" class="ui mini red basic button delete-btn"
-                                    th:attr="del_uri=@{'/'+${parCategory}+'/'+delete(articleId=${list.id})}">删除</a>
+                            <tr th:each="article:${pageInfo.getList()}">
+
+                                <td><a href="" th:text="${article.articleTitle}"
+                                                th:href="@{|/${parCategory}/${article.id}|}">文章标题</a></td>
+                                <td>
+                                    <p th:text="${#dates.format(article.editTime,'YYYY-MM-dd')}"></p>
                                 </td>
+
+                                <td th:if="${owner}">
+                                    <a th:href="@{'/'+${parCategory}+'/'+update(articleId=${article.id})}" class="ui mini teal basic button">编辑</a>
+                                    <a href="#" class="ui mini red basic button delete-btn"
+                                    th:attr="del_uri=@{'/'+${parCategory}+'/'+delete(articleId=${article.id})}">删除</a>
+                                </td>
+
                             </tr>
                             </tbody>
                             <tfoot>
                             <tr>
-                                <th colspan="6">
+                                <th colspan="3">
                                     <div class="ui mini pagination menu">
                                         <a class="item"
                                            th:href="@{'/people/'+${peopleId}+'/'+${parCategory}(page=${pageInfo.pageNum - 1})}"
-                                           th:style="${pageInfo.pageNum - 1}<=0?'pointer-events: none;':'pointer-events:true'">
+                                           th:style="${pageInfo.pageNum - 1}<=0?'pointer-events: none;opacity: 0.6;'">
                                             上一页
                                         </a>
                                         <a class="item"
                                            th:href="@{'/people/'+${peopleId}+'/'+${parCategory}(page=${pageInfo.pageNum + 1})}"
-                                           th:style="${pageInfo.pageNum + 1}>${pageInfo.pages}?'pointer-events: none;':'pointer-events:true'"
+                                           th:style="${pageInfo.pageNum + 1}>${pageInfo.pages}?'pointer-events: none;opacity: 0.6;'"
                                         >
                                             下一页
                                         </a>
@@ -146,12 +152,15 @@
                             </tr>
                             </tfoot>
                         </table>
-
+                        <!--信息通知列表-->
                         <div class="ui  message" th:if="${notificationInfo}">
                             <div class="header"
                                  th:text="${owner}?'我的通知':'他的回复'">我的通知</div>
                             <div class="ui divider"></div>
-                            <ul class="list">
+                            <ul class="list" th:if="${#lists.isEmpty(notificationInfo.getList())}">
+                                <li>暂无信息通知</li>
+                            </ul>
+                            <ul class="list" th:unless="${#lists.isEmpty(notificationInfo.getList())}">
                                 <li th:each="notification:${notificationInfo.getList()}">
                                     <div>
                                         <a href="" th:text="${notification.notifier.userName}"
@@ -179,12 +188,12 @@
                             <div class="ui mini pagination menu">
                                 <a class="item"
                                    th:href="@{'/people/'+${peopleId}+'/'+${parCategory}(page=${notificationInfo.pageNum - 1})}"
-                                   th:style="${notificationInfo.pageNum - 1}<=0?'pointer-events: none;':'pointer-events:true'">
+                                   th:style="${notificationInfo.pageNum - 1}<=0?'pointer-events: none;opacity: 0.6;'">
                                     上一页
                                 </a>
                                 <a class="item"
                                    th:href="@{'/people/'+${peopleId}+'/'+${parCategory}(page=${notificationInfo.pageNum + 1})}"
-                                   th:style="${notificationInfo.pageNum + 1}>${notificationInfo.pages}?'pointer-events: none;':'pointer-events:true'"
+                                   th:style="${notificationInfo.pageNum + 1}>${notificationInfo.pages}?'pointer-events: none;opacity: 0.6;'"
                                 >
                                     下一页
                                 </a>
@@ -302,6 +311,9 @@
                 .closest('.message')
                 .transition('fade');
         });
+    $('.ui.dropdown').dropdown({
+        on : 'hover'
+    });
 
 </script>
 </body>

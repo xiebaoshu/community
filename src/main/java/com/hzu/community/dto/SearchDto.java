@@ -12,9 +12,10 @@ public class SearchDto {
     private String articleTitle;
     private String description;
     private UserInfo userInfo;
-    private Date createTime;
+    private Date editTime;
     private String articleImg;
     private Boolean top;
+    private Boolean lookMe;
     private Integer date;
 
     public Integer getId() {
@@ -57,12 +58,12 @@ public class SearchDto {
         this.userInfo = userInfo;
     }
 
-    public Date getCreateTime() {
-        return createTime;
+    public Date getEditTime() {
+        return editTime;
     }
 
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
+    public void setEditTime(Date editTime) {
+        this.editTime = editTime;
     }
 
     public String getArticleImg() {
@@ -89,6 +90,14 @@ public class SearchDto {
         this.date = date;
     }
 
+    public Boolean getLookMe() {
+        return lookMe;
+    }
+
+    public void setLookMe(Boolean lookMe) {
+        this.lookMe = lookMe;
+    }
+
     @Override
     public String toString() {
         return "SearchDto{" +
@@ -97,7 +106,7 @@ public class SearchDto {
                 ", articleTitle='" + articleTitle + '\'' +
                 ", description='" + description + '\'' +
                 ", userInfo=" + userInfo +
-                ", create_time=" + createTime +
+                ", edit_time=" + editTime +
                 ", article_img='" + articleImg + '\'' +
                 '}';
     }

@@ -34,7 +34,7 @@
                 </div>
                 <div class="item">
                     <i class="calendar icon"></i>
-                    <span th:text="${#dates.format(article.createTime,'yyyy-MM-dd')}">2020-2-27</span>
+                    <span th:text="${#dates.format(article.editTime,'yyyy-MM-dd')}">2020-2-27</span>
                 </div>
 
                 <div class="item">
@@ -71,7 +71,8 @@
                 <div class="eight wide column">
                     <ui class="list">
                         <li>作者：<span th:text="${article.userInfo.userName}">用户</span></li>
-                        <li>时间：<span th:text="${#dates.format(article.createTime,'yyyy-MM-dd')}">2020/2/29</span></li>
+                        <li>发布时间：<span th:text="${#dates.format(article.createTime,'yyyy-MM-dd')}">2020/2/29</span></li>
+                        <li>最后编辑时间：<span th:text="${#dates.format(article.editTime,'yyyy-MM-dd')}">2020/2/29</span></li>
 
 
                     </ui>

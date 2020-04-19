@@ -46,6 +46,7 @@ public class SchoolArticleServiceImpl implements SchoolArticleService {
                  所以成功插入后返回主键值到articleId
                  该值作为更新图片url的参数*/
             article.setCreateTime(new Date());
+            article.setEditTime(new Date());
             int insertNum = schoolArticleMapper.add(article);
 
             if (insertNum <= 0) {
@@ -97,7 +98,7 @@ public class SchoolArticleServiceImpl implements SchoolArticleService {
             }
 
 //           更新文章信息
-            article.setCreateTime(new Date());
+            article.setEditTime(new Date());
             int updateNum = schoolArticleMapper.update(article);
             if (updateNum<=0){
                 return new ArticleExecution(ArticleEnum.UPDATE_WRONG);

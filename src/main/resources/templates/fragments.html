@@ -7,24 +7,26 @@
 <body>
     <!--nav的导航图片栏-->
     <div class="ui  grid" th:fragment="nav_area">
+        <!--向上翻按钮-->
         <div class="ui center aligned two wide column">
             <div class="left-btn ">
-
                 <a th:attr="page=${pageInfo.getPrePage()}"
                    class="m-btn"
                    href="javascript:void(0);"
-                   th:style="!${pageInfo.hasPreviousPage}?'pointer-events: none;':'pointer-events:true'">
+                   th:style="!${pageInfo.hasPreviousPage}?'cursor:no-drop;'">
                     <i class="ui angle left huge icon"></i>
                 </a>
-
-
-
             </div>
         </div>
         <div class="twelve wide column">
+            <div  class="container" th:if="${#lists.isEmpty(pageInfo.getList())}" style="text-align: center">
+                <br><br>
+               <p class="teal ui header">您的导航列表为空,请添加心仪的导航</p>
+                <br><br><br>
+            </div>
             <!--2*5格局-->
-            <div class="contain five" th:if="${showType==2}">
-                <div class="ui grid">
+            <div class="contain five" th:if="${showType==2 and not#lists.isEmpty(pageInfo.getList())}">
+                <div class="ui grid" style="height: 332px;">
                     <div class="five column row" style="margin-left: 20px;">
                         <div class="column" th:each="nav:${pageInfo.getList()}">
                             <div align="center">
@@ -44,8 +46,8 @@
 
             </div>
             <!--2*4格局-->
-            <div class="contain four" th:if="${showType==1}">
-                <div class="ui grid">
+            <div class="contain four" th:if="${showType==1 and not#lists.isEmpty(pageInfo.getList())}">
+                <div class="ui grid" style="height: 332px;">
                     <div class="four wide column" th:each="nav:${pageInfo.getList()}"
                     >
                         <div align="center">
@@ -78,9 +80,10 @@
 
         </div>
         <div class="ui center aligned two wide column">
+            <!--向下翻按钮-->
             <div class="right-btn">
                 <a th:attr="page=${pageInfo.getNextPage()}"
-                   th:style="!${pageInfo.hasNextPage}?'pointer-events: none;':'pointer-events:true'"
+                   th:style="!${pageInfo.hasNextPage}?'cursor:no-drop;'"
                    href="javascript:void(0);"
                    class="m-btn">
                     <i class="ui angle right huge icon"></i>
@@ -89,10 +92,17 @@
 
         </div>
         <script>
+            // 上下翻按钮的点击时间
             $('.m-btn').click(function () {
-               var page = $(this).attr('page');
-               var url = "/nav?page="+page;
-                $('#nav_content').load(url);
+                if ($(this).css('cursor')=='no-drop') {
+                    // 如果cursor是禁止状态，不做操作
+                    return false;
+                }else{
+                    var page = $(this).attr('page');
+                    var url = "/nav?page="+page;
+                    $('#nav_content').load(url);
+                }
+
 
             });
             $('#circle a').click(function () {
@@ -107,14 +117,14 @@
     </div>
     <!--nav页面的我的添加-->
     <div class="ui cards" th:fragment="my_set">
-        <div class="card" th:unless="${hasUser}">
+        <div class="card" th:unless="${session.user}" style="margin-left: 20px;">
             <div class="content">
                 <div>您还未登陆，请<a href="/login">登陆</a></div>
             </div>
         </div>
 
-        <div class="card" th:if="${hasUser}"
-             th:each="diy:${navDiy}">
+        <div class="card" th:if="${session.user}"
+             th:each="diy:${navDiy}" style="margin-left: 20px;">
             <div class="content">
                 <img class="right floated  ui  circular image m-img-small" src="/static/images/user.jpg"
                      th:src="${diy.imgUrl}">
@@ -209,7 +219,7 @@
         </script>
         <div class="ui threaded comments">
             <h3 class="ui dividing header">Comments</h3>
-
+            <div  th:if="${#lists.isEmpty(commentList)}">暂无评论</div>
             <div class="comment" th:each="coment:${commentList}">
                 <a class="avatar"
                    th:href="@{|/people/${coment.user.userId}/1|}">
@@ -226,7 +236,7 @@
                         博主</div>
                     <div class="metadata">
                                 <span class="date"
-                                      th:text="${coment.createTime}">Yesterday at 12:30AM</span>
+                                      th:text="${#dates.format(coment.createTime,'yyyy-MM-dd HH:ss:dd')}">Yesterday at 12:30AM</span>
                     </div>
                     <div class="text">
                         <p th:text="${coment.content}">This has been very useful for my research. Thanks as well!</p>

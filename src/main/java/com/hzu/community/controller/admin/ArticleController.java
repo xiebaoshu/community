@@ -12,6 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.websocket.server.PathParam;
 import java.util.List;
 
@@ -39,8 +40,12 @@ public class ArticleController {
     @GetMapping("/article")
     public String article(@ModelAttribute("searchDto") SearchDto searchDto,
                           @RequestParam(name = "page",defaultValue = "1") Integer page,
+                          HttpServletRequest request,
                           Model model){
-
+        if (searchDto.getLookMe()!=null){
+            UserInfo user = (UserInfo) request.getSession().getAttribute("user");
+            searchDto.setUserInfo(user);
+        }
         List<ArticleCategory> categoryList = articleCategoryService.categoryList();
         PageHelper.startPage(page,10);
         List<SearchDto> searchDtoList = searchMapper.getAll(searchDto);

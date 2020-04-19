@@ -14,6 +14,7 @@ public class CompanyArticle {
     private String articleContent;
     private String tag;
     private Date createTime;
+    private Date editTime;
     private Integer readCount;
     private Boolean top;
     private MultipartFile upload;
@@ -112,6 +113,14 @@ public class CompanyArticle {
 
     public void setUpload(MultipartFile upload) {
         this.upload = upload;
+    }
+
+    public Date getEditTime() {
+        return editTime;
+    }
+
+    public void setEditTime(Date editTime) {
+        this.editTime = editTime;
     }
 
     @Override

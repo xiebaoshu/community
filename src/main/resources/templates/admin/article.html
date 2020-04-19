@@ -89,6 +89,12 @@
                     </div>
                 </div>
                 <div class="field">
+                    <div class="ui checkbox">
+                        <input type="checkbox" id="lookMe" name="lookMe" th:checked="${searchDto.lookMe}">
+                        <label for="lookMe">只看我</label>
+                    </div>
+                </div>
+                <div class="field">
                     <button  type="button" id="search-btn" class="ui mini teal basic submit button"><i class="search icon"></i>搜索</button>
                 </div>
 
@@ -112,7 +118,7 @@
                     <td th:text="${article.articleTitle}">刻意练习清单</td>
                     <td th:text="${article.articleCategory.articleCategoryName}">认知升</td>
                     <td th:text="${article.top} ? '是':'否'">是</td>
-                    <td th:text="${#dates.format(article.createTime, 'yyyy-MM-dd')}">2017-10-02 09:45</td>
+                    <td th:text="${#dates.format(article.editTime, 'yyyy-MM-dd')}">2017-10-02 09:45</td>
                     <td>
                         <a href="#" th:href="@{|/${article.articleCategory.parentId}/update?articleId=${article.id}|}" class="ui mini teal basic button">编辑</a>
                         <a href="#"

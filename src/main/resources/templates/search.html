@@ -20,6 +20,7 @@
     <div class="ui container">
         <div class="container">
             <form action="/search" class="ui action big fluid input" method="get" name="searchForm1">
+                <input type="hidden" name="type" th:value="${typeCondition}">
                 <input type="text" placeholder="Search..." name="search"
                 th:value="${searchCondition}">
                 <button class="ui button" onclick="document.searchForm1.submit()">搜索</button>
@@ -91,10 +92,10 @@
                     <h5 style="color: #757575;font-weight: normal;">找到<span th:text="${count}">30</span>条结果</h5>
                 </div>
 
-                <!--左边列表content-->
-                <div class="ui attached segment">
-                    <!--文章列表-->
-                    <div th:if="${pageInfo}">
+                <div class="ui segments" th:if="${pageInfo} and ${not #lists.isEmpty(pageInfo.getList())}">
+                    <!--左边列表content-->
+                    <div class="ui attached top segment">
+                        <!--文章列表-->
                         <div class="ui segment padded vertical m-padded-tb-large"
                              th:each="article:${pageInfo.getList()}"
                         >
@@ -125,7 +126,7 @@
                                                     </div>
                                                     <div class="item">
                                                         <i class="calendar icon"></i>
-                                                        <span th:text="${#dates.format(article.createTime, 'yyyy-MM-dd')}">2020-2-27</span>
+                                                        <span th:text="${#dates.format(article.editTime, 'yyyy-MM-dd')}">2020-2-27</span>
                                                     </div>
 
                                                 </div>
@@ -156,8 +157,44 @@
                             </div>
                         </div>
                     </div>
-                    <!--用户列表-->
-                    <div th:if="${pageUser}">
+                    <!--左边列表footer-->
+                    <div class="ui bottom attached segment">
+                        <!--文章列表分页-->
+                        <div class="ui pagination  menu">
+                            <a class="item"
+                               th:href="@{/search(page=${pageInfo.getFirstPage()},type=${typeCondition},search=${searchCondition},date=${dateCondition})}">
+                                首页
+                            </a>
+                            <a class="icon item"
+                               th:href="@{/search(page=${pageInfo.getPrePage()},type=${typeCondition},search=${searchCondition},date=${dateCondition})}"
+                               th:if="${pageInfo.hasPreviousPage}">
+                                <i class="left arrow icon"></i>
+                            </a>
+                            <a class="active item"
+                               th:each="page:${pageInfo.getNavigatepageNums()}"
+                               th:text="${page}"
+                               th:class="${page}==${pageInfo.getPageNum()}?'active item':'item'"
+                               th:href="@{/search(page=${page},type=${typeCondition},search=${searchCondition},date=${dateCondition})}">
+                                1
+                            </a>
+
+
+                            <a class="icon item"
+                               th:href="@{/search(page=${pageInfo.getNextPage()},type=${typeCondition},search=${searchCondition},date=${dateCondition})}"
+                               th:if="${pageInfo.hasNextPage}">
+                                <i class="right arrow icon"></i>
+                            </a>
+                            <a class="item"
+                               th:href="@{/search(page=${pageInfo.getLastPage()},type=${typeCondition},search=${searchCondition},date=${dateCondition})}">
+                                尾页
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="ui segments" th:if="${pageUser} and ${not #lists.isEmpty(pageUser.getList())}">
+                    <!--左边列表content-->
+                    <div class="ui attached top segment">
+                        <!--用户列表-->
                         <div class="ui segment  vertical"
                              th:each="user:${pageUser.getList()}"
                         >
@@ -175,13 +212,13 @@
                                             position: relative;
                                             top: 15%;
                                         ">
-                                                <a href="#" th:text="${user.userName}"
-                                                   th:href="@{|/people/${user.userId}/1|}"
-                                                style="color: #009a61;text-decoration: none;font-size:14px;
+                                            <a href="#" th:text="${user.userName}"
+                                               th:href="@{|/people/${user.userId}/1|}"
+                                               style="color: #009a61;text-decoration: none;font-size:14px;
                                                 margin-top: 10px;
                                                 line-height: 1.8;">用户</a>
-                                                <p th:text="${user.description}"
-                                                 style=" font-weight: 300 !important;font-size:14px;
+                                            <p th:text="${user.description}"
+                                               style=" font-weight: 300 !important;font-size:14px;
                                                  letter-spacing: 1px !important;
                                                  line-height: 1.8;"></p>
                                         </div>
@@ -192,76 +229,41 @@
                             </div>
                         </div>
                     </div>
+                    <!--左边列表footer-->
+                    <div class="ui bottom attached segment">
+                        <!--用户列表分页-->
+                        <div class="ui pagination  menu">
+                            <a class="item"
+                               th:href="@{/search(page=${pageUser.getFirstPage()},type=${typeCondition},search=${searchCondition},date=${dateCondition})}">
+                                首页
+                            </a>
+                            <a class="icon item"
+                               th:href="@{/search(page=${pageUser.getPrePage()},type=${typeCondition},search=${searchCondition},date=${dateCondition})}"
+                               th:if="${pageUser.hasPreviousPage}">
+                                <i class="left arrow icon"></i>
+                            </a>
+                            <a class="active item"
+                               th:each="page:${pageUser.getNavigatepageNums()}"
+                               th:text="${page}"
+                               th:class="${page}==${pageUser.getPageNum()}?'active item':'item'"
+                               th:href="@{/search(page=${page},type=${typeCondition},search=${searchCondition},date=${dateCondition})}">
+                                1
+                            </a>
 
 
-                </div>
-
-                <!--左边列表footer-->
-                <div class="ui bottom attached segment">
-
-                    <!--文章列表分页-->
-                    <div class="ui pagination  menu"
-                         th:if="${pageInfo}">
-                        <a class="item"
-                           th:href="@{/search(page=${pageInfo.getFirstPage()},type=${typeCondition},search=${searchCondition},date=${dateCondition})}">
-                            首页
-                        </a>
-                        <a class="icon item"
-                           th:href="@{/search(page=${pageInfo.getPrePage()},type=${typeCondition},search=${searchCondition},date=${dateCondition})}"
-                           th:if="${pageInfo.hasPreviousPage}">
-                            <i class="left arrow icon"></i>
-                        </a>
-                        <a class="active item"
-                           th:each="page:${pageInfo.getNavigatepageNums()}"
-                           th:text="${page}"
-                           th:class="${page}==${pageInfo.getPageNum()}?'active item':'item'"
-                           th:href="@{/search(page=${page},type=${typeCondition},search=${searchCondition},date=${dateCondition})}">
-                            1
-                        </a>
-
-
-                        <a class="icon item"
-                           th:href="@{/search(page=${pageInfo.getNextPage()},type=${typeCondition},search=${searchCondition},date=${dateCondition})}"
-                           th:if="${pageInfo.hasNextPage}">
-                            <i class="right arrow icon"></i>
-                        </a>
-                        <a class="item"
-                           th:href="@{/search(page=${pageInfo.getLastPage()},type=${typeCondition},search=${searchCondition},date=${dateCondition})}">
-                            尾页
-                        </a>
-                    </div>
-                    <!--用户列表分页-->
-                    <div class="ui pagination  menu"
-                         th:if="${pageUser}">
-                        <a class="item"
-                           th:href="@{/search(page=${pageUser.getFirstPage()},type=${typeCondition},search=${searchCondition},date=${dateCondition})}">
-                            首页
-                        </a>
-                        <a class="icon item"
-                           th:href="@{/search(page=${pageUser.getPrePage()},type=${typeCondition},search=${searchCondition},date=${dateCondition})}"
-                           th:if="${pageUser.hasPreviousPage}">
-                            <i class="left arrow icon"></i>
-                        </a>
-                        <a class="active item"
-                           th:each="page:${pageUser.getNavigatepageNums()}"
-                           th:text="${page}"
-                           th:class="${page}==${pageUser.getPageNum()}?'active item':'item'"
-                           th:href="@{/search(page=${page},type=${typeCondition},search=${searchCondition},date=${dateCondition})}">
-                            1
-                        </a>
-
-
-                        <a class="icon item"
-                           th:href="@{/search(page=${pageUser.getNextPage()},type=${typeCondition},search=${searchCondition},date=${dateCondition})}"
-                           th:if="${pageUser.hasNextPage}">
-                            <i class="right arrow icon"></i>
-                        </a>
-                        <a class="item"
-                           th:href="@{/search(page=${pageUser.getLastPage()},type=${typeCondition},search=${searchCondition},date=${dateCondition})}">
-                            尾页
-                        </a>
+                            <a class="icon item"
+                               th:href="@{/search(page=${pageUser.getNextPage()},type=${typeCondition},search=${searchCondition},date=${dateCondition})}"
+                               th:if="${pageUser.hasNextPage}">
+                                <i class="right arrow icon"></i>
+                            </a>
+                            <a class="item"
+                               th:href="@{/search(page=${pageUser.getLastPage()},type=${typeCondition},search=${searchCondition},date=${dateCondition})}">
+                                尾页
+                            </a>
+                        </div>
                     </div>
                 </div>
+
 
             </div>
             <div class="five wide column">
@@ -290,6 +292,8 @@
 
 </div>
 
+<br>
+<br>
 <br>
 <br>
 <!--底部-->

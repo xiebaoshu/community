@@ -14,7 +14,7 @@ public interface LostArticleMapper {
     @Options(useGeneratedKeys = true,keyProperty = "id")
     @Insert("insert into lost_article(article_category_id,user_id,area_id,item_category_id," +
             "article_title,phone,article_content,description," +
-            "create_time,tag) " +
+            "edit_time,tag) " +
             "values(#{articleCategory.articleCategoryId}," +
             "#{userInfo.userId}," +
             "#{area.areaId}," +
@@ -23,7 +23,7 @@ public interface LostArticleMapper {
             "#{phone}," +
             "#{articleContent}," +
             "#{description}," +
-            "#{createTime}," +
+            "#{editTime}," +
             "#{tag}" +
 
             ")")
@@ -43,7 +43,7 @@ public interface LostArticleMapper {
             " <if test=\"phone != null\"> phone = #{phone},</if> " +
             " <if test=\"tag != null\"> tag = #{tag},</if> " +
             " <if test=\"articleContent != null\"> article_content = #{articleContent},</if> " +
-            " <if test=\"createTime != null\"> create_time = #{createTime},</if> " +
+            " <if test=\"editTime != null\"> edit_time = #{editTime},</if> " +
             " <if test=\"description != null\"> description = #{description},</if> " +
             " <if test=\"finishTime != null\"> finish_time = #{finishTime},</if> " +
             " <if test=\"top != null\"> top = #{top},</if> " +
@@ -66,9 +66,9 @@ public interface LostArticleMapper {
             " <if test=\"articleCondition.area != null and articleCondition.area.areaId != null\">and area_id = #{articleCondition.area.areaId}</if> " +
             " <if test=\"articleCondition.itemCategory != null and articleCondition.itemCategory.itemCategoryId != null\">and item_category_id = #{articleCondition.itemCategory.itemCategoryId}</if> " +
             " <if test=\"articleCondition.tag != null \">and tag like '%${articleCondition.tag}%'</if> " +
-            " <if test=\"dateCondition != null\">and DATE_SUB(CURDATE(), INTERVAL #{dateCondition} DAY) <![CDATA[<=date(CREATE_TIME)]]></if>" +
+            " <if test=\"dateCondition != null\">and DATE_SUB(CURDATE(), INTERVAL #{dateCondition} DAY) <![CDATA[<=date(EDIT_TIME)]]></if>" +
             " </where> " +
-            "order by top desc,create_time desc" +
+            "order by top desc,edit_time desc" +
             " </script> ")
     @Results({
             @Result(id=true,column="id",property="id"),
@@ -80,7 +80,7 @@ public interface LostArticleMapper {
             @Result(column="phone",property="phone"),
             @Result(column="tag",property="tag"),
             @Result(column="article_content",property="articleContent"),
-            @Result(column="create_time",property="createTime"),
+            @Result(column="edit_time",property="editTime"),
             @Result(column="finish_time",property="finishTime"),
             @Result(column="finisher_id",property="finishUser",one = @One(select = "com.hzu.community.mapper.UserInfoMapper.findUserInfoById")),
             @Result(column="article_img",property="articleImg"),
@@ -100,7 +100,7 @@ public interface LostArticleMapper {
             " <where> " +
             " <if test=\"articleId != null\">and id = #{articleId}</if> " +
             " </where> " +
-            "order by create_time desc" +
+            "order by edit_time desc" +
             " </script> ")
     @Results({
             @Result(id=true,column="id",property="id"),
@@ -111,7 +111,7 @@ public interface LostArticleMapper {
             @Result(column="article_title",property="articleTitle"),
             @Result(column="phone",property="phone"),
             @Result(column="article_content",property="articleContent"),
-            @Result(column="create_time",property="createTime"),
+            @Result(column="edit_time",property="editTime"),
             @Result(column="finish_time",property="finishTime"),
             @Result(column="tag",property="tag"),
             @Result(column="finisher_id",property="finishUser",one = @One(select = "com.hzu.community.mapper.UserInfoMapper.findUserInfoById")),
@@ -146,9 +146,9 @@ public interface LostArticleMapper {
             " <if test=\"articleCondition.area != null and articleCondition.area.areaId != null\">and area_id = #{articleCondition.area.areaId}</if> " +
             " <if test=\"articleCondition.tag != null \">and tag like '%${articleCondition.tag}%'</if> " +
             " <if test=\"articleCondition.itemCategory != null and articleCondition.itemCategory.itemCategoryId != null\">and item_category_id = #{articleCondition.itemCategory.itemCategoryId}</if> " +
-            " <if test=\"dateCondition != null\">and DATE_SUB(CURDATE(), INTERVAL #{dateCondition} DAY) <![CDATA[<=date(CREATE_TIME)]]></if>" +
+            " <if test=\"dateCondition != null\">and DATE_SUB(CURDATE(), INTERVAL #{dateCondition} DAY) <![CDATA[<=date(EDIT_TIME)]]></if>" +
             " </where> " +
-            "order by create_time desc" +
+            "order by edit_time desc" +
             " </script> ")
     public Integer searchCount(@Param("articleCondition") LostArticle articleCondition,
                                             @Param("dateCondition")Integer dateCondition);

@@ -54,6 +54,7 @@ public class PeopleController {
         UserInfo user = (UserInfo) request.getSession().getAttribute("user");
 //         判断该个人页面是否属于当前用户
         if (user.getUserId() == peopleId){
+
             model.addAttribute("owner",true);
         }else{
             model.addAttribute("owner",false);

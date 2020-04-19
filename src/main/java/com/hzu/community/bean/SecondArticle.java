@@ -16,6 +16,7 @@ public class SecondArticle {
     private String articleContent;
     private String tag;
     private Date createTime;
+    private Date editTime;
     private Integer readCount;
 
     private Double price;
@@ -124,6 +125,14 @@ public class SecondArticle {
 
     public void setPrice(Double price) {
         this.price = price;
+    }
+
+    public Date getEditTime() {
+        return editTime;
+    }
+
+    public void setEditTime(Date editTime) {
+        this.editTime = editTime;
     }
 
     @Override

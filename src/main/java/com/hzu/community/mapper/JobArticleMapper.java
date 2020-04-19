@@ -12,13 +12,14 @@ public interface JobArticleMapper {
     @Options(useGeneratedKeys = true,keyProperty = "id")
     @Insert("insert into job_article(article_category_id,user_id," +
             "article_title,article_content,description," +
-            "create_time,tag,salary,knots) " +
+            "create_time,edit_time,tag,salary,knots) " +
             "values(#{articleCategory.articleCategoryId}," +
             "#{userInfo.userId}," +
             "#{articleTitle}," +
             "#{articleContent}," +
             "#{description}," +
             "#{createTime}," +
+            "#{editTime}," +
             "#{tag}," +
             "#{salary.id}," +
             "#{knots}" +
@@ -34,7 +35,7 @@ public interface JobArticleMapper {
             " <if test=\"articleImg != null\"> article_img = #{articleImg},</if> " +
             " <if test=\"articleTitle != null\"> article_title = #{articleTitle},</if> " +
             " <if test=\"articleContent != null\"> article_content = #{articleContent},</if> " +
-            " <if test=\"createTime != null\"> create_time = #{createTime},</if> " +
+            " <if test=\"editTime != null\"> edit_time = #{editTime},</if> " +
             " <if test=\"description != null\"> description = #{description},</if> " +
             " <if test=\"tag != null\"> tag = #{tag},</if> " +
             " <if test=\"knots != null\"> knots = #{knots},</if> " +
@@ -53,11 +54,11 @@ public interface JobArticleMapper {
             " <if test=\"articleCondition.userInfo != null and articleCondition.userInfo.userId != null\">and user_id = #{articleCondition.userInfo.userId}</if> " +
             " <if test=\"articleCondition.articleTitle != null \">and article_title like '%${articleCondition.articleTitle}%'</if> " +
             " <if test=\"articleCondition.tag != null \">and tag like '%${articleCondition.tag}%'</if> " +
-            " <if test=\"dateCondition != null\">and DATE_SUB(CURDATE(), INTERVAL #{dateCondition} DAY) <![CDATA[<=date(CREATE_TIME)]]></if>" +
+            " <if test=\"dateCondition != null\">and DATE_SUB(CURDATE(), INTERVAL #{dateCondition} DAY) <![CDATA[<=date(EDIT_TIME)]]></if>" +
             " <if test=\"articleCondition.knots != null \">and knots =#{articleCondition.knots}</if> " +
             " <if test=\"articleCondition.salary != null and articleCondition.salary.id != null \">and salary = #{articleCondition.salary.id}</if> " +
             " </where> " +
-            "order by top desc,create_time desc" +
+            "order by top desc,edit_time desc" +
             " </script> ")
     @Results({
             @Result(id=true,column="id",property="id"),
@@ -66,6 +67,7 @@ public interface JobArticleMapper {
             @Result(column="article_title",property="articleTitle"),
             @Result(column="article_content",property="articleContent"),
             @Result(column="create_time",property="createTime"),
+            @Result(column="edit_time",property="editTime"),
             @Result(column="article_img",property="articleImg"),
             @Result(column="description",property="description"),
             @Result(column="tag",property="tag"),
@@ -83,7 +85,7 @@ public interface JobArticleMapper {
             " <where> " +
             " <if test=\"articleId != null\">and id = #{articleId}</if> " +
             " </where> " +
-            "order by create_time desc" +
+            "order by edit_time desc" +
             " </script> ")
     @Results({
             @Result(id=true,column="id",property="id"),
@@ -92,6 +94,7 @@ public interface JobArticleMapper {
             @Result(column="article_title",property="articleTitle"),
             @Result(column="article_content",property="articleContent"),
             @Result(column="create_time",property="createTime"),
+            @Result(column="edit_time",property="editTime"),
             @Result(column="article_img",property="articleImg"),
             @Result(column="description",property="description"),
             @Result(column="tag",property="tag"),
@@ -122,11 +125,11 @@ public interface JobArticleMapper {
             " <if test=\"articleCondition.userInfo != null and articleCondition.userInfo.userId != null\">and user_id = #{articleCondition.userInfo.userId}</if> " +
             " <if test=\"articleCondition.articleTitle != null \">and article_title like '%${articleCondition.articleTitle}%'</if> " +
             " <if test=\"articleCondition.tag != null \">and tag like '%${articleCondition.tag}%'</if> " +
-            " <if test=\"dateCondition != null\">and DATE_SUB(CURDATE(), INTERVAL #{dateCondition} DAY) <![CDATA[<=date(CREATE_TIME)]]></if>" +
+            " <if test=\"dateCondition != null\">and DATE_SUB(CURDATE(), INTERVAL #{dateCondition} DAY) <![CDATA[<=date(EDIT_TIME)]]></if>" +
             " <if test=\"articleCondition.knots != null \">and knots =#{articleCondition.knots}</if> " +
             " <if test=\"articleCondition.salary != null and articleCondition.salary.id != null \">and salary = #{articleCondition.salary.id}</if> " +
             " </where> " +
-            "order by create_time desc" +
+            "order by edit_time desc" +
             " </script> ")
     public Integer searchCount(@Param("articleCondition") JobArticle articleCondition,
                                            @Param("dateCondition")Integer dateCondition);

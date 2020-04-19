@@ -17,7 +17,7 @@ public class LostArticle {
     private String phone;
     private String articleContent;
     private String description;
-    private Date createTime;
+    private Date editTime;
     private Date finishTime;
     private UserInfo finishUser;
     private Integer readCount;
@@ -98,12 +98,12 @@ public class LostArticle {
         this.articleContent = articleContent;
     }
 
-    public Date getCreateTime() {
-        return createTime;
+    public Date getEditTime() {
+        return editTime;
     }
 
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
+    public void setEditTime(Date editTime) {
+        this.editTime = editTime;
     }
 
     public Date getFinishTime() {
@@ -174,7 +174,7 @@ public class LostArticle {
                 ", phone='" + phone + '\'' +
                 ", articleContent='" + articleContent + '\'' +
                 ", description='" + description + '\'' +
-                ", createTime=" + createTime +
+                ", editTime=" + editTime +
                 ", finishTime=" + finishTime +
                 ", finishUser=" + finishUser +
                 ", readCount=" + readCount +

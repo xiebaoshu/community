@@ -67,8 +67,8 @@
                 <div class="required field">
                     <div class="ui left labeled action input">
                         <label class="ui compact teal basic label">时间</label>
-                        <input type="date" name="createTime" id="create_time" placeholder="时间" class="m-text-color"
-                               th:value="${article!=null}?${#dates.format(article.createTime, 'yyyy-MM-dd')}">
+                        <input type="date" name="editTime" id="edit_time" placeholder="时间" class="m-text-color"
+                               th:value="${article!=null}?${#dates.format(article.editTime, 'yyyy-MM-dd')}">
                     </div>
                 </div>
             </div>
@@ -158,14 +158,18 @@
                 <textarea name="description" id="description"  placeholder="文章描述..."
                           th:text="${article!=null}?${article.description}"></textarea>
             </div>
-
+            <div class="field">
+                <input type="file" name="upload" id="upload" style="display: none;"
+                       accept="image/png, image/jpeg, image/gif, image/jpg"
+                       onchange="changepic(this)"/>
+                <img src="" id="show"  class="ui tiny image"  onerror="this.style.display='none'"/>
+            </div>
             <div class="ui error message"></div>
 
             <div class="ui grid">
                 <div class="eight wide column">
                     <div class="field">
-                        <!--<button class="ui teal button" id="upload-btn">图片上传</button>-->
-                        <input type="file"  id="upload" name="upload">
+                        <div class="button ui" onclick="$('#upload').click()"><i class="ui upload icon"></i>图片上传</div>
                     </div>
                 </div>
                 <div class="right aligned eight wide column">
@@ -289,8 +293,8 @@
                     prompt: '标题：请选择分类'
                 }]
             },
-            createTime : {
-                identifier: 'createTime',
+            editTime : {
+                identifier: 'editTime',
                 rules: [{
                     type : 'empty',
                     prompt: '标题：请输入时间'
@@ -338,6 +342,21 @@
 
         }
     });
+    // 图片上传预览
+    function changepic() {
+        var reads= new FileReader();
+        if ($('#upload').val().length==0){
+            document.getElementById('show').src='';
+        } else {
+            var f=document.getElementById('upload').files[0];
+            reads.readAsDataURL(f);
+            reads.onload=function (ev) {
+                document.getElementById('show').src=this.result;
+                $("#show").css("display","block");
+
+            };
+        }
+    };
 
 
 

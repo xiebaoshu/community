@@ -13,13 +13,14 @@ public interface CompanyArticleMapper {
     @Options(useGeneratedKeys = true,keyProperty = "id")
     @Insert("insert into company_article(article_category_id,user_id," +
             "article_title,article_content,description," +
-            "create_time,tag) " +
+            "create_time,edit_time,tag) " +
             "values(#{articleCategory.articleCategoryId}," +
             "#{userInfo.userId}," +
             "#{articleTitle}," +
             "#{articleContent}," +
             "#{description}," +
             "#{createTime}," +
+            "#{editTime}," +
             "#{tag}" +
             ")")
     public int add(CompanyArticle article);
@@ -33,7 +34,7 @@ public interface CompanyArticleMapper {
             " <if test=\"articleImg != null\"> article_img = #{articleImg},</if> " +
             " <if test=\"articleTitle != null\"> article_title = #{articleTitle},</if> " +
             " <if test=\"articleContent != null\"> article_content = #{articleContent},</if> " +
-            " <if test=\"createTime != null\"> create_time = #{createTime},</if> " +
+            " <if test=\"editTime != null\"> edit_time = #{editTime},</if> " +
             " <if test=\"description != null\"> description = #{description},</if> " +
             " <if test=\"tag != null\"> tag = #{tag},</if> " +
             " <if test=\"top != null\"> top = #{top}</if> " +
@@ -50,9 +51,9 @@ public interface CompanyArticleMapper {
             " <if test=\"articleCondition.userInfo != null and articleCondition.userInfo.userId != null\">and user_id = #{articleCondition.userInfo.userId}</if> " +
             " <if test=\"articleCondition.articleTitle != null \">and article_title like '%${articleCondition.articleTitle}%'</if> " +
             " <if test=\"articleCondition.tag != null \">and tag like '%${articleCondition.tag}%'</if> " +
-            " <if test=\"dateCondition != null\">and DATE_SUB(CURDATE(), INTERVAL #{dateCondition} DAY) <![CDATA[<=date(CREATE_TIME)]]></if>" +
+            " <if test=\"dateCondition != null\">and DATE_SUB(CURDATE(), INTERVAL #{dateCondition} DAY) <![CDATA[<=date(EDIT_TIME)]]></if>" +
             " </where> " +
-            "order by top desc,create_time desc" +
+            "order by top desc,edit_time desc" +
             " </script> ")
     @Results({
             @Result(id=true,column="id",property="id"),
@@ -61,6 +62,7 @@ public interface CompanyArticleMapper {
             @Result(column="article_title",property="articleTitle"),
             @Result(column="article_content",property="articleContent"),
             @Result(column="create_time",property="createTime"),
+            @Result(column="edit_time",property="editTime"),
             @Result(column="article_img",property="articleImg"),
             @Result(column="description",property="description"),
             @Result(column="tag",property="tag"),
@@ -76,7 +78,7 @@ public interface CompanyArticleMapper {
             " <where> " +
             " <if test=\"articleId != null\">and id = #{articleId}</if> " +
             " </where> " +
-            "order by create_time desc" +
+            "order by edit_time desc" +
             " </script> ")
     @Results({
             @Result(id=true,column="id",property="id"),
@@ -85,6 +87,7 @@ public interface CompanyArticleMapper {
             @Result(column="article_title",property="articleTitle"),
             @Result(column="article_content",property="articleContent"),
             @Result(column="create_time",property="createTime"),
+            @Result(column="edit_time",property="editTime"),
             @Result(column="article_img",property="articleImg"),
             @Result(column="description",property="description"),
             @Result(column="tag",property="tag"),
@@ -115,9 +118,9 @@ public interface CompanyArticleMapper {
             " <if test=\"articleCondition.userInfo != null and articleCondition.userInfo.userId != null\">and user_id = #{articleCondition.userInfo.userId}</if> " +
             " <if test=\"articleCondition.articleTitle != null \">and article_title like '%${articleCondition.articleTitle}%'</if> " +
             " <if test=\"articleCondition.tag != null \">and tag like '%${articleCondition.tag}%'</if> " +
-            " <if test=\"dateCondition != null\">and DATE_SUB(CURDATE(), INTERVAL #{dateCondition} DAY) <![CDATA[<=date(CREATE_TIME)]]></if>" +
+            " <if test=\"dateCondition != null\">and DATE_SUB(CURDATE(), INTERVAL #{dateCondition} DAY) <![CDATA[<=date(EDIT_TIME)]]></if>" +
             " </where> " +
-            "order by create_time desc" +
+            "order by edit_time desc" +
             " </script> ")
     public Integer searchCount(@Param("articleCondition") CompanyArticle articleCondition,
                                                @Param("dateCondition")Integer dateCondition);

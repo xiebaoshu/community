@@ -82,13 +82,10 @@ public class NavController {
     public String mySet(Model model,HttpServletRequest request){
         //        根据user获取设置区域 我的添加列表
         UserInfo user = (UserInfo) request.getSession().getAttribute("user");
-        if (user == null){
-            model.addAttribute("hasUser",false);
-        }else {
+        if (user != null){
             List<Nav> navDiy = new ArrayList<>();
             navDiy = navService.navDiy(user);
             model.addAttribute("navDiy",navDiy);
-            model.addAttribute("hasUser",true);
         }
         return "fragments :: my_set";
     }

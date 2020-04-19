@@ -46,6 +46,7 @@ public class CompanyArticleServiceImpl implements CompanyArticleService {
                  所以成功插入后返回主键值到articleId
                  该值作为更新图片url的参数*/
             article.setCreateTime(new Date());
+            article.setEditTime(new Date());
             int insertNum = companyArticleMapper.add(article);
 
             if (insertNum <= 0) {
@@ -98,7 +99,7 @@ public class CompanyArticleServiceImpl implements CompanyArticleService {
             }
 
 //           更新文章信息
-            article.setCreateTime(new Date());
+            article.setEditTime(new Date());
 
             int updateNum = companyArticleMapper.update(article);
             if (updateNum<=0){
