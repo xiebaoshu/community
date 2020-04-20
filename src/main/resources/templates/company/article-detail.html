@@ -116,7 +116,9 @@
 
                     </div>
                     <div class="ui right aligned eight wide column">
-                        <button class="ui  teal button m-mobile-wide" id="comment-btn"><i class="edit icon"></i>评论</button>
+                        <button class="ui  teal button m-mobile-wide" id="comment-btn"
+                                th:style="${session.user.permission}?'cursor:no-drop;'">
+                          <i class="edit icon"></i>评论</button>
 
                     </div>
 
@@ -197,9 +199,15 @@
     });
     // 评论表单相关按钮
     $("#comment-btn").click(function () {
-       $("#commentForm").toggle();
-        $("#comment-btn").toggle();
-        $('#commentForm').attr("action","/"+parCategory+"/comment");
+        // 判断用户是否禁言
+        if ($(this).css("cursor")=="no-drop"){
+            return false;
+        }else{
+            $("#commentForm").toggle();
+            $("#comment-btn").toggle();
+            $('#commentForm').attr("action","/"+parCategory+"/comment");
+        }
+
     });
     $("#cancel-btn").click(function () {
         clear();

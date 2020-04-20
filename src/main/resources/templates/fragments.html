@@ -166,10 +166,16 @@
         <script>
             $(function () {
                 $(".reply").click(function () {
-                    $("#commentForm").show();
-                    $("#comment-btn").hide();
-                    $("#parentId").val($(this).attr("parentId"));
-                    $("#replyUserId").val($(this).attr("replyUserId"));
+                    // 判断用户是否禁言
+                    if ($(this).css("cursor")=="no-drop"){
+                        return false;
+                    } else{
+                        $("#commentForm").show();
+                        $("#comment-btn").hide();
+                        $("#parentId").val($(this).attr("parentId"));
+                        $("#replyUserId").val($(this).attr("replyUserId"));
+                    }
+
 
                 });
 
@@ -245,6 +251,7 @@
                         <a class="reply"
                            th:unless="${user.userId}==${coment.user.userId}"
                            th:attr="parentId=${coment.commentId},replyUserId=${coment.user.userId}"
+                           th:style="${session.user.permission}?'cursor:no-drop;'"
                         >回复</a>
                         <a class="del"
                            th:if="${user.userId}==${coment.user.userId}"
@@ -286,7 +293,8 @@
                                 <div class="actions">
                                     <a class="reply"
                                        th:unless="${user.userId}==${comments.user.userId}"
-                                       th:attr="parentId=${coment.commentId},replyUserId=${comments.user.userId}">回复</a>
+                                       th:attr="parentId=${coment.commentId},replyUserId=${comments.user.userId}"
+                                       th:style="${session.user.permission}?'cursor:no-drop;'">回复</a>
                                     <a class="del"
                                        th:if="${user.userId}==${comments.user.userId}"
                                        th:attr="parentId=${coment.commentId},commentId=${comments.commentId}">删除</a>
