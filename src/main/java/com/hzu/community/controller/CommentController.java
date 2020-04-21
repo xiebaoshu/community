@@ -140,7 +140,7 @@ public class CommentController {
 
     }
 
-
+//    获取评论和信息通知
     private void getCandN(HttpServletRequest request, Comment comment,Notification notification,Integer parCategory) {
         UserInfo user = (UserInfo) request.getSession().getAttribute("user");
         comment.setUser(user);

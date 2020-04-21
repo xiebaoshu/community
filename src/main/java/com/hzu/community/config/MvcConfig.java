@@ -1,11 +1,14 @@
 package com.hzu.community.config;
 
+import com.hzu.community.HandlerInterceptor.AdminHandlerInterceptor;
+import com.hzu.community.HandlerInterceptor.CompanyHandlerInterceptor;
+import com.hzu.community.HandlerInterceptor.LoginHandlerInterceptor;
+import com.hzu.community.HandlerInterceptor.TeacherHandlerInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.multipart.MultipartResolver;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
-import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
@@ -16,6 +19,12 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class MvcConfig implements WebMvcConfigurer {
     @Autowired
     private LoginHandlerInterceptor loginHandlerInterceptor;
+    @Autowired
+    private AdminHandlerInterceptor adminHandlerInterceptor;
+    @Autowired
+    private TeacherHandlerInterceptor teacherHandlerInterceptor;
+    @Autowired
+    private CompanyHandlerInterceptor companyHandlerInterceptor;
 
 
     /**
@@ -33,9 +42,18 @@ public class MvcConfig implements WebMvcConfigurer {
     //    注册拦截器
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-//        addPathPatterns拦截哪些路径，excludePathPatterns排除哪些路径
+//        addPathPatterns拦截哪些路径，excludePathPatterns排除哪些路径，登陆拦截器
         registry.addInterceptor(loginHandlerInterceptor).addPathPatterns("/**")
                 .excludePathPatterns("/","/static/**","/login","/nav","/nav/mySet","/register");
+//        管理员权限拦截器
+        registry.addInterceptor(adminHandlerInterceptor).addPathPatterns("/admin/**")
+                .excludePathPatterns("/static/**");
+//        教师权限拦截器
+        registry.addInterceptor(teacherHandlerInterceptor).addPathPatterns("/5/add","/5/update","/5/delete")
+                .excludePathPatterns("/static/**");
+        //企业权限拦截器
+        registry.addInterceptor(companyHandlerInterceptor).addPathPatterns("/6/add","/6/update","/6/delete")
+                .excludePathPatterns("/static/**");
     }
 
     @Override

@@ -68,6 +68,7 @@ public class LostArticleController {
                                   @RequestParam(name = "date", required = false) Integer date
 
     ){
+
 //        初始化信息
         List<Area> areaList = areaService.getAreaList();
         model.addAttribute("areaList",areaList);
@@ -210,9 +211,9 @@ public class LostArticleController {
 //        判断是否为非法操作
         UserInfo user = article.getUserInfo();
         UserInfo nowUser = (UserInfo)request.getSession().getAttribute("user");
-//        如果是非法操作，则重定向到当前用户界面
+//        如果是非法操作，则抛出异常，跳转到错误页面
         if (!user.getUserId().equals(nowUser.getUserId()) && !nowUser.getUserType().equals(3)){
-            return "redirect:/people/"+nowUser.getUserId()+"/1";
+            throw new ArticleException("非法操作，请不要修改他人文章");
         }
 
 //        页面初始化所需数据
@@ -317,8 +318,8 @@ public class LostArticleController {
             attributes.addFlashAttribute("message", "删除成功");
             return "redirect:/admin/article";
         }else {
-//            非法操作，不进行操作，返回用户界面
-            return "redirect:/people/"+nowUser.getUserId()+"/1";
+//            非法操作，抛出异常
+            throw new ArticleException("非法操作，请不要删除他人文章");
         }
 
 

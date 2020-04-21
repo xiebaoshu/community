@@ -1,6 +1,6 @@
 spring:
   thymeleaf:
-    cache:false
+    cache: false
   autoconfigure:
 #   \u6392\u9664\u9ED8\u8BA4\u7684\u56FE\u7247\u4E0A\u4F20\u8BBE\u7F6E\uFF0C\u5728springweb\u914D\u7F6E\u81EA\u5B9A\u4E49\u7684\u4E0A\u4F20\u56FE\u7247\u8BBE\u7F6E
     exclude:  org.springframework.boot.autoconfigure.web.servlet.MultipartAutoConfiguration
@@ -32,6 +32,17 @@ pagehelper:
   reasonable: true
   support-methods-arguments: true
   params: count=countSql
+
+#日志配置
+logging:
+  file:
+    path: log/
+  level:
+    root: info
+    com.hzu.community: debug
+
+
+
 
 
 

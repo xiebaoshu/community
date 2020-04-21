@@ -1,4 +1,4 @@
-package com.hzu.community.config;
+package com.hzu.community.HandlerInterceptor;
 
 import com.hzu.community.bean.UserInfo;
 import com.hzu.community.mapper.UserInfoMapper;
@@ -47,7 +47,7 @@ public class LoginHandlerInterceptor implements HandlerInterceptor {
         Object loginUser = request.getSession().getAttribute("user");
         if(loginUser == null){
             //未登陆
-            request.setAttribute("msg","没有权限请先登陆");
+            request.setAttribute("message","没有权限,请先登陆");
             //返回登陆页面
             request.getRequestDispatcher("/login").forward(request,response);
             return false;

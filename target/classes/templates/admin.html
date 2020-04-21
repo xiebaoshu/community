@@ -121,7 +121,9 @@
                                 </td>
 
                                 <td th:if="${owner}">
-                                    <a th:href="@{'/'+${parCategory}+'/'+update(articleId=${article.id})}" class="ui mini teal basic button">编辑</a>
+                                    <div th:attr="url=@{'/'+${parCategory}+'/'+update(articleId=${article.id})}"
+                                         class="ui mini teal basic button update-btn"
+                                         th:style="${session.user.permission}?'cursor:no-drop;'">编辑</div>
                                     <a href="#" class="ui mini red basic button delete-btn"
                                     th:attr="del_uri=@{'/'+${parCategory}+'/'+delete(articleId=${article.id})}">删除</a>
                                 </td>
@@ -144,10 +146,11 @@
                                             下一页
                                         </a>
                                     </div>
-                                    <a href="#" class="ui mini right floated teal basic button"
-                                       th:if="${owner}"
-                                       th:href="@{|/${parCategory}/add|}"
-                                    >新增</a>
+                                    <div  class="ui mini right floated  basic button"
+                                       th:if="${owner}" id="insert-btn"
+                                       th:attr="url=@{|/${parCategory}/add|}"
+                                       th:style="${session.user.permission}?'cursor:no-drop;'">新增</div>
+
                                 </th>
                             </tr>
                             </tfoot>
@@ -284,6 +287,23 @@
 
     $('#mobile-btn1').click(function () {
         $('.m-item-search').toggleClass('m-mobile-hide');
+    });
+    // 新增按钮
+    $('#insert-btn').click(function () {
+        // 如果被禁言，则不跳转
+        if ($(this).css('cursor')=='no-drop'){
+            return false;
+        }else {
+            window.location.href=$(this).attr('url');
+        }
+    });
+    //编辑按钮
+    $('.update-btn').click(function () {
+        if ($(this).css('cursor')=='no-drop'){
+            return false;
+        }else {
+            window.location.href=$(this).attr('url');
+        }
     });
 
     $('.delete-btn').click(function () {
