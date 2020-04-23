@@ -1,10 +1,14 @@
 package com.hzu.community.service.impl;
 
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.TypeReference;
+import com.google.common.base.Strings;
 import com.hzu.community.bean.UserInfo;
 
 import com.hzu.community.dto.ImageHolder;
 
+import com.hzu.community.dto.JobFair;
 import com.hzu.community.enums.UserEnum;
 
 import com.hzu.community.exceptions.UserException;
@@ -14,20 +18,41 @@ import com.hzu.community.service.UserInfoService;
 import com.hzu.community.util.ImageUtil;
 import com.hzu.community.util.PathUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
+
+import java.io.File;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class UserInfoServiceImpl implements UserInfoService {
     @Autowired
     private UserInfoMapper userInfoMapper;
+    @Autowired
+    private StringRedisTemplate redisTemplate;
 
     @Override
     public UserInfo findUserInfoById(Integer id) {
-        return userInfoMapper.findUserInfoById(id);
+        //默认导航列表，使用redis缓存
+        String key = "user"+id;
+        //Jedis对缓存的操作，key-value的操作
+        String json =  redisTemplate.opsForValue().get(key);
+        UserInfo user = null;
+        if (Strings.isNullOrEmpty(json)) {
+            File myFile = new File("E:/workspace/community/src/main/resources/static/json/jsonzhaoping.json");
+            user = userInfoMapper.findUserInfoById(id);
+            String string  = JSON.toJSONString(user);
+            redisTemplate.opsForValue().set(key, string);
+            //设置过期时间,5分钟
+            redisTemplate.expire(key, 5, TimeUnit.MINUTES);
+
+        }else {
+            user = JSON.parseObject(json,UserInfo.class);
+        }
+        return user;
     }
 
     @Override
@@ -49,9 +74,14 @@ public class UserInfoServiceImpl implements UserInfoService {
     public Integer searchCount(UserInfo userInfo) {
         return userInfoMapper.searchCount(userInfo);
     }
-
+//    用于禁言
     @Override
     public int updatePermission(UserInfo user) {
+//        判断redis是否有该user数据，有的话清空
+        String key = "user"+user.getUserId();
+        if (redisTemplate.hasKey(key)){
+            redisTemplate.delete(key);
+        }
         return userInfoMapper.update(user);
     }
 
@@ -115,6 +145,11 @@ public class UserInfoServiceImpl implements UserInfoService {
             if (updateNum<=0){
                 return UserEnum.UPDATE_WRONG;
             }else {
+                // 判断redis是否有该user数据，有的话清空
+                String key = "user"+user.getUserId();
+                if (redisTemplate.hasKey(key)){
+                    redisTemplate.delete(key);
+                }
                 return UserEnum.SUCCESS;
             }
 
