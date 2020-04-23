@@ -1,6 +1,4 @@
 package com.hzu.community.controller;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.hzu.community.bean.*;
@@ -8,43 +6,40 @@ import com.hzu.community.bean.*;
 import com.hzu.community.dto.ImageHolder;
 import com.hzu.community.enums.ArticleEnum;
 import com.hzu.community.exceptions.ArticleException;
-import com.hzu.community.mapper.JobArticleMapper;
-import com.hzu.community.mapper.SalaryMapper;
-import com.hzu.community.mapper.TagMapper;
+
 import com.hzu.community.service.ArticleCategoryService;
 import com.hzu.community.service.JobArticleService;
-import com.hzu.community.util.HttpServletRequestUtil;
+import com.hzu.community.service.SalaryService;
+import com.hzu.community.service.TagService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
-import org.springframework.web.multipart.commons.CommonsMultipartFile;
-import org.springframework.web.multipart.commons.CommonsMultipartResolver;
+
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
+
 import java.util.List;
-import java.util.Map;
+
 
 @Controller
 @RequestMapping("/4")
 public class JobArticleController {
 
     @Autowired
-    private TagMapper tagMapper;
+    private TagService tagService;
     @Autowired
-    private SalaryMapper salaryMapper;
+    private SalaryService salaryService;
     @Autowired
     private ArticleCategoryService articleCategoryService;
     @Autowired
     private JobArticleService jobArticleService;
-    @Autowired
-    private JobArticleMapper jobArticleMapper;
+    
 
 
     @GetMapping("")
@@ -62,8 +57,8 @@ public class JobArticleController {
 
 //        取出子类别和标签组和待遇选项
         List<ArticleCategory> articleCategories = articleCategoryService.getArticleCategories(4);
-        List<Tag> tagList = tagMapper.allTag(4);
-        List<Salary> salaryList = salaryMapper.getSalaryList();
+        List<Tag> tagList = tagService.allTag(4);
+        List<Salary> salaryList = salaryService.getSalaryList();
         model.addAttribute("articleCategories",articleCategories);
         model.addAttribute("tagList",tagList);
         model.addAttribute("salaryList",salaryList);
@@ -92,11 +87,11 @@ public class JobArticleController {
         article.setArticleTitle(search);
         article.setTag(tag);
         article.setKnots(knots);
-        article.setSalary(salaryMapper.findSalaryById(salary));
+        article.setSalary(salaryService.findSalaryById(salary));
         //开启分页，并使用pageJob插件进行分页和返回数据，pageJob插件需要先配置pom和yml。
         PageHelper.startPage(page,10);
         List<JobArticle> list = new ArrayList<>();
-        list=jobArticleMapper.getArticleList(article,date);
+        list=jobArticleService.getArticleList(article,date);
         PageInfo<JobArticle> pageInfo = new PageInfo<>(list);
         model.addAttribute("pageInfo",pageInfo);
         return "/job/job";
@@ -111,8 +106,8 @@ public class JobArticleController {
         List<Salary> salaryList = new ArrayList<>();
         try {
             articleCategoryList =  articleCategoryService.getArticleCategories(4);
-            tagList = tagMapper.allTag(4);
-            salaryList = salaryMapper.getSalaryList();
+            tagList = tagService.allTag(4);
+            salaryList = salaryService.getSalaryList();
             model.addAttribute("categoryList",articleCategoryList);
             model.addAttribute("tagList",tagList);
             model.addAttribute("salaryList",salaryList);
@@ -179,7 +174,7 @@ public class JobArticleController {
                                @RequestParam(name = "articleId") Integer articleId,
                                HttpServletRequest request){
         //通过articleId回显article里面的数据
-        JobArticle article = jobArticleMapper.findArticleById(articleId);
+        JobArticle article = jobArticleService.findArticleById(articleId);
         model.addAttribute("article",article);
         //        判断是否为非法操作
         UserInfo user = article.getUserInfo();
@@ -193,8 +188,8 @@ public class JobArticleController {
         List<Tag> tagList = new ArrayList<>();
         List<Salary> salaryList = new ArrayList<>();
         categoryList = articleCategoryService.getArticleCategories(4);
-        tagList = tagMapper.allTag(4);
-        salaryList = salaryMapper.getSalaryList();
+        tagList = tagService.allTag(4);
+        salaryList = salaryService.getSalaryList();
 //       将需要下拉列表选项的数据放进去model
         model.addAttribute("categoryList",categoryList);
         model.addAttribute("tagList",tagList);
@@ -262,7 +257,7 @@ public class JobArticleController {
                       RedirectAttributes attributes,
                       HttpServletRequest request){
 
-        JobArticle article = jobArticleMapper.findArticleById(articleId);
+        JobArticle article = jobArticleService.findArticleById(articleId);
 //        文章作者
         UserInfo user = article.getUserInfo();
 //        当前用户
@@ -299,9 +294,9 @@ public class JobArticleController {
     @GetMapping("/{articleId}")
     public String articleDetail(@PathVariable("articleId") Integer articleId,Model model
     ){
-        JobArticle article = jobArticleMapper.findArticleById(articleId);
+        JobArticle article = jobArticleService.findArticleById(articleId);
         model.addAttribute("article",article);
-        jobArticleMapper.incReadCount(article);
+        jobArticleService.incReadCount(article);
         return "/job/article-detail";
     }
 }

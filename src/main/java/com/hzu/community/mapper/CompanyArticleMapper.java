@@ -108,7 +108,7 @@ public interface CompanyArticleMapper {
 
 
     @Update("update company_article set read_count = read_count+1 where id = #{id}")
-    void incReadCount(CompanyArticle article);
+    public void incReadCount(CompanyArticle article);
 
     @Select("<script> " +
             "SELECT count(1) " +

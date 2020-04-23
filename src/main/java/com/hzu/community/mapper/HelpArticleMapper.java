@@ -109,7 +109,7 @@ public interface HelpArticleMapper {
     public void batchDel(@Param( "List" ) List  List);
 
     @Update("update help_article set read_count = read_count+1 where id = #{id}")
-    void incReadCount(HelpArticle article);
+    public void incReadCount(HelpArticle article);
 
     @Select("<script> " +
             "SELECT count(1) " +

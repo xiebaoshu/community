@@ -134,7 +134,7 @@ public interface LostArticleMapper {
     public void batchDel(@Param( "List" ) List  List);
 
     @Update("update lost_article set read_count = read_count+1 where id = #{id}")
-    void incReadCount(LostArticle lostArticle);
+    public void incReadCount(LostArticle lostArticle);
 
     @Select("<script> " +
             "SELECT count(1) " +

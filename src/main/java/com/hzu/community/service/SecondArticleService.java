@@ -16,5 +16,15 @@ public interface SecondArticleService {
             throws ArticleException;
     public ArticleEnum deleteArticle(Integer id, Integer userId)
             throws ArticleException;
+    public List<SecondArticle> getArticleList(@Param("articleCondition") SecondArticle articleCondition,
+                                              @Param("dateCondition")Integer dateCondition,
+                                              @Param("prePrice")Double prePrice,
+                                              @Param("nextPrice")Double nextPrice);
+    public Integer searchCount(@Param("articleCondition") SecondArticle articleCondition,
+                               @Param("dateCondition")Integer dateCondition,
+                               @Param("prePrice")Double prePrice,
+                               @Param("nextPrice")Double nextPrice);
+    public SecondArticle findArticleById(@Param("articleId") Integer articleId);
+    void incReadCount(SecondArticle article);
     public void batchDel(@Param( "List" ) List List);
 }

@@ -63,6 +63,11 @@ public class ArticleCategoryServiceImpl implements ArticleCategoryService {
     }
 
     @Override
+    public List<ArticleCategory> articleTags() {
+        return  articleCategoryMapper.articleTags();
+    }
+
+    @Override
     @Transactional
     public void del(Integer id) throws RuntimeException {
         try {

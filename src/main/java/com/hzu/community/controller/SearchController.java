@@ -5,7 +5,7 @@ import com.github.pagehelper.PageInfo;
 import com.hzu.community.bean.*;
 import com.hzu.community.dto.SearchDto;
 import com.hzu.community.mapper.*;
-import com.hzu.community.service.UserInfoService;
+import com.hzu.community.service.*;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -18,19 +18,19 @@ import java.util.List;
 @Controller
 public class SearchController {
     @Autowired
-    private SearchMapper searchMapper;
+    private SearchService searchService;
     @Autowired
-    private LostArticleMapper lostArticleMapper;
+    private LostArticleService lostArticleService;
     @Autowired
-    private SecondArticleMapper secondArticleMapper;
+    private SecondArticleService secondArticleService;
     @Autowired
-    private HelpArticleMapper helpArticleMapper;
+    private HelpArticleService helpArticleService;
     @Autowired
-    private JobArticleMapper jobArticleMapper;
+    private JobArticleService jobArticleService;
     @Autowired
-    private SchoolArticleMapper schoolArticleMapper;
+    private SchoolArticleService schoolArticleService;
     @Autowired
-    private CompanyArticleMapper companyArticleMapper;
+    private CompanyArticleService companyArticleService;
     @Autowired
     private UserInfoService userInfoService;
 
@@ -50,66 +50,66 @@ public class SearchController {
             SearchDto searchDto = new SearchDto();
             searchDto.setArticleTitle(search);
             searchDto.setDate(date);
-            List<SearchDto> searchDtoList = searchMapper.getAll(searchDto);
+            List<SearchDto> searchDtoList = searchService.getAll(searchDto);
             PageInfo<SearchDto> pageInfo = new PageInfo<>(searchDtoList);
             model.addAttribute("pageInfo",pageInfo);
-            Integer count = searchMapper.getCount(searchDto);
+            Integer count = searchService.getCount(searchDto);
 //            统计搜索条数
             model.addAttribute("count",count);
 
         }else if (type.equals("1")){
             LostArticle lostArticle = new LostArticle();
             lostArticle.setArticleTitle(search);
-            List<LostArticle> list = lostArticleMapper.getArticleList(lostArticle,date);
+            List<LostArticle> list = lostArticleService.getArticleList(lostArticle,date);
             PageInfo<LostArticle> pageInfo = new PageInfo<>(list);
             model.addAttribute("pageInfo",pageInfo);
 
-            Integer count = lostArticleMapper.searchCount(lostArticle,date);
+            Integer count = lostArticleService.searchCount(lostArticle,date);
             model.addAttribute("count",count);
         }else if (type.equals("2")){
             SecondArticle secondArticle = new SecondArticle();
             secondArticle.setArticleTitle(search);
-            List<SecondArticle> list = secondArticleMapper.getArticleList(secondArticle,date,null,null);
+            List<SecondArticle> list = secondArticleService.getArticleList(secondArticle,date,null,null);
             PageInfo<SecondArticle> pageInfo = new PageInfo<>(list);
             model.addAttribute("pageInfo",pageInfo);
 
-            Integer count = secondArticleMapper.searchCount(secondArticle,date,null,null);
+            Integer count = secondArticleService.searchCount(secondArticle,date,null,null);
             model.addAttribute("count",count);
         }else if (type.equals("3")){
             HelpArticle helpArticle = new HelpArticle();
             helpArticle.setArticleTitle(search);
-            List<HelpArticle> list = helpArticleMapper.getArticleList(helpArticle,date);
+            List<HelpArticle> list = helpArticleService.getArticleList(helpArticle,date);
             PageInfo<HelpArticle> pageInfo = new PageInfo<>(list);
             model.addAttribute("pageInfo",pageInfo);
 
-            Integer count = helpArticleMapper.searchCount(helpArticle,date);
+            Integer count = helpArticleService.searchCount(helpArticle,date);
             model.addAttribute("count",count);
         }else if (type.equals("4")){
             JobArticle jobArticle = new JobArticle();
             jobArticle.setArticleTitle(search);
-            List<JobArticle> list = jobArticleMapper.getArticleList(jobArticle,date);
+            List<JobArticle> list = jobArticleService.getArticleList(jobArticle,date);
             PageInfo<JobArticle> pageInfo = new PageInfo<>(list);
             model.addAttribute("pageInfo",pageInfo);
 
-            Integer count = jobArticleMapper.searchCount(jobArticle,date);
+            Integer count = jobArticleService.searchCount(jobArticle,date);
             model.addAttribute("count",count);
         }else if (type.equals("5")){
             SchoolArticle schoolArticle = new SchoolArticle();
             schoolArticle.setArticleTitle(search);
-            List<SchoolArticle> list = schoolArticleMapper.getArticleList(schoolArticle,date);
+            List<SchoolArticle> list = schoolArticleService.getArticleList(schoolArticle,date);
             PageInfo<SchoolArticle> pageInfo = new PageInfo<>(list);
             model.addAttribute("pageInfo",pageInfo);
 
-            Integer count = schoolArticleMapper.searchCount(schoolArticle,date);
+            Integer count = schoolArticleService.searchCount(schoolArticle,date);
             model.addAttribute("count",count);
         }else if (type.equals("6")){
             CompanyArticle companyArticle = new CompanyArticle();
             companyArticle.setArticleTitle(search);
-            List<CompanyArticle> list = companyArticleMapper.getArticleList(companyArticle,date);
+            List<CompanyArticle> list = companyArticleService.getArticleList(companyArticle,date);
             PageInfo<CompanyArticle> pageInfo = new PageInfo<>(list);
             model.addAttribute("pageInfo",pageInfo);
 
-            Integer count = companyArticleMapper.searchCount(companyArticle,date);
+            Integer count = companyArticleService.searchCount(companyArticle,date);
             model.addAttribute("count",count);
         }else if (type.equals("user")){
             UserInfo userInfo = new UserInfo();

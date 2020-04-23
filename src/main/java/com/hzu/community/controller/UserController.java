@@ -29,8 +29,7 @@ import java.util.UUID;
 @Controller
 public class UserController {
     static Boolean hasUser;
-    @Autowired
-    private UserInfoMapper userInfoMapper;
+
     @Autowired
     private UserInfoService userInfoService;
     @GetMapping("/login")
@@ -66,12 +65,12 @@ public class UserController {
                        HttpServletResponse response,
                        Model model)
     {
-        List<UserInfo> list = userInfoMapper.login(user);
+        List<UserInfo> list = userInfoService.login(user);
         if (list.size()>0){
             user =  list.get(0);
             String token = UUID.randomUUID().toString();
             user.setToken(token);
-            userInfoMapper.update(user);
+            userInfoService.update(user,null);
             Cookie cookie = new Cookie("token",token);
             cookie.setMaxAge(60 * 60 * 24 * 30 * 6);
             response.addCookie(cookie);
@@ -106,7 +105,7 @@ public class UserController {
                                HttpServletRequest request) {
         UserInfo userInfo = new UserInfo();
         userInfo.setUserAccount(user.getUserAccount());
-        List<UserInfo> hasUser = userInfoMapper.login(userInfo);
+        List<UserInfo> hasUser = userInfoService.login(userInfo);
         if (hasUser.size()>0){
             attributes.addFlashAttribute("message", "注册失败，该账号已存在");
         }else {
@@ -149,7 +148,7 @@ public class UserController {
 //            非法操作
             return "redirect:/people/"+user.getUserId()+"/1";
         }else {
-            UserInfo userInfo = userInfoMapper.findUserInfoById(userId);
+            UserInfo userInfo = userInfoService.findUserInfoById(userId);
             model.addAttribute("user",userInfo);
             return "login/register";
         }

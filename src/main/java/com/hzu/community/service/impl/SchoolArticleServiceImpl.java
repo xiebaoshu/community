@@ -31,6 +31,26 @@ public class SchoolArticleServiceImpl implements SchoolArticleService {
     private NotificationMapper notificationMapper;
 
     @Override
+    public List<SchoolArticle> getArticleList(SchoolArticle articleCondition, Integer dateCondition) {
+        return schoolArticleMapper.getArticleList(articleCondition,dateCondition);
+    }
+
+    @Override
+    public Integer searchCount(SchoolArticle articleCondition, Integer dateCondition) {
+        return schoolArticleMapper.searchCount(articleCondition,dateCondition);
+    }
+
+    @Override
+    public SchoolArticle findArticleById(Integer articleId) {
+        return schoolArticleMapper.findArticleById(articleId);
+    }
+
+    @Override
+    public void incReadCount(SchoolArticle article) {
+        schoolArticleMapper.incReadCount(article);
+    }
+
+    @Override
     public void batchDel(List List) {
         schoolArticleMapper.batchDel(List);
     }

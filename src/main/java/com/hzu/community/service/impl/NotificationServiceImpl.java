@@ -12,6 +12,17 @@ import java.util.List;
 public class NotificationServiceImpl implements NotificationService {
     @Autowired
     private NotificationMapper notificationMapper;
+
+    @Override
+    public int delNotification(Notification notification) {
+        return notificationMapper.delNotification(notification);
+    }
+
+    @Override
+    public void batchDel(Integer parId, List List) {
+        notificationMapper.batchDel(parId,List);
+    }
+
     @Override
     public int add(Notification notification) {
         return notificationMapper.addNotification(notification);

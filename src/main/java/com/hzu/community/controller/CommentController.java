@@ -8,8 +8,7 @@ import com.hzu.community.bean.Notification;
 import com.hzu.community.bean.UserInfo;
 import com.hzu.community.enums.NotificationTypeEnum;
 import com.hzu.community.mapper.*;
-import com.hzu.community.service.CommentService;
-import com.hzu.community.service.NotificationService;
+import com.hzu.community.service.*;
 import com.hzu.community.util.HttpServletRequestUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -26,23 +25,22 @@ import java.util.*;
 public class CommentController {
 
     @Autowired
-    private LostArticleMapper lostArticleMapper;
-    @Autowired
-    private CommentMapper commentMapper;
+    private LostArticleService lostArticleService;
+
     @Autowired
     private CommentService commentService;
     @Autowired
     private NotificationService notificationService;
     @Autowired
-    private HelpArticleMapper helpArticleMapper;
+    private HelpArticleService helpArticleService;
     @Autowired
-    private SecondArticleMapper secondArticleMapper;
+    private SecondArticleService secondArticleService;
     @Autowired
-    private JobArticleMapper jobArticleMapper;
+    private JobArticleService jobArticleService;
     @Autowired
-    private SchoolArticleMapper schoolArticleMapper;
+    private SchoolArticleService schoolArticleService;
     @Autowired
-    private CompanyArticleMapper companyArticleMapper;
+    private CompanyArticleService companyArticleService;
 
 //    加载文章的评论，并返回评论区域代码块，供前端局部刷新
     @GetMapping("/{parCategory}/comment/{articleId}")
@@ -50,7 +48,7 @@ public class CommentController {
                            @PathVariable("articleId") Integer articleId,
                            Model model, HttpServletRequest request) {
         List<Comment> commentList = new ArrayList<>();
-        commentList = commentMapper.findCommentListById(articleId,parCategory);
+        commentList = commentService.findCommentListById(articleId,parCategory);
         model.addAttribute("commentList", commentList);
 
 //        用于判断当前评论是否属于自己，是否能操作
@@ -86,7 +84,7 @@ public class CommentController {
 
 //        将评论插入数据库中,且新增信息通知
         try {
-            int cNum = commentMapper.addComment(comment);
+            int cNum = commentService.addComment(comment);
             int nNum = notificationService.add(notification);
             if (cNum>0 && nNum>0){
                 modelmap.put("success",true);
@@ -151,17 +149,17 @@ public class CommentController {
 //        与文章拥有者对比，判断是否为博主
         UserInfo owner = new UserInfo();
         if (parCategory.equals(1)){
-            owner = lostArticleMapper.findArticleById(comment.getArticleId()).getUserInfo();
+            owner = lostArticleService.findArticleById(comment.getArticleId()).getUserInfo();
         }else if (parCategory.equals(2)){
-            owner = secondArticleMapper.findArticleById(comment.getArticleId()).getUserInfo();
+            owner = secondArticleService.findArticleById(comment.getArticleId()).getUserInfo();
         }else if (parCategory.equals(3)){
-            owner = helpArticleMapper.findArticleById(comment.getArticleId()).getUserInfo();
+            owner = helpArticleService.findArticleById(comment.getArticleId()).getUserInfo();
         }else if (parCategory.equals(4)){
-            owner = jobArticleMapper.findArticleById(comment.getArticleId()).getUserInfo();
+            owner = jobArticleService.findArticleById(comment.getArticleId()).getUserInfo();
         }else if (parCategory.equals(5)){
-            owner = schoolArticleMapper.findArticleById(comment.getArticleId()).getUserInfo();
+            owner = schoolArticleService.findArticleById(comment.getArticleId()).getUserInfo();
         }else if (parCategory.equals(6)){
-            owner = companyArticleMapper.findArticleById(comment.getArticleId()).getUserInfo();
+            owner = companyArticleService.findArticleById(comment.getArticleId()).getUserInfo();
         }
 
 
@@ -189,26 +187,26 @@ public class CommentController {
             notification.setType(NotificationTypeEnum.REPLY_ARTICLE.getType());
             notification.setCreateTime(new Date());
             if (parCategory.equals(1)){
-                notification.setOuterTitle(lostArticleMapper.findArticleById(comment.getArticleId()).getArticleTitle());
+                notification.setOuterTitle(lostArticleService.findArticleById(comment.getArticleId()).getArticleTitle());
 //                文章类型id
 
             }else if (parCategory.equals(2)){
-                notification.setOuterTitle(secondArticleMapper.findArticleById(comment.getArticleId()).getArticleTitle());
+                notification.setOuterTitle(secondArticleService.findArticleById(comment.getArticleId()).getArticleTitle());
 
 
             }else if (parCategory.equals(3)){
-                notification.setOuterTitle(helpArticleMapper.findArticleById(comment.getArticleId()).getArticleTitle());
+                notification.setOuterTitle(helpArticleService.findArticleById(comment.getArticleId()).getArticleTitle());
 
 
             }else if (parCategory.equals(4)){
-                notification.setOuterTitle(jobArticleMapper.findArticleById(comment.getArticleId()).getArticleTitle());
+                notification.setOuterTitle(jobArticleService.findArticleById(comment.getArticleId()).getArticleTitle());
 
 
             }else if (parCategory.equals(5)){
-                notification.setOuterTitle(schoolArticleMapper.findArticleById(comment.getArticleId()).getArticleTitle());
+                notification.setOuterTitle(schoolArticleService.findArticleById(comment.getArticleId()).getArticleTitle());
 
             }else if (parCategory.equals(6)){
-                notification.setOuterTitle(companyArticleMapper.findArticleById(comment.getArticleId()).getArticleTitle());
+                notification.setOuterTitle(companyArticleService.findArticleById(comment.getArticleId()).getArticleTitle());
             }
             notification.setArticleParCategory(parCategory);
 
@@ -224,7 +222,7 @@ public class CommentController {
             notification.setArticleParCategory(parCategory);
             notification.setType(NotificationTypeEnum.REPLY_COMMENT.getType());
             notification.setCreateTime(new Date());
-            notification.setOuterTitle(commentMapper.findCommentById(comment.getParentComment().getCommentId()).getContent());
+            notification.setOuterTitle(commentService.findCommentById(comment.getParentComment().getCommentId()).getContent());
             notification.setStatus(false);
         }
     }

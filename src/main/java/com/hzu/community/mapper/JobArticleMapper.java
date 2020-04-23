@@ -115,7 +115,7 @@ public interface JobArticleMapper {
     public void batchDel(@Param( "List" ) List  List);
 
     @Update("update job_article set read_count = read_count+1 where id = #{id}")
-    void incReadCount(JobArticle article);
+    public void incReadCount(JobArticle article);
 
     @Select("<script> " +
             "SELECT count(1) " +

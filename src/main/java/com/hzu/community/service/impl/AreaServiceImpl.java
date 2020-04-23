@@ -16,4 +16,9 @@ public class AreaServiceImpl implements AreaService {
     public List<Area> getAreaList(){
         return areaMapper.getArea();
     }
+
+    @Override
+    public Area findAreaById(Integer id) {
+        return areaMapper.findAreaById(id);
+    }
 }

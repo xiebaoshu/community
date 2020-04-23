@@ -3,29 +3,24 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.hzu.community.bean.*;
 import com.hzu.community.dto.ImageHolder;
-import com.hzu.community.dto.ArticleExecution;
+
 import com.hzu.community.enums.ArticleEnum;
 import com.hzu.community.exceptions.ArticleException;
-import com.hzu.community.mapper.CommentMapper;
-import com.hzu.community.mapper.LostArticleMapper;
-import com.hzu.community.mapper.TagMapper;
-import com.hzu.community.mapper.UserInfoMapper;
+
 import com.hzu.community.service.*;
-import com.hzu.community.util.HttpServletRequestUtil;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
 
 import org.springframework.ui.Model;
-import org.springframework.web.bind.ServletRequestDataBinder;
+
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
-import org.springframework.web.multipart.commons.CommonsMultipartFile;
-import org.springframework.web.multipart.commons.CommonsMultipartResolver;
+
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
@@ -37,23 +32,20 @@ import java.util.*;
 @RequestMapping("/1")
 public class LostArticleController {
     @Autowired
-    AreaService areaService;
+    private AreaService areaService;
     @Autowired
-    ItemCategoryService itemCategoryService;
+    private ItemCategoryService itemCategoryService;
     @Autowired
-    ArticleCategoryService articleCategoryService;
+    private ArticleCategoryService articleCategoryService;
     @Autowired
-    LostArticleService lostArticleService;
+    private LostArticleService lostArticleService;
     @Autowired
-    LostArticleMapper lostArticleMapper;
-    @Autowired
-    UserInfoMapper userInfoMapper;
-    @Autowired
-    CommentMapper commentMapper;
+    private UserInfoService userInfoService;
+  
     @Autowired
     CommentService commentService;
     @Autowired
-    private TagMapper tagMapper;
+    private TagService tagService;
 
     @GetMapping("")
     public String lostArticleList(Model model,
@@ -74,7 +66,7 @@ public class LostArticleController {
         model.addAttribute("areaList",areaList);
         List<ItemCategory> itemCategoryList = itemCategoryService.getItemCategoryist();
         model.addAttribute("itemCategoryList",itemCategoryList);
-        List<Tag> tagList = tagMapper.allTag(1);
+        List<Tag> tagList = tagService.allTag(1);
         model.addAttribute("tagList",tagList);
 //        取出失物招领子类别
         List<ArticleCategory> articleCategories = articleCategoryService.getArticleCategories(1);
@@ -114,7 +106,7 @@ public class LostArticleController {
         //开启分页，并使用pageHelp插件进行分页和返回数据，pageHelp插件需要先配置pom和yml。
         PageHelper.startPage(page,10);
         List<LostArticle> list = new ArrayList<>();
-        list=lostArticleMapper.getArticleList(lostArticle,date);
+        list=lostArticleService.getArticleList(lostArticle,date);
 
         PageInfo<LostArticle> pageInfo = new PageInfo<>(list);
         model.addAttribute("pageInfo",pageInfo);
@@ -134,7 +126,7 @@ public class LostArticleController {
             areaList = areaService.getAreaList();
             itemCategoryList = itemCategoryService.getItemCategoryist();
             articleCategoryList = articleCategoryService.getArticleCategories(1);
-            tagList = tagMapper.allTag(1);
+            tagList = tagService.allTag(1);
 //            将需要初始化的数据放进去model
             model.addAttribute("areaList",areaList);
             model.addAttribute("itemCategoryList",itemCategoryList);
@@ -206,7 +198,7 @@ public class LostArticleController {
                                @RequestParam(name = "articleId") Integer articleId,
                                 HttpServletRequest request){
         //通过articleId回显article里面的数据
-        LostArticle article = lostArticleMapper.findArticleById(articleId);
+        LostArticle article = lostArticleService.findArticleById(articleId);
         model.addAttribute("article",article);
 //        判断是否为非法操作
         UserInfo user = article.getUserInfo();
@@ -223,7 +215,7 @@ public class LostArticleController {
         List<ArticleCategory> articleCategoryList = new ArrayList<>();
         areaList = areaService.getAreaList();
         itemCategoryList = itemCategoryService.getItemCategoryist();
-        tagList = tagMapper.allTag(1);
+        tagList = tagService.allTag(1);
         articleCategoryList = articleCategoryService.getArticleCategories(1);
 //       将需要下拉列表选项的数据放进去model
         model.addAttribute("areaList",areaList);
@@ -289,7 +281,7 @@ public class LostArticleController {
     public String lostArticleList(@RequestParam(name = "articleId") Integer articleId,
                                   RedirectAttributes attributes,
                                   HttpServletRequest request){
-        LostArticle article = lostArticleMapper.findArticleById(articleId);
+        LostArticle article = lostArticleService.findArticleById(articleId);
 //        文章作者
         UserInfo user = article.getUserInfo();
 //        当前用户
@@ -329,9 +321,9 @@ public class LostArticleController {
     @GetMapping("/{articleId}")
     public String articleDetail(@PathVariable("articleId") Integer articleId,Model model
                                 ){
-        LostArticle lostArticle = lostArticleMapper.findArticleById(articleId);
+        LostArticle lostArticle = lostArticleService.findArticleById(articleId);
         model.addAttribute("article",lostArticle);
-        lostArticleMapper.incReadCount(lostArticle);
+        lostArticleService.incReadCount(lostArticle);
         return "/lost/article-detail";
     }
 

@@ -15,6 +15,7 @@ import com.hzu.community.exceptions.ArticleException;
 import com.hzu.community.exceptions.NavException;
 import com.hzu.community.mapper.UserInfoMapper;
 import com.hzu.community.service.NavService;
+import com.hzu.community.service.UserInfoService;
 import com.hzu.community.util.HttpServletRequestUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -37,7 +38,7 @@ public class NavController {
     @Autowired
     private NavService navService;
     @Autowired
-    private UserInfoMapper userInfoMapper;
+    private UserInfoService userInfoService;
     @GetMapping("/")
     public String navPage(Model model,HttpServletRequest request){
 //        初始化设置区域 默认列表
@@ -145,17 +146,18 @@ public class NavController {
 
     }
 
-
+//    导航显示布局
     @PostMapping("/navShow")
     @ResponseBody
     public Map<String,Object> navShow(HttpServletRequest request,
                                       @RequestParam(name = "showType") Integer showType){
         Map<String,Object> modelMap = new HashMap<>();
         UserInfo user = (UserInfo) request.getSession().getAttribute("user");
+//        设置显示布局
         user.setNavType(showType);
         try {
-            userInfoMapper.update(user);
-            user = userInfoMapper.findUserInfoById(user.getUserId());
+            userInfoService.update(user,null);
+            user = userInfoService.findUserInfoById(user.getUserId());
             request.getSession().removeAttribute("user");
             request.getSession().setAttribute("user",user);
         }catch (Exception e){

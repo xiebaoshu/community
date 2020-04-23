@@ -8,10 +8,10 @@ import com.hzu.community.bean.*;
 import com.hzu.community.dto.ImageHolder;
 import com.hzu.community.enums.ArticleEnum;
 import com.hzu.community.exceptions.ArticleException;
-import com.hzu.community.mapper.SecondArticleMapper;
-import com.hzu.community.mapper.TagMapper;
+
 import com.hzu.community.service.ArticleCategoryService;
 import com.hzu.community.service.SecondArticleService;
+import com.hzu.community.service.TagService;
 import com.hzu.community.util.HttpServletRequestUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -35,13 +35,12 @@ import java.util.Map;
 @RequestMapping("/2")
 public class SecondArticleController {
     @Autowired
-    private TagMapper tagMapper;
+    private TagService tagService;
     @Autowired
     private ArticleCategoryService articleCategoryService;
     @Autowired
     private SecondArticleService secondArticleService;
-    @Autowired
-    private SecondArticleMapper secondArticleMapper;
+
 
 
 
@@ -61,7 +60,7 @@ public class SecondArticleController {
 
 //        取出子类别和标签组
         List<ArticleCategory> articleCategories = articleCategoryService.getArticleCategories(2);
-        List<Tag> tagList = tagMapper.allTag(2);
+        List<Tag> tagList = tagService.allTag(2);
         model.addAttribute("articleCategories",articleCategories);
         model.addAttribute("tagList",tagList);
 //        返回查询条件，使元素回显
@@ -91,7 +90,7 @@ public class SecondArticleController {
         //开启分页，并使用pageSecond插件进行分页和返回数据，pageSecond插件需要先配置pom和yml。
         PageHelper.startPage(page,10);
         List<SecondArticle> list = new ArrayList<>();
-        list=secondArticleMapper.getArticleList(article,date,prePrice,nextPrice);
+        list=secondArticleService.getArticleList(article,date,prePrice,nextPrice);
         PageInfo<SecondArticle> pageInfo = new PageInfo<>(list);
         model.addAttribute("pageInfo",pageInfo);
         return "/second/second";
@@ -104,7 +103,7 @@ public class SecondArticleController {
         List<Tag> tagList = new ArrayList<>();
         try {
             articleCategoryList =  articleCategoryService.getArticleCategories(2);
-            tagList = tagMapper.allTag(2);
+            tagList = tagService.allTag(2);
             model.addAttribute("categoryList",articleCategoryList);
             model.addAttribute("tagList",tagList);
         }catch (Exception e){
@@ -171,7 +170,7 @@ public class SecondArticleController {
                                @RequestParam(name = "articleId") Integer articleId,
                                HttpServletRequest request){
         //通过articleId回显article里面的数据
-        SecondArticle article = secondArticleMapper.findArticleById(articleId);
+        SecondArticle article = secondArticleService.findArticleById(articleId);
         model.addAttribute("article",article);
         //        判断是否为非法操作
         UserInfo user = article.getUserInfo();
@@ -184,7 +183,7 @@ public class SecondArticleController {
         List<ArticleCategory> categoryList = new ArrayList<>();
         List<Tag> tagList = new ArrayList<>();
         categoryList = articleCategoryService.getArticleCategories(2);
-        tagList = tagMapper.allTag(2);
+        tagList = tagService.allTag(2);
 //       将需要下拉列表选项的数据放进去model
         model.addAttribute("categoryList",categoryList);
         model.addAttribute("tagList",tagList);
@@ -252,7 +251,7 @@ public class SecondArticleController {
                       RedirectAttributes attributes,
                       HttpServletRequest request){
 
-        SecondArticle article = secondArticleMapper.findArticleById(articleId);
+        SecondArticle article = secondArticleService.findArticleById(articleId);
 //        文章作者
         UserInfo user = article.getUserInfo();
 //        当前用户
@@ -289,9 +288,9 @@ public class SecondArticleController {
     @GetMapping("/{articleId}")
     public String articleDetail(@PathVariable("articleId") Integer articleId,Model model
     ){
-        SecondArticle article = secondArticleMapper.findArticleById(articleId);
+        SecondArticle article = secondArticleService.findArticleById(articleId);
         model.addAttribute("article",article);
-        secondArticleMapper.incReadCount(article);
+        secondArticleService.incReadCount(article);
         return "/second/article-detail";
     }
 }

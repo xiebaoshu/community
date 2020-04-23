@@ -31,6 +31,26 @@ public class JobArticleServiceImpl implements JobArticleService {
     private NotificationMapper notificationMapper;
 
     @Override
+    public List<JobArticle> getArticleList(JobArticle articleCondition, Integer dateCondition) {
+        return jobArticleMapper.getArticleList(articleCondition,dateCondition);
+    }
+
+    @Override
+    public Integer searchCount(JobArticle articleCondition, Integer dateCondition) {
+        return jobArticleMapper.searchCount(articleCondition,dateCondition);
+    }
+
+    @Override
+    public JobArticle findArticleById(Integer articleId) {
+        return jobArticleMapper.findArticleById(articleId);
+    }
+
+    @Override
+    public void incReadCount(JobArticle article) {
+        jobArticleMapper.incReadCount(article);
+    }
+
+    @Override
     public void batchDel(List List) {
         jobArticleMapper.batchDel(List);
     }

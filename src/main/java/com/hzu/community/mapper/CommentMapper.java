@@ -26,7 +26,7 @@ public interface CommentMapper {
     public List<Comment> findCommentReplyById(@Param("commentId") Integer commentId);
 
 
-    //获取一级回复列表
+    //获取一级回复列表(一对多映射二级评论列表)
     @Select("<script> " +
             "SELECT * " +
             "from comment " +

@@ -4,7 +4,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.hzu.community.bean.ArticleCategory;
 import com.hzu.community.bean.Tag;
-import com.hzu.community.mapper.ArticleCategoryMapper;
+
 import com.hzu.community.service.ArticleCategoryService;
 import com.hzu.community.service.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,9 +22,8 @@ public class TagController {
     @Autowired
     private TagService tagService;
     @Autowired
-    private ArticleCategoryMapper articleCategoryMapper;
-    @Autowired
     private ArticleCategoryService articleCategoryService;
+
     @GetMapping("/tags")
     public String tag(@RequestParam(name = "type",defaultValue = "1") Integer type,
 //                      type参数为文章模块类型
@@ -57,7 +56,7 @@ public class TagController {
             List<ArticleCategory> articleCategoryList = articleCategoryService.getArticleCategories(null);
             model.addAttribute("articleCategoryList",articleCategoryList);
         }else {
-            List<ArticleCategory> articleTags = articleCategoryMapper.articleTags();
+            List<ArticleCategory> articleTags = articleCategoryService.articleTags();
             model.addAttribute("articleTags",articleTags);
         }
         model.addAttribute("Tag",new Tag());
@@ -72,7 +71,7 @@ public class TagController {
             List<ArticleCategory> articleCategoryList = articleCategoryService.getArticleCategories(null);
             model.addAttribute("articleCategoryList",articleCategoryList);
         }else {
-            List<ArticleCategory> articleTags = articleCategoryMapper.articleTags();
+            List<ArticleCategory> articleTags = articleCategoryService.articleTags();
             model.addAttribute("articleTags",articleTags);
         }
         model.addAttribute("Tag",tagService.findById(id));

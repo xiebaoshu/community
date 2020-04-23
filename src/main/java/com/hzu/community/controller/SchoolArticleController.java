@@ -10,9 +10,10 @@ import com.hzu.community.dto.ImageHolder;
 import com.hzu.community.enums.ArticleEnum;
 import com.hzu.community.exceptions.ArticleException;
 import com.hzu.community.mapper.SchoolArticleMapper;
-import com.hzu.community.mapper.TagMapper;
+
 import com.hzu.community.service.ArticleCategoryService;
 import com.hzu.community.service.SchoolArticleService;
+import com.hzu.community.service.TagService;
 import com.hzu.community.util.HttpServletRequestUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -36,13 +37,12 @@ import java.util.Map;
 public class SchoolArticleController {
 
     @Autowired
-    private TagMapper tagMapper;
+    private TagService tagService;
     @Autowired
     private ArticleCategoryService articleCategoryService;
     @Autowired
     private SchoolArticleService schoolArticleService;
-    @Autowired
-    private SchoolArticleMapper schoolArticleMapper;
+  
 
 
     @GetMapping("")
@@ -58,7 +58,7 @@ public class SchoolArticleController {
 
 //        取出子类别和标签组
         List<ArticleCategory> articleCategories = articleCategoryService.getArticleCategories(5);
-        List<Tag> tagList = tagMapper.allTag(5);
+        List<Tag> tagList = tagService.allTag(5);
         model.addAttribute("articleCategories",articleCategories);
         model.addAttribute("tagList",tagList);
 //        返回查询条件，使元素回显
@@ -86,7 +86,7 @@ public class SchoolArticleController {
         //开启分页，并使用pageSchool插件进行分页和返回数据，pageSchool插件需要先配置pom和yml。
         PageHelper.startPage(page,10);
         List<SchoolArticle> list = new ArrayList<>();
-        list=schoolArticleMapper.getArticleList(article,date);
+        list=schoolArticleService.getArticleList(article,date);
         PageInfo<SchoolArticle> pageInfo = new PageInfo<>(list);
         model.addAttribute("pageInfo",pageInfo);
         return "/school/school";
@@ -99,7 +99,7 @@ public class SchoolArticleController {
         List<Tag> tagList = new ArrayList<>();
         try {
             articleCategoryList =  articleCategoryService.getArticleCategories(5);
-            tagList = tagMapper.allTag(5);
+            tagList = tagService.allTag(5);
             model.addAttribute("categoryList",articleCategoryList);
             model.addAttribute("tagList",tagList);
         }catch (Exception e){
@@ -165,7 +165,7 @@ public class SchoolArticleController {
                                @RequestParam(name = "articleId") Integer articleId,
                                HttpServletRequest request){
         //通过articleId回显article里面的数据
-        SchoolArticle article = schoolArticleMapper.findArticleById(articleId);
+        SchoolArticle article = schoolArticleService.findArticleById(articleId);
         model.addAttribute("article",article);
         //        判断是否为非法操作
         UserInfo user = article.getUserInfo();
@@ -178,7 +178,7 @@ public class SchoolArticleController {
         List<ArticleCategory> categoryList = new ArrayList<>();
         List<Tag> tagList = new ArrayList<>();
         categoryList = articleCategoryService.getArticleCategories(5);
-        tagList = tagMapper.allTag(5);
+        tagList = tagService.allTag(5);
 //       将需要下拉列表选项的数据放进去model
         model.addAttribute("categoryList",categoryList);
         model.addAttribute("tagList",tagList);
@@ -242,7 +242,7 @@ public class SchoolArticleController {
                       RedirectAttributes attributes,
                       HttpServletRequest request){
 
-        SchoolArticle article = schoolArticleMapper.findArticleById(articleId);
+        SchoolArticle article = schoolArticleService.findArticleById(articleId);
 //        文章作者
         UserInfo user = article.getUserInfo();
 //        当前用户
@@ -279,9 +279,9 @@ public class SchoolArticleController {
     @GetMapping("/{articleId}")
     public String articleDetail(@PathVariable("articleId") Integer articleId,Model model
     ){
-        SchoolArticle article = schoolArticleMapper.findArticleById(articleId);
+        SchoolArticle article = schoolArticleService.findArticleById(articleId);
         model.addAttribute("article",article);
-        schoolArticleMapper.incReadCount(article);
+        schoolArticleService.incReadCount(article);
         return "/school/article-detail";
     }
 }

@@ -33,6 +33,26 @@ public class HelpArticleServiceImpl implements HelpArticleService {
     private NotificationMapper notificationMapper;
 
     @Override
+    public List<HelpArticle> getArticleList(HelpArticle articleCondition, Integer dateCondition) {
+       return helpArticleMapper.getArticleList(articleCondition,dateCondition);
+    }
+
+    @Override
+    public Integer searchCount(HelpArticle articleCondition, Integer dateCondition) {
+       return   helpArticleMapper.searchCount(articleCondition,dateCondition);
+    }
+
+    @Override
+    public HelpArticle findArticleById(Integer articleId) {
+       return helpArticleMapper.findArticleById(articleId);
+    }
+
+    @Override
+    public void incReadCount(HelpArticle article) {
+        helpArticleMapper.incReadCount(article);
+    }
+
+    @Override
     public void batchDel(List List) {
         helpArticleMapper.batchDel(List);
     }

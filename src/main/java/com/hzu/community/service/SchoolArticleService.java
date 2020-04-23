@@ -16,5 +16,13 @@ public interface SchoolArticleService {
             throws ArticleException;
     public ArticleEnum deleteArticle(Integer id, Integer userId)
             throws ArticleException;
+
+    public List<SchoolArticle> getArticleList(@Param("articleCondition") SchoolArticle articleCondition,
+                                              @Param("dateCondition")Integer dateCondition);
+    public Integer searchCount(@Param("articleCondition") SchoolArticle articleCondition,
+                               @Param("dateCondition")Integer dateCondition);
+    public SchoolArticle findArticleById(@Param("articleId") Integer articleId);
+
+    public void incReadCount(SchoolArticle article);
     public void batchDel(@Param( "List" ) List List);
 }

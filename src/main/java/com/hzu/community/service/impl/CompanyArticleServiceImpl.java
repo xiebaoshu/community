@@ -31,6 +31,26 @@ public class CompanyArticleServiceImpl implements CompanyArticleService {
     private NotificationMapper notificationMapper;
 
     @Override
+    public List<CompanyArticle> getArticleList(CompanyArticle articleCondition, Integer dateCondition) {
+        return companyArticleMapper.getArticleList(articleCondition,dateCondition);
+    }
+
+    @Override
+    public Integer searchCount(CompanyArticle articleCondition, Integer dateCondition) {
+        return companyArticleMapper.searchCount(articleCondition,dateCondition);
+    }
+
+    @Override
+    public CompanyArticle findArticleById(Integer articleId) {
+        return companyArticleMapper.findArticleById(articleId);
+    }
+
+    @Override
+    public void incReadCount(CompanyArticle article) {
+        companyArticleMapper.incReadCount(article);
+    }
+
+    @Override
     public void batchDel(List List) {
          companyArticleMapper.batchDel(List);
     }

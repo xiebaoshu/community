@@ -29,6 +29,27 @@ public class SecondArticleServiceImpl implements SecondArticleService {
     @Autowired
     private NotificationMapper notificationMapper;
 
+
+    @Override
+    public List<SecondArticle> getArticleList(SecondArticle articleCondition, Integer dateCondition, Double prePrice, Double nextPrice) {
+        return secondArticleMapper.getArticleList(articleCondition,dateCondition,prePrice,nextPrice);
+    }
+
+    @Override
+    public Integer searchCount(SecondArticle articleCondition, Integer dateCondition, Double prePrice, Double nextPrice) {
+        return secondArticleMapper.searchCount(articleCondition,dateCondition,prePrice,nextPrice);
+    }
+
+    @Override
+    public SecondArticle findArticleById(Integer articleId) {
+        return secondArticleMapper.findArticleById(articleId);
+    }
+
+    @Override
+    public void incReadCount(SecondArticle article) {
+        secondArticleMapper.incReadCount(article);
+    }
+
     @Override
     public void batchDel(List List) {
         secondArticleMapper.batchDel(List);

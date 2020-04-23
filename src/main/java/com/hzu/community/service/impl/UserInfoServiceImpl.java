@@ -26,6 +26,21 @@ public class UserInfoServiceImpl implements UserInfoService {
     private UserInfoMapper userInfoMapper;
 
     @Override
+    public UserInfo findUserInfoById(Integer id) {
+        return userInfoMapper.findUserInfoById(id);
+    }
+
+    @Override
+    public UserInfo findUserByToken(String token) {
+        return userInfoMapper.findUserByToken(token);
+    }
+
+    @Override
+    public List<UserInfo> login(UserInfo user) {
+        return userInfoMapper.login(user);
+    }
+
+    @Override
     public List<UserInfo> searchList(UserInfo userInfo) {
         return userInfoMapper.searchList(userInfo);
     }

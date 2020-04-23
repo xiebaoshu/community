@@ -108,7 +108,7 @@ public interface SchoolArticleMapper {
     public void batchDel(@Param( "List" ) List  List);
 
     @Update("update school_article set read_count = read_count+1 where id = #{id}")
-    void incReadCount(SchoolArticle article);
+    public void incReadCount(SchoolArticle article);
 
     @Select("<script> " +
             "SELECT count(1) " +

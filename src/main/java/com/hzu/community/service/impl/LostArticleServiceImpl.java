@@ -29,6 +29,26 @@ public class LostArticleServiceImpl implements LostArticleService {
     NotificationMapper notificationMapper;
 
     @Override
+    public List<LostArticle> getArticleList(LostArticle articleCondition, Integer dateCondition) {
+        return lostArticleMapper.getArticleList(articleCondition,dateCondition);
+    }
+
+    @Override
+    public Integer searchCount(LostArticle articleCondition, Integer dateCondition) {
+        return lostArticleMapper.searchCount(articleCondition,dateCondition);
+    }
+
+    @Override
+    public LostArticle findArticleById(Integer articleId) {
+        return lostArticleMapper.findArticleById(articleId);
+    }
+
+    @Override
+    public void incReadCount(LostArticle lostArticle) {
+        lostArticleMapper.incReadCount(lostArticle);
+    }
+
+    @Override
     public void batchDel(List List) {
         lostArticleMapper.batchDel(List);
     }
@@ -99,8 +119,6 @@ public class LostArticleServiceImpl implements LostArticleService {
             if (updateNum<=0){
                 return ArticleEnum.UPDATE_WRONG;
             }else {
-//                重新赋值，并将更新后的数据封装在execution返回
-                lostArticle = lostArticleMapper.findArticleById(lostArticle.getId());
                 return ArticleEnum.SUCCESS;
             }
 

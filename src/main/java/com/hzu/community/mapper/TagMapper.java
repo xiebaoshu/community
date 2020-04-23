@@ -68,6 +68,7 @@ public interface TagMapper {
 
     @Delete("delete from tag where id = #{id}")
     public void del(Integer id);
+
     @Delete("delete from tag where par_id = #{parentId}")
     public void delList(Integer parentId);
 }

@@ -5,8 +5,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.hzu.community.bean.*;
 import com.hzu.community.mapper.*;
-import com.hzu.community.service.ArticleCategoryService;
-import com.hzu.community.service.NotificationService;
+import com.hzu.community.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,24 +22,23 @@ import java.util.List;
 @Controller
 @RequestMapping("/people")
 public class PeopleController {
+
     @Autowired
-    private ArticleCategoryService articleCategoryService;
+    private LostArticleService lostArticleService;
     @Autowired
-    private LostArticleMapper lostArticleMapper;
+    private HelpArticleService helpArticleService;
     @Autowired
-    private HelpArticleMapper helpArticleMapper;
+    private SecondArticleService secondArticleService;
     @Autowired
-    private SecondArticleMapper secondArticleMapper;
+    private JobArticleService jobArticleService;
     @Autowired
-    private JobArticleMapper jobArticleMapper;
+    private SchoolArticleService schoolArticleService;
     @Autowired
-    private SchoolArticleMapper schoolArticleMapper;
-    @Autowired
-    private CompanyArticleMapper companyArticleMapper;
+    private CompanyArticleService companyArticleService;
     @Autowired
     private NotificationService notificationService;
     @Autowired
-    private UserInfoMapper userInfoMapper;
+    private UserInfoService userInfoService;
 //    个人页面失物招领模块初始化
     @GetMapping("/{peopleId}/{parCategory}")
     public String adminInit(@PathVariable("parCategory") String  parCategory,
@@ -60,7 +58,7 @@ public class PeopleController {
             model.addAttribute("owner",false);
         }
 
-        UserInfo people = userInfoMapper.findUserInfoById(peopleId);
+        UserInfo people = userInfoService.findUserInfoById(peopleId);
         model.addAttribute("people",people);
 //        设置当前页和每页的数据数量
         PageHelper.startPage(page,3);
@@ -71,7 +69,7 @@ public class PeopleController {
             LostArticle lostArticle = new LostArticle();
             lostArticle.setUserInfo(people);
             List<LostArticle> list = new ArrayList<>();
-            list=lostArticleMapper.getArticleList(lostArticle,null);
+            list=lostArticleService.getArticleList(lostArticle,null);
             PageInfo<LostArticle> pageInfo = new PageInfo<>(list);
             model.addAttribute("pageInfo",pageInfo);
 
@@ -79,7 +77,7 @@ public class PeopleController {
             SecondArticle secondArticle = new SecondArticle();
             secondArticle.setUserInfo(people);
             List<SecondArticle> list = new ArrayList<>();
-            list=secondArticleMapper.getArticleList(secondArticle,null,null,null);
+            list=secondArticleService.getArticleList(secondArticle,null,null,null);
             PageInfo<SecondArticle> pageInfo = new PageInfo<>(list);
             model.addAttribute("pageInfo",pageInfo);
 
@@ -87,14 +85,14 @@ public class PeopleController {
             HelpArticle helpArticle = new HelpArticle();
             helpArticle.setUserInfo(people);
             List<HelpArticle> list = new ArrayList<>();
-            list=helpArticleMapper.getArticleList(helpArticle,null);
+            list=helpArticleService.getArticleList(helpArticle,null);
             PageInfo<HelpArticle> pageInfo = new PageInfo<>(list);
             model.addAttribute("pageInfo",pageInfo);
         }else if (parCategory.equals("4")){
             JobArticle jobArticle = new JobArticle();
             jobArticle.setUserInfo(people);
             List<JobArticle> list = new ArrayList<>();
-            list=jobArticleMapper.getArticleList(jobArticle,null);
+            list=jobArticleService.getArticleList(jobArticle,null);
             PageInfo<JobArticle> pageInfo = new PageInfo<>(list);
             model.addAttribute("pageInfo",pageInfo);
 
@@ -102,7 +100,7 @@ public class PeopleController {
             SchoolArticle schoolArticle = new SchoolArticle();
             schoolArticle.setUserInfo(people);
             List<SchoolArticle> list = new ArrayList<>();
-            list=schoolArticleMapper.getArticleList(schoolArticle,null);
+            list=schoolArticleService.getArticleList(schoolArticle,null);
             PageInfo<SchoolArticle> pageInfo = new PageInfo<>(list);
             model.addAttribute("pageInfo",pageInfo);
 
@@ -110,7 +108,7 @@ public class PeopleController {
             CompanyArticle companyArticle = new CompanyArticle();
             companyArticle.setUserInfo(people);
             List<CompanyArticle> list = new ArrayList<>();
-            list=companyArticleMapper.getArticleList(companyArticle,null);
+            list=companyArticleService.getArticleList(companyArticle,null);
             PageInfo<CompanyArticle> pageInfo = new PageInfo<>(list);
             model.addAttribute("pageInfo",pageInfo);
 

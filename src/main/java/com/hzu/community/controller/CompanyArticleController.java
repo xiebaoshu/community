@@ -12,6 +12,7 @@ import com.hzu.community.mapper.CompanyArticleMapper;
 import com.hzu.community.mapper.TagMapper;
 import com.hzu.community.service.ArticleCategoryService;
 import com.hzu.community.service.CompanyArticleService;
+import com.hzu.community.service.TagService;
 import com.hzu.community.util.HttpServletRequestUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -34,13 +35,12 @@ import java.util.Map;
 @RequestMapping("/6")
 public class CompanyArticleController {
     @Autowired
-    private TagMapper tagMapper;
+    private TagService tagService;
     @Autowired
     private ArticleCategoryService articleCategoryService;
     @Autowired
     private CompanyArticleService companyArticleService;
-    @Autowired
-    private CompanyArticleMapper companyArticleMapper;
+
 
     @GetMapping("")
     public String ArticlePage(Model model,
@@ -55,7 +55,7 @@ public class CompanyArticleController {
 
 //        取出子类别和标签组
         List<ArticleCategory> articleCategories = articleCategoryService.getArticleCategories(6);
-        List<Tag> tagList = tagMapper.allTag(6);
+        List<Tag> tagList = tagService.allTag(6);
         model.addAttribute("articleCategories",articleCategories);
         model.addAttribute("tagList",tagList);
 //        返回查询条件，使元素回显
@@ -83,7 +83,7 @@ public class CompanyArticleController {
         //开启分页，并使用pageCompany插件进行分页和返回数据，pageCompany插件需要先配置pom和yml。
         PageHelper.startPage(page,10);
         List<CompanyArticle> list = new ArrayList<>();
-        list=companyArticleMapper.getArticleList(article,date);
+        list=companyArticleService.getArticleList(article,date);
         PageInfo<CompanyArticle> pageInfo = new PageInfo<>(list);
         model.addAttribute("pageInfo",pageInfo);
         return "/company/company";
@@ -96,7 +96,7 @@ public class CompanyArticleController {
         List<Tag> tagList = new ArrayList<>();
         try {
             articleCategoryList =  articleCategoryService.getArticleCategories(6);
-            tagList = tagMapper.allTag(6);
+            tagList = tagService.allTag(6);
             model.addAttribute("categoryList",articleCategoryList);
             model.addAttribute("tagList",tagList);
         }catch (Exception e){
@@ -167,7 +167,7 @@ public class CompanyArticleController {
                                @RequestParam(name = "articleId") Integer articleId,
                                HttpServletRequest request){
         //通过articleId回显article里面的数据
-        CompanyArticle article = companyArticleMapper.findArticleById(articleId);
+        CompanyArticle article = companyArticleService.findArticleById(articleId);
         model.addAttribute("article",article);
         //        判断是否为非法操作
         UserInfo user = article.getUserInfo();
@@ -180,7 +180,7 @@ public class CompanyArticleController {
         List<ArticleCategory> categoryList = new ArrayList<>();
         List<Tag> tagList = new ArrayList<>();
         categoryList = articleCategoryService.getArticleCategories(6);
-        tagList = tagMapper.allTag(6);
+        tagList = tagService.allTag(6);
 //       将需要下拉列表选项的数据放进去model
         model.addAttribute("categoryList",categoryList);
         model.addAttribute("tagList",tagList);
@@ -245,7 +245,7 @@ public class CompanyArticleController {
                       RedirectAttributes attributes,
                       HttpServletRequest request){
 
-        CompanyArticle article = companyArticleMapper.findArticleById(articleId);
+        CompanyArticle article = companyArticleService.findArticleById(articleId);
 //        文章作者
         UserInfo user = article.getUserInfo();
 //        当前用户
@@ -282,9 +282,9 @@ public class CompanyArticleController {
     @GetMapping("/{articleId}")
     public String articleDetail(@PathVariable("articleId") Integer articleId,Model model
     ){
-        CompanyArticle article = companyArticleMapper.findArticleById(articleId);
+        CompanyArticle article = companyArticleService.findArticleById(articleId);
         model.addAttribute("article",article);
-        companyArticleMapper.incReadCount(article);
+        companyArticleService.incReadCount(article);
         return "/company/article-detail";
     }
 }

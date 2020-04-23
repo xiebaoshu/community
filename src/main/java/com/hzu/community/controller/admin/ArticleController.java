@@ -4,8 +4,9 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.hzu.community.bean.*;
 import com.hzu.community.dto.SearchDto;
+import com.hzu.community.enums.ArticleEnum;
 import com.hzu.community.mapper.*;
-import com.hzu.community.service.ArticleCategoryService;
+import com.hzu.community.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,21 +21,21 @@ import java.util.List;
 @RequestMapping("/admin")
 public class ArticleController {
     @Autowired
-    private SearchMapper searchMapper;
+    private SearchService searchService;
     @Autowired
     private ArticleCategoryService articleCategoryService;
     @Autowired
-    private LostArticleMapper lostArticleMapper;
+    private LostArticleService lostArticleService;
     @Autowired
-    private SecondArticleMapper secondArticleMapper;
+    private SecondArticleService secondArticleService;
     @Autowired
-    private JobArticleMapper jobArticleMapper;
+    private JobArticleService jobArticleService;
     @Autowired
-    private HelpArticleMapper helpArticleMapper;
+    private HelpArticleService helpArticleService;
     @Autowired
-    private SchoolArticleMapper schoolArticleMapper;
+    private SchoolArticleService schoolArticleService;
     @Autowired
-    private CompanyArticleMapper companyArticleMapper;
+    private CompanyArticleService companyArticleService;
 
 
     @GetMapping("/article")
@@ -48,7 +49,7 @@ public class ArticleController {
         }
         List<ArticleCategory> categoryList = articleCategoryService.categoryList();
         PageHelper.startPage(page,10);
-        List<SearchDto> searchDtoList = searchMapper.getAll(searchDto);
+        List<SearchDto> searchDtoList = searchService.getAll(searchDto);
         PageInfo<SearchDto> pageInfo = new PageInfo<>(searchDtoList);
         model.addAttribute("categoryList",categoryList);
         model.addAttribute("pageInfo",pageInfo);
@@ -61,41 +62,43 @@ public class ArticleController {
     public String top(@PathVariable("id") Integer id,
                       @RequestParam("articleId") Integer articleId,
                       RedirectAttributes attributes){
-        int num = 0 ;
+        ArticleEnum articleEnum ;
 
         if (id.equals(1)){
             LostArticle article = new LostArticle();
             article.setId(articleId);
             article.setTop(true);
-            num = lostArticleMapper.updatelost(article);
+            articleEnum = lostArticleService.updateArticle(article,null);
         }else if (id.equals(2)){
             SecondArticle article = new SecondArticle();
             article.setId(articleId);
             article.setTop(true);
-            num = secondArticleMapper.update(article);
+            articleEnum = secondArticleService.updateArticle(article,null);
         }else if (id.equals(3)){
             HelpArticle article = new HelpArticle();
             article.setId(articleId);
             article.setTop(true);
-            num = helpArticleMapper.update(article);
+            articleEnum = helpArticleService.updateArticle(article,null);
         }else if (id.equals(4)){
             JobArticle article = new JobArticle();
             article.setId(articleId);
             article.setTop(true);
-            num = jobArticleMapper.update(article);
+            articleEnum = jobArticleService.updateArticle(article,null);
         }else if (id.equals(5)){
             SchoolArticle article = new SchoolArticle();
             article.setId(articleId);
             article.setTop(true);
-            num = schoolArticleMapper.update(article);
+            articleEnum = schoolArticleService.updateArticle(article,null);
         }else if (id.equals(6)){
             CompanyArticle article = new CompanyArticle();
             article.setId(articleId);
             article.setTop(true);
-            num = companyArticleMapper.update(article);
+            articleEnum = companyArticleService.updateArticle(article,null);
+        }else {
+            articleEnum = ArticleEnum.NULL_Article;
         }
         
-        if (num>0){
+        if (articleEnum.getState()==ArticleEnum.SUCCESS.getState()){
             attributes.addFlashAttribute("message", "置顶成功");
         }else {
             attributes.addFlashAttribute("message", "置顶失败");
@@ -109,41 +112,43 @@ public class ArticleController {
     public String untop(@PathVariable("id") Integer id,
                       @RequestParam("articleId") Integer articleId,
                       RedirectAttributes attributes){
-        int num = 0 ;
+        ArticleEnum articleEnum ;
 
         if (id.equals(1)){
             LostArticle article = new LostArticle();
             article.setId(articleId);
             article.setTop(false);
-            num = lostArticleMapper.updatelost(article);
+            articleEnum = lostArticleService.updateArticle(article,null);
         }else if (id.equals(2)){
             SecondArticle article = new SecondArticle();
             article.setId(articleId);
             article.setTop(false);
-            num = secondArticleMapper.update(article);
+            articleEnum = secondArticleService.updateArticle(article,null);
         }else if (id.equals(3)){
             HelpArticle article = new HelpArticle();
             article.setId(articleId);
             article.setTop(false);
-            num = helpArticleMapper.update(article);
+            articleEnum = helpArticleService.updateArticle(article,null);
         }else if (id.equals(4)){
             JobArticle article = new JobArticle();
             article.setId(articleId);
             article.setTop(false);
-            num = jobArticleMapper.update(article);
+            articleEnum = jobArticleService.updateArticle(article,null);
         }else if (id.equals(5)){
             SchoolArticle article = new SchoolArticle();
             article.setId(articleId);
             article.setTop(false);
-            num = schoolArticleMapper.update(article);
+            articleEnum = schoolArticleService.updateArticle(article,null);
         }else if (id.equals(6)){
             CompanyArticle article = new CompanyArticle();
             article.setId(articleId);
             article.setTop(false);
-            num = companyArticleMapper.update(article);
+            articleEnum = companyArticleService.updateArticle(article,null);
+        }else {
+            articleEnum = ArticleEnum.NULL_Article;
         }
 
-        if (num>0){
+        if (articleEnum.getState()==ArticleEnum.SUCCESS.getState()){
             attributes.addFlashAttribute("message", "取消置顶成功");
         }else {
             attributes.addFlashAttribute("message", "取消置顶失败");

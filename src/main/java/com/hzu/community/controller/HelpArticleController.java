@@ -9,11 +9,11 @@ import com.hzu.community.dto.ImageHolder;
 
 import com.hzu.community.enums.ArticleEnum;
 import com.hzu.community.exceptions.ArticleException;
-import com.hzu.community.mapper.ArticleCategoryMapper;
-import com.hzu.community.mapper.HelpArticleMapper;
-import com.hzu.community.mapper.TagMapper;
+
+
 import com.hzu.community.service.ArticleCategoryService;
 import com.hzu.community.service.HelpArticleService;
+import com.hzu.community.service.TagService;
 import com.hzu.community.util.HttpServletRequestUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -38,13 +38,12 @@ import java.util.Map;
 @RequestMapping("/3")
 public class HelpArticleController {
    @Autowired
-   private TagMapper tagMapper;
+   private TagService tagService;
    @Autowired
    private ArticleCategoryService articleCategoryService;
    @Autowired
    private HelpArticleService helpArticleService;
-   @Autowired
-   private HelpArticleMapper helpArticleMapper;
+  
 
     @GetMapping("")
     public String ArticlePage(Model model,
@@ -59,7 +58,7 @@ public class HelpArticleController {
 
 //        取出子类别和标签组
         List<ArticleCategory> articleCategories = articleCategoryService.getArticleCategories(3);
-        List<Tag> tagList = tagMapper.allTag(3);
+        List<Tag> tagList = tagService.allTag(3);
         model.addAttribute("articleCategories",articleCategories);
         model.addAttribute("tagList",tagList);
 //        返回查询条件，使元素回显
@@ -87,7 +86,7 @@ public class HelpArticleController {
         //开启分页，并使用pageHelp插件进行分页和返回数据，pageHelp插件需要先配置pom和yml。
         PageHelper.startPage(page,10);
         List<HelpArticle> list = new ArrayList<>();
-        list=helpArticleMapper.getArticleList(article,date);
+        list=helpArticleService.getArticleList(article,date);
         PageInfo<HelpArticle> pageInfo = new PageInfo<>(list);
         model.addAttribute("pageInfo",pageInfo);
         return "/help/help";
@@ -102,7 +101,7 @@ public class HelpArticleController {
         List<Tag> tagList = new ArrayList<>();
         try {
             articleCategoryList =  articleCategoryService.getArticleCategories(3);
-            tagList = tagMapper.allTag(3);
+            tagList = tagService.allTag(3);
             model.addAttribute("categoryList",articleCategoryList);
             model.addAttribute("tagList",tagList);
         }catch (Exception e){
@@ -167,7 +166,7 @@ public class HelpArticleController {
                                @RequestParam(name = "articleId") Integer articleId,
                                HttpServletRequest request){
         //通过articleId回显article里面的数据
-        HelpArticle article = helpArticleMapper.findArticleById(articleId);
+        HelpArticle article = helpArticleService.findArticleById(articleId);
         model.addAttribute("article",article);
 
         //        判断是否为非法操作
@@ -181,7 +180,7 @@ public class HelpArticleController {
         List<ArticleCategory> categoryList = new ArrayList<>();
         List<Tag> tagList = new ArrayList<>();
         categoryList = articleCategoryService.getArticleCategories(3);
-        tagList = tagMapper.allTag(3);
+        tagList = tagService.allTag(3);
 //       将需要下拉列表选项的数据放进去model
         model.addAttribute("categoryList",categoryList);
         model.addAttribute("tagList",tagList);
@@ -248,7 +247,7 @@ public class HelpArticleController {
                                     RedirectAttributes attributes,
                                   HttpServletRequest request){
 
-        HelpArticle article = helpArticleMapper.findArticleById(articleId);
+        HelpArticle article = helpArticleService.findArticleById(articleId);
 //        文章作者
         UserInfo user = article.getUserInfo();
 //        当前用户
@@ -285,9 +284,9 @@ public class HelpArticleController {
     @GetMapping("/{articleId}")
     public String articleDetail(@PathVariable("articleId") Integer articleId,Model model
     ){
-        HelpArticle article = helpArticleMapper.findArticleById(articleId);
+        HelpArticle article = helpArticleService.findArticleById(articleId);
         model.addAttribute("article",article);
-        helpArticleMapper.incReadCount(article);
+        helpArticleService.incReadCount(article);
         return "/help/article-detail";
     }
 }

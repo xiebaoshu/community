@@ -17,5 +17,16 @@ public interface HelpArticleService {
             throws ArticleException;
     public ArticleEnum deleteArticle(Integer id, Integer userId)
             throws ArticleException;
+
+    public List<HelpArticle> getArticleList(@Param("articleCondition") HelpArticle articleCondition,
+                                            @Param("dateCondition")Integer dateCondition);
+
+    public Integer searchCount(@Param("articleCondition") HelpArticle articleCondition,
+                               @Param("dateCondition")Integer dateCondition);
+
+    public HelpArticle findArticleById(@Param("articleId") Integer articleId);
+    public void incReadCount(HelpArticle article);
+
+
     public void batchDel(@Param( "List" ) List List);
 }

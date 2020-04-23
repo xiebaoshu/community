@@ -16,7 +16,9 @@ public interface TagService {
     public Tag findById(@Param("id") Integer id);
     public int add(Tag tag);
     public int update(Tag tag);
+    //    删除标签
     public void del(Integer id);
+    //    删除标签组
     public void delList(Integer parentId) throws RuntimeException;
 
 

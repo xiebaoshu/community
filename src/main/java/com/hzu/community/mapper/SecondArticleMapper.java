@@ -117,7 +117,7 @@ public interface SecondArticleMapper {
     public void batchDel(@Param( "List" ) List  List);
 
     @Update("update second_article set read_count = read_count+1 where id = #{id}")
-    void incReadCount(SecondArticle article);
+    public void incReadCount(SecondArticle article);
 
     @Select("<script> " +
             "SELECT count(1) " +
