@@ -4,7 +4,6 @@ package com.hzu.community.service.impl;
 import com.hzu.community.bean.UserInfo;
 
 import com.hzu.community.dto.ImageHolder;
-import com.hzu.community.dto.UserExecution;
 
 import com.hzu.community.enums.UserEnum;
 
@@ -43,7 +42,7 @@ public class UserInfoServiceImpl implements UserInfoService {
 
     @Override
     @Transactional
-    public UserExecution save(UserInfo user, ImageHolder imageHolder) throws UserException {
+    public UserEnum save(UserInfo user, ImageHolder imageHolder) throws UserException {
         try {
                  /*因为add方法中，开启了mybtis的useGeneratedKeys
                  所以成功插入后返回主键值到userId
@@ -78,12 +77,12 @@ public class UserInfoServiceImpl implements UserInfoService {
         }catch (Exception e){
             throw new UserException(e.getMessage());
         }
-        return new UserExecution(UserEnum.SUCCESS,user);
+        return UserEnum.SUCCESS;
     }
 
     @Override
     @Transactional
-    public UserExecution update(UserInfo user, ImageHolder imageHolder) throws UserException {
+    public UserEnum update(UserInfo user, ImageHolder imageHolder) throws UserException {
         try {
 //            判断是否需要处理图片
             if(imageHolder != null){
@@ -99,9 +98,9 @@ public class UserInfoServiceImpl implements UserInfoService {
 
             int updateNum = userInfoMapper.update(user);
             if (updateNum<=0){
-                return new UserExecution(UserEnum.UPDATE_WRONG);
+                return UserEnum.UPDATE_WRONG;
             }else {
-                return new UserExecution(UserEnum.SUCCESS);
+                return UserEnum.SUCCESS;
             }
 
         }catch (Exception e){

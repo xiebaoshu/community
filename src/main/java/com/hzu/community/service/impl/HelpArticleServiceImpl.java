@@ -5,7 +5,7 @@ import com.hzu.community.bean.HelpArticle;
 
 import com.hzu.community.bean.LostArticle;
 import com.hzu.community.bean.Notification;
-import com.hzu.community.dto.ArticleExecution;
+
 import com.hzu.community.dto.ImageHolder;
 import com.hzu.community.enums.ArticleEnum;
 import com.hzu.community.exceptions.ArticleException;
@@ -39,9 +39,9 @@ public class HelpArticleServiceImpl implements HelpArticleService {
 
     @Override
     @Transactional
-    public ArticleExecution saveArticle(HelpArticle article, ImageHolder imageHolder) throws ArticleException {
+    public ArticleEnum saveArticle(HelpArticle article, ImageHolder imageHolder) throws ArticleException {
         if (article == null) {
-            return new ArticleExecution(ArticleEnum.NULL_Article);
+            return ArticleEnum.NULL_Article;
         }
         try {
                 /*因为add方法中，开启了mybtis的useGeneratedKeys
@@ -79,12 +79,12 @@ public class HelpArticleServiceImpl implements HelpArticleService {
             throw new ArticleException(e.getMessage());
 
         }
-        return new ArticleExecution(ArticleEnum.SUCCESS,article);
+        return ArticleEnum.SUCCESS;
 
     }
     @Transactional
     @Override
-    public ArticleExecution updateArticle(HelpArticle article, ImageHolder imageHolder) throws ArticleException {
+    public ArticleEnum updateArticle(HelpArticle article, ImageHolder imageHolder) throws ArticleException {
         try {
 //            判断是否需要处理图片
             if(imageHolder != null){
@@ -103,11 +103,10 @@ public class HelpArticleServiceImpl implements HelpArticleService {
             article.setEditTime(new Date());
             int updateNum = helpArticleMapper.update(article);
             if (updateNum<=0){
-                return new ArticleExecution(ArticleEnum.UPDATE_WRONG);
+                return ArticleEnum.UPDATE_WRONG;
             }else {
-//                重新赋值，并将更新后的数据封装在execution返回
-                article = helpArticleMapper.findArticleById(article.getId());
-                return new ArticleExecution(ArticleEnum.SUCCESS,article);
+//
+                return ArticleEnum.SUCCESS;
             }
 
         }catch (Exception e){
@@ -117,7 +116,7 @@ public class HelpArticleServiceImpl implements HelpArticleService {
 
     @Override
     @Transactional
-    public ArticleExecution deleteArticle(Integer id, Integer userId) throws ArticleException {
+    public ArticleEnum deleteArticle(Integer id, Integer userId) throws ArticleException {
         try {
 
 
@@ -153,7 +152,7 @@ public class HelpArticleServiceImpl implements HelpArticleService {
             String delePath = "/upload/item/"+userStr+"/helpArticle/"+idStr;
 //            删除路径对应文件
             ImageUtil.deleteFileOrpath(delePath);
-            return new ArticleExecution(ArticleEnum.SUCCESS);
+            return ArticleEnum.SUCCESS;
 
         }catch (Exception e){
             throw new ArticleException(e.getMessage());

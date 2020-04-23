@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.hzu.community.bean.*;
-import com.hzu.community.dto.ArticleExecution;
+
 import com.hzu.community.dto.ImageHolder;
 import com.hzu.community.enums.ArticleEnum;
 import com.hzu.community.exceptions.ArticleException;
@@ -133,7 +133,7 @@ public class SecondArticleController {
 
 //        新增校园互助
         article.setUserInfo(user);
-            ArticleExecution le;
+            ArticleEnum le;
             try {
                 if (articleImg.isEmpty()){
                     le = secondArticleService.saveArticle(article,null);
@@ -211,7 +211,7 @@ public class SecondArticleController {
 
         if ( article.getId()!= null) {
 
-            ArticleExecution le;
+            ArticleEnum le;
             try {
                 if (articleImg.isEmpty()){
                     le=secondArticleService.updateArticle(article,null);

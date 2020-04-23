@@ -6,7 +6,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.hzu.community.bean.*;
 import com.hzu.community.dto.ImageHolder;
-import com.hzu.community.dto.ArticleExecution;
+
 import com.hzu.community.enums.ArticleEnum;
 import com.hzu.community.exceptions.ArticleException;
 import com.hzu.community.mapper.ArticleCategoryMapper;
@@ -133,7 +133,7 @@ public class HelpArticleController {
     //        新增校园互助
     //        从session获取数据
             article.setUserInfo(user);
-            ArticleExecution le;
+            ArticleEnum le;
             try {
                 if (articleImg.isEmpty()){
                     le = helpArticleService.saveArticle(article,null);
@@ -208,7 +208,7 @@ public class HelpArticleController {
 
         if (article.getId()!= null) {
 
-            ArticleExecution le;
+            ArticleEnum le;
             try {
                 if (articleImg.isEmpty()){
                     le=helpArticleService.updateArticle(article,null);

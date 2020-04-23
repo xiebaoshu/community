@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.hzu.community.bean.*;
-import com.hzu.community.dto.ArticleExecution;
+
 import com.hzu.community.dto.ImageHolder;
 import com.hzu.community.enums.ArticleEnum;
 import com.hzu.community.exceptions.ArticleException;
@@ -125,7 +125,7 @@ public class CompanyArticleController {
         MultipartFile articleImg = article.getUpload();
 //        新增校园互助
             article.setUserInfo(user);
-            ArticleExecution le;
+            ArticleEnum le;
             try {
                 if (articleImg.isEmpty()){
                     le = companyArticleService.saveArticle(article,null);
@@ -207,7 +207,7 @@ public class CompanyArticleController {
 
         if (article.getId()!= null) {
 
-            ArticleExecution le;
+            ArticleEnum le;
             try {
                 if (articleImg.isEmpty()){
                     le=companyArticleService.updateArticle(article,null);

@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.hzu.community.bean.*;
-import com.hzu.community.dto.ArticleExecution;
+
 import com.hzu.community.dto.ImageHolder;
 import com.hzu.community.enums.ArticleEnum;
 import com.hzu.community.exceptions.ArticleException;
@@ -143,7 +143,7 @@ public class JobArticleController {
         MultipartFile articleImg = article.getUpload();
 //        新增兼职信息
         article.setUserInfo(user);
-            ArticleExecution le;
+            ArticleEnum le;
             try {
                 if (articleImg.isEmpty()){
                     le = jobArticleService.saveArticle(article,null);
@@ -223,7 +223,7 @@ public class JobArticleController {
         if (article.getId()!= null) {
 //            从session获取数据
 
-            ArticleExecution le;
+            ArticleEnum le;
             try {
                 if (articleImg.isEmpty()){
                     le=jobArticleService.updateArticle(article,null);

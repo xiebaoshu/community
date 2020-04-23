@@ -4,7 +4,7 @@ import com.hzu.community.bean.Comment;
 import com.hzu.community.bean.SchoolArticle;
 import com.hzu.community.bean.Notification;
 import com.hzu.community.bean.SchoolArticle;
-import com.hzu.community.dto.ArticleExecution;
+
 import com.hzu.community.dto.ImageHolder;
 import com.hzu.community.enums.ArticleEnum;
 import com.hzu.community.exceptions.ArticleException;
@@ -37,9 +37,9 @@ public class SchoolArticleServiceImpl implements SchoolArticleService {
 
     @Override
     @Transactional
-    public ArticleExecution saveArticle(SchoolArticle article, ImageHolder imageHolder) throws ArticleException {
+    public ArticleEnum saveArticle(SchoolArticle article, ImageHolder imageHolder) throws ArticleException {
         if (article == null) {
-            return new ArticleExecution(ArticleEnum.NULL_Article);
+            return ArticleEnum.NULL_Article;
         }
         try {
                 /*因为add方法中，开启了mybtis的useGeneratedKeys
@@ -77,12 +77,12 @@ public class SchoolArticleServiceImpl implements SchoolArticleService {
             throw new ArticleException(e.getMessage());
 
         }
-        return new ArticleExecution(ArticleEnum.SUCCESS,article);
+        return ArticleEnum.SUCCESS;
     }
 
     @Override
     @Transactional
-    public ArticleExecution updateArticle(SchoolArticle article, ImageHolder imageHolder) throws ArticleException {
+    public ArticleEnum updateArticle(SchoolArticle article, ImageHolder imageHolder) throws ArticleException {
         try {
 //            判断是否需要处理图片
             if(imageHolder != null){
@@ -101,11 +101,10 @@ public class SchoolArticleServiceImpl implements SchoolArticleService {
             article.setEditTime(new Date());
             int updateNum = schoolArticleMapper.update(article);
             if (updateNum<=0){
-                return new ArticleExecution(ArticleEnum.UPDATE_WRONG);
+                return ArticleEnum.UPDATE_WRONG;
             }else {
-//                重新赋值，并将更新后的数据封装在execution返回
-                article = schoolArticleMapper.findArticleById(article.getId());
-                return new ArticleExecution(ArticleEnum.SUCCESS,article);
+//
+                return ArticleEnum.SUCCESS;
             }
 
         }catch (Exception e){
@@ -115,7 +114,7 @@ public class SchoolArticleServiceImpl implements SchoolArticleService {
 
     @Override
     @Transactional
-    public ArticleExecution deleteArticle(Integer id, Integer userId) throws ArticleException {
+    public ArticleEnum deleteArticle(Integer id, Integer userId) throws ArticleException {
         try {
 
 
@@ -151,7 +150,7 @@ public class SchoolArticleServiceImpl implements SchoolArticleService {
             String delePath = "/upload/item/"+userStr+"/schoolArticle/"+idStr;
 //            删除路径对应文件
             ImageUtil.deleteFileOrpath(delePath);
-            return new ArticleExecution(ArticleEnum.SUCCESS);
+            return ArticleEnum.SUCCESS;
 
         }catch (Exception e){
             throw new ArticleException(e.getMessage());

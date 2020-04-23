@@ -4,7 +4,6 @@ import com.hzu.community.bean.Comment;
 import com.hzu.community.bean.LostArticle;
 import com.hzu.community.bean.Notification;
 import com.hzu.community.dto.ImageHolder;
-import com.hzu.community.dto.ArticleExecution;
 import com.hzu.community.enums.ArticleEnum;
 import com.hzu.community.exceptions.ArticleException;
 import com.hzu.community.mapper.CommentMapper;
@@ -36,9 +35,9 @@ public class LostArticleServiceImpl implements LostArticleService {
 
     @Override
     @Transactional
-    public ArticleExecution saveArticle(LostArticle lostArticle, ImageHolder imageHolder) {
+    public ArticleEnum saveArticle(LostArticle lostArticle, ImageHolder imageHolder) {
         if (lostArticle == null) {
-            return new ArticleExecution(ArticleEnum.NULL_Article);
+            return  ArticleEnum.NULL_Article;
         }
         try {
                 /*因为addLostArticle方法中，开启了mybtis的useGeneratedKeys
@@ -74,14 +73,14 @@ public class LostArticleServiceImpl implements LostArticleService {
                 throw new ArticleException(e.getMessage());
 
             }
-            return new ArticleExecution(ArticleEnum.SUCCESS,lostArticle);
+            return ArticleEnum.SUCCESS;
 
 
     }
 
     @Override
     @Transactional
-    public ArticleExecution updateArticle(LostArticle lostArticle, ImageHolder imageHolder) {
+    public ArticleEnum updateArticle(LostArticle lostArticle, ImageHolder imageHolder) {
         try {
 //            判断是否需要处理图片
             if(imageHolder != null){
@@ -98,11 +97,11 @@ public class LostArticleServiceImpl implements LostArticleService {
 //            更新文章信息
             int updateNum = lostArticleMapper.updatelost(lostArticle);
             if (updateNum<=0){
-                return new ArticleExecution(ArticleEnum.UPDATE_WRONG);
+                return ArticleEnum.UPDATE_WRONG;
             }else {
 //                重新赋值，并将更新后的数据封装在execution返回
                 lostArticle = lostArticleMapper.findArticleById(lostArticle.getId());
-                return new ArticleExecution(ArticleEnum.SUCCESS,lostArticle);
+                return ArticleEnum.SUCCESS;
             }
 
         }catch (Exception e){
@@ -112,7 +111,7 @@ public class LostArticleServiceImpl implements LostArticleService {
     }
     @Transactional
     @Override
-    public ArticleExecution deleteArticle(Integer id, Integer userId) throws ArticleException {
+    public ArticleEnum deleteArticle(Integer id, Integer userId) throws ArticleException {
         try {
 
 
@@ -148,7 +147,7 @@ public class LostArticleServiceImpl implements LostArticleService {
             String delePath = "/upload/item/"+userStr+"/lostArticle/"+idStr;
 //            删除路径对应文件
             ImageUtil.deleteFileOrpath(delePath);
-            return new ArticleExecution(ArticleEnum.SUCCESS);
+            return ArticleEnum.SUCCESS;
 
         }catch (Exception e){
             throw new ArticleException(e.getMessage());

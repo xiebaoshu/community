@@ -3,9 +3,9 @@ package com.hzu.community.controller;
 import com.hzu.community.bean.HelpArticle;
 import com.hzu.community.bean.UserInfo;
 import com.hzu.community.dto.ArticleExecution;
-import com.hzu.community.dto.UserExecution;
 import com.hzu.community.dto.ImageHolder;
 import com.hzu.community.enums.ArticleEnum;
+import com.hzu.community.enums.UserEnum;
 import com.hzu.community.exceptions.ArticleException;
 import com.hzu.community.mapper.UserInfoMapper;
 import com.hzu.community.service.UserInfoService;
@@ -110,7 +110,7 @@ public class UserController {
         if (hasUser.size()>0){
             attributes.addFlashAttribute("message", "注册失败，该账号已存在");
         }else {
-            UserExecution le;
+            UserEnum le;
             MultipartFile UserImg = user.getUpload();
             try {
                 if (UserImg.isEmpty()){
@@ -165,7 +165,7 @@ public class UserController {
 
         if (user.getUserId()!= null) {
 
-            UserExecution le;
+            UserEnum le;
             try {
                 if (UserImg.isEmpty()){
                     le=userInfoService.update(user,null);

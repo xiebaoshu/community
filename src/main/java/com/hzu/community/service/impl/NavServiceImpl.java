@@ -3,10 +3,9 @@ package com.hzu.community.service.impl;
 import com.hzu.community.bean.JobArticle;
 import com.hzu.community.bean.Nav;
 import com.hzu.community.bean.UserInfo;
-import com.hzu.community.dto.ArticleExecution;
+
 import com.hzu.community.dto.ImageHolder;
-import com.hzu.community.dto.NavExecution;
-import com.hzu.community.enums.ArticleEnum;
+
 import com.hzu.community.enums.NavEnum;
 import com.hzu.community.exceptions.NavException;
 import com.hzu.community.mapper.NavMapper;
@@ -66,17 +65,17 @@ public class NavServiceImpl implements NavService {
 
     @Override
     @Transactional
-    public NavExecution diySave(Nav nav, ImageHolder imageHolder) throws NavException {
+    public NavEnum diySave(Nav nav, ImageHolder imageHolder) throws NavException {
         if (nav == null) {
-            return new NavExecution(NavEnum.NULL_Nav);
+            return NavEnum.NULL_Nav;
         }else if (nav.getName() == null){
-            return new NavExecution(NavEnum.NULL_Name);
+            return NavEnum.NULL_Name;
         }else if (nav.getUrl() == null){
-            return new NavExecution(NavEnum.NULL_Url);
+            return NavEnum.NULL_Url;
         }
         Nav nav1 = navMapper.findByName(nav);
         if (nav1 != null){
-            return new NavExecution(NavEnum.REPEACT_NAV);
+            return NavEnum.REPEACT_NAV;
         }
         try {
                 /*因为add方法中，开启了mybtis的useGeneratedKeys
@@ -115,24 +114,24 @@ public class NavServiceImpl implements NavService {
             throw new NavException(e.getMessage());
 
         }
-        return new NavExecution(NavEnum.SUCCESS,nav);
+        return NavEnum.SUCCESS;
     }
 
     @Override
     @Transactional
-    public NavExecution defaultSave(Nav nav, ImageHolder imageHolder) throws NavException {
+    public NavEnum defaultSave(Nav nav, ImageHolder imageHolder) throws NavException {
         if (nav == null) {
-            return new NavExecution(NavEnum.NULL_Nav);
+            return NavEnum.NULL_Nav;
         }else if (nav.getName() == null){
-            return new NavExecution(NavEnum.NULL_Name);
+            return NavEnum.NULL_Name;
         }else if (nav.getUrl() == null){
-            return new NavExecution(NavEnum.NULL_Url);
+            return NavEnum.NULL_Url;
         }else if (nav.getDescription() == null){
-            return new NavExecution(NavEnum.NULL_Description);
+            return NavEnum.NULL_Description;
         }
         Nav nav1 = navMapper.findDefaultByName(nav);
         if (nav1 != null){
-            return new NavExecution(NavEnum.REPEACT_NAV);
+            return NavEnum.REPEACT_NAV;
         }
         try {
 
@@ -169,26 +168,26 @@ public class NavServiceImpl implements NavService {
             throw new NavException(e.getMessage());
 
         }
-        return new NavExecution(NavEnum.SUCCESS,nav);
+        return NavEnum.SUCCESS;
     }
 
 
     @Override
     @Transactional
-    public NavExecution defaultUpdate(Nav nav, ImageHolder imageHolder) throws NavException {
+    public NavEnum defaultUpdate(Nav nav, ImageHolder imageHolder) throws NavException {
         if (nav == null) {
-            return new NavExecution(NavEnum.NULL_Nav);
+            return NavEnum.NULL_Nav;
         } else if (nav.getName() == null) {
-            return new NavExecution(NavEnum.NULL_Name);
+            return NavEnum.NULL_Name;
         } else if (nav.getUrl() == null) {
-            return new NavExecution(NavEnum.NULL_Url);
+            return NavEnum.NULL_Url;
         } else if (nav.getDescription() == null) {
-            return new NavExecution(NavEnum.NULL_Description);
+            return NavEnum.NULL_Description;
         }
         //        修改后的名字是否存在，并判断若存在，是否为本身
         Nav nav1 = navMapper.findDefaultByName(nav);
         if (nav1!=null && nav1.getId() != nav.getId()) {
-            return new NavExecution(NavEnum.REPEACT_NAV);
+            return NavEnum.REPEACT_NAV;
         }
         try {
 //            判断是否需要处理图片
@@ -206,11 +205,10 @@ public class NavServiceImpl implements NavService {
 
             int updateNum = navMapper.updateDefault(nav);
             if (updateNum<=0){
-                return new NavExecution(NavEnum.UPDATE_WRONG);
+                return NavEnum.UPDATE_WRONG;
             }else {
-//                重新赋值，并将更新后的数据封装在execution返回
-                nav = navMapper.findDefaultById(nav);
-                return new NavExecution(NavEnum.SUCCESS,nav);
+//
+                return NavEnum.SUCCESS;
             }
 
 

@@ -2,7 +2,7 @@ package com.hzu.community.service.impl;
 
 import com.hzu.community.bean.*;
 import com.hzu.community.bean.SecondArticle;
-import com.hzu.community.dto.ArticleExecution;
+
 import com.hzu.community.dto.ImageHolder;
 import com.hzu.community.enums.ArticleEnum;
 import com.hzu.community.exceptions.ArticleException;
@@ -36,9 +36,9 @@ public class SecondArticleServiceImpl implements SecondArticleService {
 
     @Override
     @Transactional
-    public ArticleExecution saveArticle(SecondArticle article, ImageHolder imageHolder) throws ArticleException {
+    public ArticleEnum saveArticle(SecondArticle article, ImageHolder imageHolder) throws ArticleException {
         if (article == null) {
-            return new ArticleExecution(ArticleEnum.NULL_Article);
+            return ArticleEnum.NULL_Article;
         }
         try {
                 /*因为add方法中，开启了mybtis的useGeneratedKeys
@@ -76,12 +76,12 @@ public class SecondArticleServiceImpl implements SecondArticleService {
             throw new ArticleException(e.getMessage());
 
         }
-        return new ArticleExecution(ArticleEnum.SUCCESS,article);
+        return ArticleEnum.SUCCESS;
     }
 
     @Override
     @Transactional
-    public ArticleExecution updateArticle(SecondArticle article, ImageHolder imageHolder) throws ArticleException {
+    public ArticleEnum updateArticle(SecondArticle article, ImageHolder imageHolder) throws ArticleException {
         try {
 //            判断是否需要处理图片
             if(imageHolder != null){
@@ -99,11 +99,10 @@ public class SecondArticleServiceImpl implements SecondArticleService {
             article.setEditTime(new Date());
             int updateNum = secondArticleMapper.update(article);
             if (updateNum<=0){
-                return new ArticleExecution(ArticleEnum.UPDATE_WRONG);
+                return ArticleEnum.UPDATE_WRONG;
             }else {
-//                重新赋值，并将更新后的数据封装在execution返回
-                article = secondArticleMapper.findArticleById(article.getId());
-                return new ArticleExecution(ArticleEnum.SUCCESS,article);
+
+                return ArticleEnum.SUCCESS;
             }
 
         }catch (Exception e){
@@ -113,7 +112,7 @@ public class SecondArticleServiceImpl implements SecondArticleService {
 
     @Override
     @Transactional
-    public ArticleExecution deleteArticle(Integer id, Integer userId) throws ArticleException {
+    public ArticleEnum deleteArticle(Integer id, Integer userId) throws ArticleException {
         try {
 
 
@@ -149,7 +148,7 @@ public class SecondArticleServiceImpl implements SecondArticleService {
             String delePath = "/upload/item/"+userStr+"/secondArticle/"+idStr;
 //            删除路径对应文件
             ImageUtil.deleteFileOrpath(delePath);
-            return new ArticleExecution(ArticleEnum.SUCCESS);
+            return ArticleEnum.SUCCESS;
 
         }catch (Exception e){
             throw new ArticleException(e.getMessage());

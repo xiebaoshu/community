@@ -171,7 +171,7 @@ public class LostArticleController {
 
 
             article.setUserInfo(user);
-            ArticleExecution le;
+            ArticleEnum le;
             try {
                 if (articleImg.isEmpty()){
                     le = lostArticleService.saveArticle(article,null);
@@ -252,7 +252,7 @@ public class LostArticleController {
         if (article.getId()!= null) {
 //            从session获取用户数据，用于前台js判断当前是否为管理员操作
 
-            ArticleExecution le;
+            ArticleEnum le;
             try {
                 if (articleImg.isEmpty()){
                     le=lostArticleService.updateArticle(article,null);

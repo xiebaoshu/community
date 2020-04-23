@@ -6,11 +6,11 @@ import com.github.pagehelper.PageInfo;
 import com.hzu.community.bean.Nav;
 import com.hzu.community.bean.UserInfo;
 
-import com.hzu.community.dto.NavExecution;
-import com.hzu.community.dto.NavExecution;
+
 import com.hzu.community.dto.ImageHolder;
 import com.hzu.community.enums.ArticleEnum;
 import com.hzu.community.enums.NavEnum;
+
 import com.hzu.community.exceptions.ArticleException;
 import com.hzu.community.exceptions.NavException;
 import com.hzu.community.mapper.UserInfoMapper;
@@ -197,7 +197,7 @@ public class NavController {
 //        从session获取数据
             UserInfo user = (UserInfo) request.getSession().getAttribute("user");
             nav.setUserId(user.getUserId());
-            NavExecution le;
+            NavEnum le;
             try {
                 if (navImg == null){
                     le = navService.diySave(nav,null);

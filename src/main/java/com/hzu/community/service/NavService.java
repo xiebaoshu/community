@@ -5,7 +5,7 @@ import com.hzu.community.bean.Nav;
 import com.hzu.community.bean.UserInfo;
 import com.hzu.community.dto.ArticleExecution;
 import com.hzu.community.dto.ImageHolder;
-import com.hzu.community.dto.NavExecution;
+import com.hzu.community.enums.NavEnum;
 import com.hzu.community.exceptions.ArticleException;
 import com.hzu.community.exceptions.NavException;
 
@@ -17,12 +17,12 @@ public interface NavService {
     public int add(Nav nav);
     public void del(Integer id);
     public void delDefault(Integer id);
-    public NavExecution diySave(Nav nav, ImageHolder imageHolder)
+    public NavEnum diySave(Nav nav, ImageHolder imageHolder)
             throws NavException;
     public Nav findByName(Nav nav);
     public Nav findDefaultByName(Nav nav);
     public Nav findDefaultById(Nav nav);
-    public NavExecution defaultSave(Nav nav, ImageHolder imageHolder)
+    public NavEnum defaultSave(Nav nav, ImageHolder imageHolder)
             throws NavException;
-    public NavExecution defaultUpdate(Nav nav, ImageHolder imageHolder) throws NavException;
+    public NavEnum defaultUpdate(Nav nav, ImageHolder imageHolder) throws NavException;
 }
