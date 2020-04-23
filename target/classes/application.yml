@@ -1,6 +1,15 @@
 spring:
   thymeleaf:
     cache: false
+
+#redis缓存的配置
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    jedis:
+      pool:
+        max-active: 8
+
   autoconfigure:
 #   \u6392\u9664\u9ED8\u8BA4\u7684\u56FE\u7247\u4E0A\u4F20\u8BBE\u7F6E\uFF0C\u5728springweb\u914D\u7F6E\u81EA\u5B9A\u4E49\u7684\u4E0A\u4F20\u56FE\u7247\u8BBE\u7F6E
     exclude:  org.springframework.boot.autoconfigure.web.servlet.MultipartAutoConfiguration
@@ -26,6 +35,7 @@ spring:
     poolPreparedStatements: true
 
 
+
 #分页插件
 pagehelper:
   helper-dialect: mysql
@@ -40,6 +50,7 @@ logging:
   level:
     root: info
     com.hzu.community: debug
+
 
 
 

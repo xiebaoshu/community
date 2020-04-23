@@ -36,7 +36,7 @@ public class NavServiceImpl implements NavService {
 
     @Override
     public int add(Nav nav) {
-       return navMapper.add(nav);
+        return navMapper.add(nav);
     }
 
     @Override
@@ -185,8 +185,9 @@ public class NavServiceImpl implements NavService {
         } else if (nav.getDescription() == null) {
             return new NavExecution(NavEnum.NULL_Description);
         }
+        //        修改后的名字是否存在，并判断若存在，是否为本身
         Nav nav1 = navMapper.findDefaultByName(nav);
-        if (nav1.getId() != nav.getId()) {
+        if (nav1!=null && nav1.getId() != nav.getId()) {
             return new NavExecution(NavEnum.REPEACT_NAV);
         }
         try {
@@ -213,12 +214,12 @@ public class NavServiceImpl implements NavService {
             }
 
 
-            }catch(Exception e){
-                throw new NavException(e.getMessage());
+        }catch(Exception e){
+            throw new NavException(e.getMessage());
 
-            }
+        }
 
-     }
+    }
 
 
     private void addNavImg(Nav nav, ImageHolder ImageHolder){

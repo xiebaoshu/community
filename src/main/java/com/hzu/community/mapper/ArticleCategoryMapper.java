@@ -13,6 +13,7 @@ public interface ArticleCategoryMapper {
 
     public ArticleCategory findArticleCategoryById(@Param("id") Integer id);
 
+//    根据parentId判断获取一级还是二级分类
     @Select("<script> " +
             "SELECT * " +
             "from article_category " +

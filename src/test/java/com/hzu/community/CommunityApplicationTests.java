@@ -135,7 +135,7 @@ class CommunityApplicationTests {
     void NavMapperTest(){
         List<Nav> navList = navService.navDefault();
         for (Nav nav : navList) {
-            System.out.println(nav);
+            System.out.println(nav.getDescription());
         }
 
     }

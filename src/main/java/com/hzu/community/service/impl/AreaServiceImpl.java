@@ -11,6 +11,7 @@ import java.util.List;
 public class AreaServiceImpl implements AreaService {
     @Autowired
     AreaMapper areaMapper;
+
     @Override
     public List<Area> getAreaList(){
         return areaMapper.getArea();

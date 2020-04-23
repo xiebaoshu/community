@@ -53,7 +53,7 @@
                 <tbody>
                 <tr th:each="information,iterStat : ${informationList}">
                     <td th:text="${iterStat.count}">1</td>
-                    <td><a th:href="${information.getUrl()}" th:text="${information.title}" target="_blank" style="color: #8898a7;">招聘会名称</a></td>
+                    <td><a th:href="${information.url}" th:text="${information.title}" target="_blank" style="color: #8898a7;">招聘会名称</a></td>
                     <td th:text="${information.city}">举办城市</td>
                     <td th:text="${information.address}">举办地址</td>
                     <td th:text="${information.type}">招聘会类型</td>

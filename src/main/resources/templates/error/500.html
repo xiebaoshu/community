@@ -7,6 +7,7 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.css">
   <link rel="stylesheet" href="/static/css/me.css" >
   <link rel="stylesheet" href="/static/plugins/editor/css/editormd.preview.min.css" >
+
 </head>
 <body>
 
@@ -28,20 +29,14 @@
       </div>
     </div>
   </div>
+
+
+
 <br>
 <br>
 <br>
 <br>
-<div>
-  <!--th：remove 去除标签，utext转义，将异常信息转化为注释文本-->
-  <div th:utext="'&lt;!--'" th:remove="tag"></div>
-  <div th:utext="'Failed Request URL : ' + ${url}" th:remove="tag"></div>
-  <div th:utext="'Exception message : ' + ${exception.message}" th:remove="tag"></div>
-  <ul th:remove="tag">
-    <li th:each="st : ${exception.stackTrace}" th:remove="tag"><span th:utext="${st}" th:remove="tag"></span></li>
-  </ul>
-  <div th:utext="'--&gt;'" th:remove="tag"></div>
-</div>
+
 
 <footer class="ui inverted segment vertical segment m-padded-tb-massive">
   <div class="ui container center aligned">
@@ -89,4 +84,15 @@
 
 </footer>
 </body>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+<script src="/static/js/common/common.js"></script>
+<script>
+    // 导航栏下拉列表选中
+    $(function () {
+        $('.nav-dropdown').dropdown({
+            on : 'hover'
+        });
+    });
+</script>
 </html>
