@@ -501,40 +501,46 @@
                    th:href="@{/1}"
                    th:class="${articleParCategory}==1?'active item':'item'">
                     失物招领
-                    <div class="ui teal basic left pointing label">13</div>
+                    <div class="ui teal basic left pointing label"
+                    th:text="${session.count1}">13</div>
                 </a>
                 <a href="#" class="item"
                    th:href="@{/2}"
                    th:class="${articleParCategory}==2?'active item':'item'"
                 >
                     二手交易
-                    <div class="ui teal basic left pointing label">13</div>
+                    <div class="ui teal basic left pointing label"
+                         th:text="${session.count2}">13</div>
                 </a>
                 <a href="#" class="item"
                    th:href="@{/3}"
                    th:class="${articleParCategory}==3?'active item':'item'">
                     校园互助
-                    <div class="ui teal basic left pointing label">13</div>
+                    <div class="ui teal basic left pointing label"
+                         th:text="${session.count3}">13</div>
                 </a>
                 <a href="#" class="item"
                    th:href="@{/4}"
                    th:class="${articleParCategory}==4?'active item':'item'"
                 >
                     兼职信息
-                    <div class="ui teal basic left pointing label">13</div>
+                    <div class="ui teal basic left pointing label"
+                         th:text="${session.count4}">13</div>
                 </a>
                 <a href="#" class="item"
                    th:href="@{/5}"
                    th:class="${articleParCategory}==5?'active item':'item'"
                 >
                     校园公告
-                    <div class="ui teal basic left pointing label">13</div>
+                    <div class="ui teal basic left pointing label"
+                         th:text="${session.count5}">13</div>
                 </a>
                 <a href="#" class="item"
                    th:href="@{/6}"
                    th:class="${articleParCategory}==6?'active item':'item'">
                     企业信息
-                    <div class="ui teal basic left pointing label">13</div>
+                    <div class="ui teal basic left pointing label"
+                         th:text="${session.count6}">13</div>
                 </a>
 
             </div>
