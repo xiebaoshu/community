@@ -47,6 +47,7 @@ public class CompanyArticleController {
                               HttpServletRequest request,
                               @RequestParam(name = "page", defaultValue = "1") Integer page,
                               @RequestParam(name = "search", required = false) String search,
+                              @RequestParam(name = "sort", required = false) String sort,
                               @RequestParam(name = "category", required = false) Integer category,
                               @RequestParam(name = "date", required = false) Integer date,
                               @RequestParam(name = "tagPar", defaultValue = "44") Integer tagPar,
@@ -64,6 +65,7 @@ public class CompanyArticleController {
         model.addAttribute("searchCondition",search);
         model.addAttribute("tagCondition",tag);
         model.addAttribute("tagParCondition",tagPar);
+        model.addAttribute("sortCondition",sort);
         //判断属于哪种文章，高亮
         model.addAttribute("articleParCategory",6);
 
@@ -80,6 +82,7 @@ public class CompanyArticleController {
         article.setArticleCategory(articleCategory);
         article.setArticleTitle(search);
         article.setTag(tag);
+        article.setSort(sort);
         //开启分页，并使用pageCompany插件进行分页和返回数据，pageCompany插件需要先配置pom和yml。
         PageHelper.startPage(page,10);
         List<CompanyArticle> list = new ArrayList<>();

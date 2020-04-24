@@ -59,7 +59,14 @@ public interface SecondArticleMapper {
             " <if test=\"nextPrice != null \">and price &lt;= #{nextPrice}</if> " +
             " <if test=\"dateCondition != null\">and DATE_SUB(CURDATE(), INTERVAL #{dateCondition} DAY) <![CDATA[<=date(EDIT_TIME)]]></if>" +
             " </where> " +
-            "order by top desc,edit_time desc" +
+            " <choose>" +
+            " <when test=\"articleCondition.sort != null and articleCondition.sort!= ''\">" +
+            "     order by top desc,${articleCondition.sort} desc\n" +
+            " </when>" +
+            " <otherwise>" +
+            "     order by top desc,edit_time desc" +
+            " </otherwise>" +
+            " </choose>" +
             " </script> ")
     @Results({
             @Result(id=true,column="id",property="id"),

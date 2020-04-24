@@ -52,6 +52,7 @@ public class LostArticleController {
                                   HttpServletRequest request,
                                   @RequestParam(name = "page", defaultValue = "1") Integer page,
                                   @RequestParam(name = "search", required = false) String search,
+                                  @RequestParam(name = "sort", required = false) String sort,
                                   @RequestParam(name = "item", required = false) Integer item,
                                   @RequestParam(name = "area", required = false) Integer area,
                                   @RequestParam(name = "category", required = false) Integer category,
@@ -79,6 +80,7 @@ public class LostArticleController {
         model.addAttribute("searchCondition",search);
         model.addAttribute("tagCondition",tag);
         model.addAttribute("tagParCondition",tagPar);
+        model.addAttribute("sortCondition",sort);
         //判断属于哪种文章，高亮
         model.addAttribute("articleParCategory",1);
 
@@ -103,6 +105,7 @@ public class LostArticleController {
         lostArticle.setItemCategory(itemCategory);
         lostArticle.setTag(tag);
         lostArticle.setArticleTitle(search);
+        lostArticle.setSort(sort);
         //开启分页，并使用pageHelp插件进行分页和返回数据，pageHelp插件需要先配置pom和yml。
         PageHelper.startPage(page,10);
         List<LostArticle> list = new ArrayList<>();

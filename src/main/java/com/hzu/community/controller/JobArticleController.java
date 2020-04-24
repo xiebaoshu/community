@@ -47,6 +47,7 @@ public class JobArticleController {
                               HttpServletRequest request,
                               @RequestParam(name = "page", defaultValue = "1") Integer page,
                               @RequestParam(name = "search", required = false) String search,
+                              @RequestParam(name = "sort", required = false) String sort,
                               @RequestParam(name = "category", required = false) Integer category,
                               @RequestParam(name = "date", required = false) Integer date,
                               @RequestParam(name = "tagPar", defaultValue = "17") Integer tagPar,
@@ -70,6 +71,7 @@ public class JobArticleController {
         model.addAttribute("tagParCondition",tagPar);
         model.addAttribute("knotsCondition",knots);
         model.addAttribute("salaryCondition",salary);
+        model.addAttribute("sortCondition",sort);
         //判断属于哪种文章，高亮
         model.addAttribute("articleParCategory",4);
 
@@ -88,6 +90,7 @@ public class JobArticleController {
         article.setTag(tag);
         article.setKnots(knots);
         article.setSalary(salaryService.findSalaryById(salary));
+        article.setSort(sort);
         //开启分页，并使用pageJob插件进行分页和返回数据，pageJob插件需要先配置pom和yml。
         PageHelper.startPage(page,10);
         List<JobArticle> list = new ArrayList<>();

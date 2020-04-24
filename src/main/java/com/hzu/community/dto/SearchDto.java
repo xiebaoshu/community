@@ -17,6 +17,9 @@ public class SearchDto {
     private Boolean top;
     private Boolean lookMe;
     private Integer date;
+    private Integer readCount;
+    private String sort;
+
 
     public Integer getId() {
         return id;
@@ -96,6 +99,22 @@ public class SearchDto {
 
     public void setLookMe(Boolean lookMe) {
         this.lookMe = lookMe;
+    }
+
+    public String getSort() {
+        return sort;
+    }
+
+    public void setSort(String sort) {
+        this.sort = sort;
+    }
+
+    public Integer getReadCount() {
+        return readCount;
+    }
+
+    public void setReadCount(Integer readCount) {
+        this.readCount = readCount;
     }
 
     @Override

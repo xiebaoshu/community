@@ -28,35 +28,35 @@
 
 
             <div class="ui secondary pointing menu">
-                <a class="active item" th:href="@{/search(type=all,search=${searchCondition},date=${dateCondition})}"
+                <a class="active item" th:href="@{/search(type=all,search=${searchCondition},date=${dateCondition},sort=${sortCondition})}"
                 th:class="${typeCondition=='all'}?'active item':'item'">
                     <i class="home icon"></i> 综合
                 </a>
-                <a class="item" th:href="@{/search(type=user,search=${searchCondition},date=${dateCondition})}"
+                <a class="item" th:href="@{/search(type=user,search=${searchCondition},date=${dateCondition},sort=${sortCondition})}"
                    th:class="${typeCondition=='user'}?'active item':'item'">
                     <i class="user icon"></i> 用户
                 </a>
-                <a class="item" th:href="@{/search(type=1,search=${searchCondition},date=${dateCondition})}"
+                <a class="item" th:href="@{/search(type=1,search=${searchCondition},date=${dateCondition},sort=${sortCondition})}"
                    th:class="${typeCondition=='1'}?'active item':'item'">
                     <i class="privacy icon"></i> 失物招领
                 </a>
-                <a class="item" th:href="@{/search(type=2,search=${searchCondition},date=${dateCondition})}"
+                <a class="item" th:href="@{/search(type=2,search=${searchCondition},date=${dateCondition},sort=${sortCondition})}"
                    th:class="${typeCondition=='2'}?'active item':'item'">
                     <i class="shop icon"></i> 二手交易
                 </a>
-                <a class="item" th:href="@{/search(type=3,search=${searchCondition},date=${dateCondition})}"
+                <a class="item" th:href="@{/search(type=3,search=${searchCondition},date=${dateCondition},sort=${sortCondition})}"
                    th:class="${typeCondition=='3'}?'active item':'item'">
                     <i class="exchange icon"></i> 校园互助
                 </a>
-                <a class="item" th:href="@{/search(type=4,search=${searchCondition},date=${dateCondition})}"
+                <a class="item" th:href="@{/search(type=4,search=${searchCondition},date=${dateCondition},sort=${sortCondition})}"
                    th:class="${typeCondition=='4'}?'active item':'item'">
                     <i class="money icon"></i> 兼职信息
                 </a>
-                <a class="item" th:href="@{/search(type=5,search=${searchCondition},date=${dateCondition})}"
+                <a class="item" th:href="@{/search(type=5,search=${searchCondition},date=${dateCondition},sort=${sortCondition})}"
                    th:class="${typeCondition=='5'}?'active item':'item'">
                     <i class="student icon"></i> 校园公告
                 </a>
-                <a class="item" th:href="@{/search(type=6,search=${searchCondition},date=${dateCondition})}"
+                <a class="item" th:href="@{/search(type=6,search=${searchCondition},date=${dateCondition},sort=${sortCondition})}"
                    th:class="${typeCondition=='6'}?'active item':'item'">
                     <i class="travel icon"></i> 企业信息
                 </a>
@@ -74,11 +74,29 @@
                         <a class="item" style="border-color: white!important;"
                         th:href="@{/search(type=${typeCondition},search=${searchCondition},date='')}">时间不限</a>
                         <a class="item" style="border-color: white!important;"
-                           th:href="@{/search(type=${typeCondition},search=${searchCondition},date='3')}" >三天内</a>
+                           th:href="@{/search(type=${typeCondition},search=${searchCondition},date='3',sort=${sortCondition})}" >三天内</a>
                         <a class="item" style="border-color: white!important;"
-                           th:href="@{/search(type=${typeCondition},search=${searchCondition},date='7')}">七天内</a>
+                           th:href="@{/search(type=${typeCondition},search=${searchCondition},date='7',sort=${sortCondition})}">七天内</a>
                         <a class="item" style="border-color: white!important;"
-                           th:href="@{/search(type=${typeCondition},search=${searchCondition},date='30')}">一月内</a>
+                           th:href="@{/search(type=${typeCondition},search=${searchCondition},date='30',sort=${sortCondition})}">一月内</a>
+                    </div>
+                </div>
+                <div class="ui dropdown  item" th:unless="${typeCondition=='user'}">
+                    <div class="text" th:if="!${sortCondition}" th:text="排序方式">排序方式</div>
+                    <th:block th:switch="${sortCondition}">
+                        <div class="text" th:case="edit_time" th:text="时间排序">时间排序</div>
+                        <div class="text" th:case="read_count" th:text="热度排序">热度排序</div>
+                    </th:block>
+
+                    <i class="dropdown icon"></i>
+                    <div class="menu">
+                        <a class="item" style="border-color: white!important;"
+                           th:href="@{/search(type=${typeCondition},search=${searchCondition},date=${dateCondition},sort='')}">排序方式</a>
+                        <a class="item" style="border-color: white!important;"
+                           th:href="@{/search(type=${typeCondition},search=${searchCondition},date=${dateCondition},sort='edit_time')}" >时间排序</a>
+                        <a class="item" style="border-color: white!important;"
+                           th:href="@{/search(type=${typeCondition},search=${searchCondition},date=${dateCondition},sort='read_count')}">热度排序</a>
+                        
                     </div>
                 </div>
 
@@ -106,6 +124,8 @@
                                         <a th:href="@{|/${article.articleCategory.parentId}/${article.id}|}" target="_self"
                                            th:text="${article.getArticleTitle()}"
                                            style="color: black">失物招领1</a>
+                                        <div href="javascript:;" class="ui  red basic left pointing label m-margin-tb-tiny"
+                                             th:if="${article.top}">置顶</div>
                                     </h3>
                                     <p class="m-text" th:text="|${article.description}...|">正确做好任何一件事情的前提是清晰、正确的理解目标。而事实是，我们很多人很多时候根本没有对目标正确的定义，甚至根本从来就没有想过，只是大家都那么做而已…...</p>
                                     <div class="ui grid">
@@ -127,6 +147,10 @@
                                                     <div class="item">
                                                         <i class="calendar icon"></i>
                                                         <span th:text="${#dates.format(article.editTime, 'yyyy-MM-dd')}">2020-2-27</span>
+                                                    </div>
+                                                    <div class="item">
+                                                        <i class="eye icon"></i>
+                                                        <span th:text="${article.readCount}">阅读量</span>
                                                     </div>
 
                                                 </div>
@@ -162,11 +186,11 @@
                         <!--文章列表分页-->
                         <div class="ui pagination  menu">
                             <a class="item"
-                               th:href="@{/search(page=${pageInfo.getFirstPage()},type=${typeCondition},search=${searchCondition},date=${dateCondition})}">
+                               th:href="@{/search(page=${pageInfo.getFirstPage()},type=${typeCondition},search=${searchCondition},date=${dateCondition},sort=${sortCondition})}">
                                 首页
                             </a>
                             <a class="icon item"
-                               th:href="@{/search(page=${pageInfo.getPrePage()},type=${typeCondition},search=${searchCondition},date=${dateCondition})}"
+                               th:href="@{/search(page=${pageInfo.getPrePage()},type=${typeCondition},search=${searchCondition},date=${dateCondition},sort=${sortCondition})}"
                                th:if="${pageInfo.hasPreviousPage}">
                                 <i class="left arrow icon"></i>
                             </a>
@@ -174,18 +198,18 @@
                                th:each="page:${pageInfo.getNavigatepageNums()}"
                                th:text="${page}"
                                th:class="${page}==${pageInfo.getPageNum()}?'active item':'item'"
-                               th:href="@{/search(page=${page},type=${typeCondition},search=${searchCondition},date=${dateCondition})}">
+                               th:href="@{/search(page=${page},type=${typeCondition},search=${searchCondition},date=${dateCondition},sort=${sortCondition})}">
                                 1
                             </a>
 
 
                             <a class="icon item"
-                               th:href="@{/search(page=${pageInfo.getNextPage()},type=${typeCondition},search=${searchCondition},date=${dateCondition})}"
+                               th:href="@{/search(page=${pageInfo.getNextPage()},type=${typeCondition},search=${searchCondition},date=${dateCondition},sort=${sortCondition})}"
                                th:if="${pageInfo.hasNextPage}">
                                 <i class="right arrow icon"></i>
                             </a>
                             <a class="item"
-                               th:href="@{/search(page=${pageInfo.getLastPage()},type=${typeCondition},search=${searchCondition},date=${dateCondition})}">
+                               th:href="@{/search(page=${pageInfo.getLastPage()},type=${typeCondition},search=${searchCondition},date=${dateCondition},sort=${sortCondition})}">
                                 尾页
                             </a>
                         </div>
@@ -234,11 +258,11 @@
                         <!--用户列表分页-->
                         <div class="ui pagination  menu">
                             <a class="item"
-                               th:href="@{/search(page=${pageUser.getFirstPage()},type=${typeCondition},search=${searchCondition},date=${dateCondition})}">
+                               th:href="@{/search(page=${pageUser.getFirstPage()},type=${typeCondition},search=${searchCondition},date=${dateCondition},sort=${sortCondition})}">
                                 首页
                             </a>
                             <a class="icon item"
-                               th:href="@{/search(page=${pageUser.getPrePage()},type=${typeCondition},search=${searchCondition},date=${dateCondition})}"
+                               th:href="@{/search(page=${pageUser.getPrePage()},type=${typeCondition},search=${searchCondition},date=${dateCondition},sort=${sortCondition})}"
                                th:if="${pageUser.hasPreviousPage}">
                                 <i class="left arrow icon"></i>
                             </a>
@@ -246,18 +270,18 @@
                                th:each="page:${pageUser.getNavigatepageNums()}"
                                th:text="${page}"
                                th:class="${page}==${pageUser.getPageNum()}?'active item':'item'"
-                               th:href="@{/search(page=${page},type=${typeCondition},search=${searchCondition},date=${dateCondition})}">
+                               th:href="@{/search(page=${page},type=${typeCondition},search=${searchCondition},date=${dateCondition},sort=${sortCondition})}">
                                 1
                             </a>
 
 
                             <a class="icon item"
-                               th:href="@{/search(page=${pageUser.getNextPage()},type=${typeCondition},search=${searchCondition},date=${dateCondition})}"
+                               th:href="@{/search(page=${pageUser.getNextPage()},type=${typeCondition},search=${searchCondition},date=${dateCondition},sort=${sortCondition})}"
                                th:if="${pageUser.hasNextPage}">
                                 <i class="right arrow icon"></i>
                             </a>
                             <a class="item"
-                               th:href="@{/search(page=${pageUser.getLastPage()},type=${typeCondition},search=${searchCondition},date=${dateCondition})}">
+                               th:href="@{/search(page=${pageUser.getLastPage()},type=${typeCondition},search=${searchCondition},date=${dateCondition},sort=${sortCondition})}">
                                 尾页
                             </a>
                         </div>

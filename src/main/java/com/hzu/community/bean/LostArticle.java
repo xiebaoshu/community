@@ -24,6 +24,8 @@ public class LostArticle {
     private String tag;
     private Boolean top;
     private MultipartFile upload;
+//    排序方式
+    private String sort;
 
 
     public MultipartFile getUpload() {
@@ -159,6 +161,14 @@ public class LostArticle {
 
     public void setTop(Boolean top) {
         this.top = top;
+    }
+
+    public String getSort() {
+        return sort;
+    }
+
+    public void setSort(String sort) {
+        this.sort = sort;
     }
 
     @Override

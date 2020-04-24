@@ -58,7 +58,14 @@ public interface JobArticleMapper {
             " <if test=\"articleCondition.knots != null \">and knots =#{articleCondition.knots}</if> " +
             " <if test=\"articleCondition.salary != null and articleCondition.salary.id != null \">and salary = #{articleCondition.salary.id}</if> " +
             " </where> " +
-            "order by top desc,edit_time desc" +
+            " <choose>" +
+            " <when test=\"articleCondition.sort != null and articleCondition.sort!= ''\">" +
+            "     order by top desc,${articleCondition.sort} desc\n" +
+            " </when>" +
+            " <otherwise>" +
+            "     order by top desc,edit_time desc" +
+            " </otherwise>" +
+            " </choose>" +
             " </script> ")
     @Results({
             @Result(id=true,column="id",property="id"),

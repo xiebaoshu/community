@@ -50,6 +50,7 @@ public class SchoolArticleController {
                               HttpServletRequest request,
                               @RequestParam(name = "page", defaultValue = "1") Integer page,
                               @RequestParam(name = "search", required = false) String search,
+                              @RequestParam(name = "sort", required = false) String sort,
                               @RequestParam(name = "category", required = false) Integer category,
                               @RequestParam(name = "date", required = false) Integer date,
                               @RequestParam(name = "tagPar", defaultValue = "31") Integer tagPar,
@@ -67,6 +68,7 @@ public class SchoolArticleController {
         model.addAttribute("searchCondition",search);
         model.addAttribute("tagCondition",tag);
         model.addAttribute("tagParCondition",tagPar);
+        model.addAttribute("sortCondition",sort);
         //判断属于哪种文章，高亮
         model.addAttribute("articleParCategory",5);
 
@@ -83,6 +85,7 @@ public class SchoolArticleController {
         article.setArticleCategory(articleCategory);
         article.setArticleTitle(search);
         article.setTag(tag);
+        article.setSort(sort);
         //开启分页，并使用pageSchool插件进行分页和返回数据，pageSchool插件需要先配置pom和yml。
         PageHelper.startPage(page,10);
         List<SchoolArticle> list = new ArrayList<>();

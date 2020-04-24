@@ -18,6 +18,8 @@ public class CompanyArticle {
     private Integer readCount;
     private Boolean top;
     private MultipartFile upload;
+    //    排序方式
+    private String sort;
 
     public Integer getId() {
         return id;
@@ -121,6 +123,14 @@ public class CompanyArticle {
 
     public void setEditTime(Date editTime) {
         this.editTime = editTime;
+    }
+
+    public String getSort() {
+        return sort;
+    }
+
+    public void setSort(String sort) {
+        this.sort = sort;
     }
 
     @Override

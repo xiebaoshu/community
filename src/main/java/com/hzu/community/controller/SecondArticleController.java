@@ -49,6 +49,7 @@ public class SecondArticleController {
                               HttpServletRequest request,
                               @RequestParam(name = "page", defaultValue = "1") Integer page,
                               @RequestParam(name = "search", required = false) String search,
+                              @RequestParam(name = "sort", required = false) String sort,
                               @RequestParam(name = "category", required = false) Integer category,
                               @RequestParam(name = "date", required = false) Integer date,
                               @RequestParam(name = "tagPar", defaultValue = "9") Integer tagPar,
@@ -71,6 +72,7 @@ public class SecondArticleController {
         model.addAttribute("tagParCondition",tagPar);
         model.addAttribute("prePriceCondition",prePrice);
         model.addAttribute("nextPriceCondition",nextPrice);
+        model.addAttribute("sortCondition",sort);
         //判断属于哪种文章，高亮
         model.addAttribute("articleParCategory",2);
 
@@ -87,6 +89,7 @@ public class SecondArticleController {
         article.setArticleCategory(articleCategory);
         article.setArticleTitle(search);
         article.setTag(tag);
+        article.setSort(sort);
         //开启分页，并使用pageSecond插件进行分页和返回数据，pageSecond插件需要先配置pom和yml。
         PageHelper.startPage(page,10);
         List<SecondArticle> list = new ArrayList<>();

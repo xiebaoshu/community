@@ -19,6 +19,8 @@ public class HelpArticle {
     private Integer readCount;
     private Boolean top;
     private MultipartFile upload;
+    //    排序方式
+    private String sort;
 
 
 
@@ -124,5 +126,13 @@ public class HelpArticle {
 
     public void setEditTime(Date editTime) {
         this.editTime = editTime;
+    }
+
+    public String getSort() {
+        return sort;
+    }
+
+    public void setSort(String sort) {
+        this.sort = sort;
     }
 }

@@ -6,7 +6,7 @@
     <title>首页</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
     <link rel="stylesheet" href="../../static/css/me.css" >
-    <link rel="stylesheet" href="../../static/css/layui.css">
+
 
 </head>
 <body>
@@ -25,57 +25,57 @@
                   <div class="eleven wide column">
                       <!--左边列表header-->
                       <div class="ui segment top attached">
-                          <div class="ui  middle aligned two column grid">
-                              <div class="column aligned">
+                          <div class="ui  middle aligned   grid">
+                              <div class="row">
+                                  <div class="four wide column">
+                                      <div class="ui header teal">失物招领</div>
+                                  </div>
+                                  <div class="twelve wide right aligned column">
+                                      <form name="condition" action="/1" method="get">
+                                          <input type="text" name="category" style="display: none" th:value="${categoryCondition}">
+                                          <input type="text" name="tag" style="display: none" th:value="${tagCondition}">
+                                          <input type="text" name="tagPar" style="display: none" th:value="${tagParCondition}">
 
-                                  <div class="ui header teal">失物招领</div>
-                              </div>
-                              <!--pc端过滤条件-->
-                              <div class="right aligned column m-mobile-hide">
-                                <form name="condition" action="/1" method="get">
-                                    <input type="text" name="category" style="display: none" th:value="${categoryCondition}">
-                                    <input type="text" name="tag" style="display: none" th:value="${tagCondition}">
-                                    <input type="text" name="tagPar" style="display: none" th:value="${tagParCondition}">
+                                          <select class="ui dropdown" name="sort" onchange="document.condition.submit()">
+                                                <option value="" >排序</option>
+                                                <option value="edit_time" th:selected="${sortCondition}=='edit_time'">时间</option>
+                                                <option value="read_count" th:selected="${sortCondition}=='read_count'">热度</option>
+                                          </select>
+                                          <select class="ui dropdown" name="date" onchange="document.condition.submit()">
+                                              <option value="" >时间不限</option>
+                                              <option value="3" th:selected="${dateCondition}==3"><a href="#">三天内</a></option>
+                                              <option value="7" th:selected="${dateCondition}==7">一周内</option>
+                                              <option value="30" th:selected="${dateCondition}==30">一月内</option>
+                                          </select>
 
-                                  <select class="ui dropdown" name="date" onchange="document.condition.submit()">
-                                      <option value="" >时间</option>
-                                      <option value="3" th:selected="${dateCondition}==3"><a href="#">三天内</a></option>
-                                      <option value="7" th:selected="${dateCondition}==7">一周内</option>
-                                      <option value="30" th:selected="${dateCondition}==30">一月内</option>
+                                          <select class="ui dropdown" name="area" onchange="document.condition.submit()">
+                                              <option value="" >区域</option>
+                                              <option
+                                                      th:each="area:${areaList}"
+                                                      th:text="${area.getAreaName()}"
+                                                      th:value="${area.getAreaId()}"
+                                                      th:selected="${area.areaId}==${areaCondition}"
 
+                                              ></option>
+                                              <!--<option value="2">操场</option>-->
+                                              <!--<option value="3">饭堂</option>-->
+                                          </select>
 
-                                  </select>
+                                          <select class="ui dropdown" name="item" onchange="document.condition.submit()">
+                                              <option value="">类型</option>
+                                              <option
+                                                      th:each="item:${itemCategoryList}"
+                                                      th:text="${item.getItemCategoryName()}"
+                                                      th:value="${item.getItemCategoryId()}"
+                                                      th:selected="${item.getItemCategoryId()}==${itemCondition}"
+                                              ></option>
+                                              <!--<option value="2">ID卡</option>-->
+                                              <!--<option value="3">现金</option>-->
+                                          </select>
 
-                                  <select class="ui dropdown" name="area" onchange="document.condition.submit()">
-                                      <option value="" >区域</option>
-                                      <option
-                                      th:each="area:${areaList}"
-                                      th:text="${area.getAreaName()}"
-                                      th:value="${area.getAreaId()}"
-                                      th:selected="${area.areaId}==${areaCondition}"
+                                      </form>
 
-                                      ></option>
-                                      <!--<option value="2">操场</option>-->
-                                      <!--<option value="3">饭堂</option>-->
-
-
-                                  </select>
-
-                                  <select class="ui dropdown" name="item" onchange="document.condition.submit()">
-                                      <option value="">类型</option>
-                                      <option
-                                      th:each="item:${itemCategoryList}"
-                                      th:text="${item.getItemCategoryName()}"
-                                      th:value="${item.getItemCategoryId()}"
-                                      th:selected="${item.getItemCategoryId()}==${itemCondition}"
-                                      ></option>
-                                      <!--<option value="2">ID卡</option>-->
-                                      <!--<option value="3">现金</option>-->
-
-
-                                  </select>
-                                </form>
-
+                                  </div>
 
                               </div>
                           </div>
@@ -140,7 +140,7 @@
                                   <div class="eleven wide column">
                                       <h3 class="ui header">
                                           <a th:href="@{|/1/${article.id}|}" target="_self"
-                                             th:text="${article.getArticleTitle()}">失物招领1</a>
+                                             th:text="${article.getArticleTitle()}" style="color: black">失物招领1</a>
                                           <div href="javascript:;" class="ui  red basic left pointing label m-margin-tb-tiny"
                                                th:if="${article.top}">置顶</div>
                                       </h3>
@@ -170,6 +170,10 @@
                                                           <i class="university icon"></i>
                                                           <span th:text="${article.area.areaName}">旭日大楼</span>
                                                       </div>
+                                                      <div class="item">
+                                                          <i class="eye icon"></i>
+                                                          <span th:text="${article.readCount}">阅读量</span>
+                                                      </div>
 
                                                   </div>
 
@@ -177,7 +181,7 @@
                                               <div class="right aligned five wide column">
                                                   <a href="#" class="ui teal basic label  m-text-thin m-padded-tiny"
                                                      th:text="${article.articleCategory.articleCategoryName}"
-                                                     th:href="@{/1(category=${article.articleCategory.articleCategoryId},date=${dateCondition},area=${areaCondition},item=${itemCondition})}">
+                                                     th:href="@{/1(category=${article.articleCategory.articleCategoryId},date=${dateCondition},area=${areaCondition},item=${itemCondition},sort=${sortCondition})}">
                                                       已找回</a>
                                               </div>
                                           </div>
@@ -210,7 +214,7 @@
                                   <div class="column">
                                       <h3 class="ui header">
                                           <a th:href="@{|/1/${article.id}|}" target="_self"
-                                             th:text="${article.getArticleTitle()}">失物招领1</a>
+                                             th:text="${article.getArticleTitle()}" style="color: black">失物招领1</a>
                                           <div href="javascript:;" class="ui  red basic left pointing label m-margin-tb-tiny"
                                                th:if="${article.top}">置顶</div>
                                       </h3>
@@ -240,6 +244,10 @@
                                                           <i class="university icon"></i>
                                                           <span th:text="${article.area.areaName}">旭日大楼</span>
                                                       </div>
+                                                      <div class="item">
+                                                          <i class="eye icon"></i>
+                                                          <span th:text="${article.readCount}">阅读量</span>
+                                                      </div>
 
                                                   </div>
 
@@ -247,7 +255,7 @@
                                               <div class="right aligned five wide column">
                                                   <a href="#" class="ui teal basic label  m-text-thin m-padded-tiny"
                                                      th:text="${article.articleCategory.articleCategoryName}"
-                                                     th:href="@{/1(category=${article.articleCategory.articleCategoryId},date=${dateCondition},area=${areaCondition},item=${itemCondition})}">
+                                                     th:href="@{/1(category=${article.articleCategory.articleCategoryId},date=${dateCondition},area=${areaCondition},item=${itemCondition},sort=${sortCondition})}">
                                                       已找回</a>
                                               </div>
                                           </div>
@@ -276,11 +284,11 @@
 
                           <div class="ui pagination  menu">
                               <a class="item"
-                              th:href="@{/1(page=${pageInfo.getFirstPage()},category=${categoryCondition},date=${dateCondition},area=${areaCondition},item=${itemCondition},search=${searchCondition})}">
+                              th:href="@{/1(page=${pageInfo.getFirstPage()},category=${categoryCondition},date=${dateCondition},area=${areaCondition},item=${itemCondition},sort=${sortCondition},search=${searchCondition})}">
                                   首页
                               </a>
                               <a class="icon item"
-                              th:href="@{/1(page=${pageInfo.getPrePage()},category=${categoryCondition},date=${dateCondition},area=${areaCondition},item=${itemCondition},search=${searchCondition})}"
+                              th:href="@{/1(page=${pageInfo.getPrePage()},category=${categoryCondition},date=${dateCondition},area=${areaCondition},item=${itemCondition},sort=${sortCondition},search=${searchCondition})}"
                               th:if="${pageInfo.hasPreviousPage}">
                                   <i class="left arrow icon"></i>
                               </a>
@@ -288,18 +296,18 @@
                               th:each="page:${pageInfo.getNavigatepageNums()}"
                               th:text="${page}"
                               th:class="${page}==${pageInfo.getPageNum()}?'active item':'item'"
-                              th:href="@{/1(page=${page},category=${categoryCondition},date=${dateCondition},area=${areaCondition},item=${itemCondition},search=${searchCondition})}">
+                              th:href="@{/1(page=${page},category=${categoryCondition},date=${dateCondition},area=${areaCondition},item=${itemCondition},sort=${sortCondition},search=${searchCondition})}">
                                   1
                               </a>
 
 
                               <a class="icon item"
-                              th:href="@{/1(page=${pageInfo.getNextPage()},category=${categoryCondition},date=${dateCondition},area=${areaCondition},item=${itemCondition},search=${searchCondition})}"
+                              th:href="@{/1(page=${pageInfo.getNextPage()},category=${categoryCondition},date=${dateCondition},area=${areaCondition},item=${itemCondition},sort=${sortCondition},search=${searchCondition})}"
                               th:if="${pageInfo.hasNextPage}">
                                   <i class="right arrow icon"></i>
                               </a>
                               <a class="item"
-                                 th:href="@{/1(page=${pageInfo.getLastPage()},category=${categoryCondition},date=${dateCondition},area=${areaCondition},item=${itemCondition},search=${searchCondition})}">
+                                 th:href="@{/1(page=${pageInfo.getLastPage()},category=${categoryCondition},date=${dateCondition},area=${areaCondition},item=${itemCondition},sort=${sortCondition},search=${searchCondition})}">
                                   尾页
                               </a>
                           </div>
@@ -327,7 +335,7 @@
                           <div class="ui teal segment">
                               <a href="#" target="_self" class="ui teal basic left pointing label m-margin-tb-tiny"
                                 th:each="category:${articleCategories}"
-                                 th:href="@{/1(category=${category.getArticleCategoryId()},date=${dateCondition},area=${areaCondition},item=${itemCondition},tag=${tagCondition},tagPar=${tagParCondition})}"
+                                 th:href="@{/1(category=${category.getArticleCategoryId()},date=${dateCondition},area=${areaCondition},item=${itemCondition},sort=${sortCondition},tag=${tagCondition},tagPar=${tagParCondition})}"
                                  th:class="${category.articleCategoryId}==${categoryCondition}?'ui red basic left pointing label m-margin-tb-tiny':'ui teal basic left pointing label m-margin-tb-tiny'"
                               >
                                   <span th:text="${category.articleCategoryName}">寻物启事</span>
@@ -368,7 +376,7 @@
                                   <a  target="_self" class="ui teal basic left pointing label m-margin-tb-tiny"
                                       th:each="tag:${parTag.tagList}"
                                       th:text="${tag.name}"
-                                      th:href="@{/1(category=${categoryCondition},date=${dateCondition},area=${areaCondition},item=${itemCondition},tag=${tag.name},tagPar=${parTag.id})}"
+                                      th:href="@{/1(category=${categoryCondition},date=${dateCondition},area=${areaCondition},item=${itemCondition},sort=${sortCondition},tag=${tag.name},tagPar=${parTag.id})}"
                                       th:class="${tagCondition}==${tag.name}?'ui red basic left pointing label m-margin-tb-tiny':'ui teal basic left pointing label m-margin-tb-tiny'">
                                       java
                                   </a>
@@ -440,7 +448,7 @@
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
     <script src="/static/js/common/common.js"></script>
-    <script src="../../static/layui.js"></script>
+
 
 
     <script>

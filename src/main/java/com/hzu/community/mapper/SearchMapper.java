@@ -11,17 +11,17 @@ import java.util.List;
 public interface SearchMapper {
     @Select("<script> " +
             "SELECT * FROM\n" +
-            "(select id,article_category_id,user_id,article_img,article_title,edit_time,description,top from lost_article \n" +
+            "(select id,article_category_id,user_id,article_img,article_title,edit_time,description,top,read_count from lost_article \n" +
             "union all\n" +
-            "select id,article_category_id,user_id,article_img,article_title,edit_time,description,top from second_article \n" +
+            "select id,article_category_id,user_id,article_img,article_title,edit_time,description,top,read_count from second_article \n" +
             "union all\n" +
-            "select id,article_category_id,user_id,article_img,article_title,edit_time,description,top from help_article \n" +
+            "select id,article_category_id,user_id,article_img,article_title,edit_time,description,top,read_count from help_article \n" +
             "union all\n" +
-            "select id,article_category_id,user_id,article_img,article_title,edit_time,description,top from job_article \n" +
+            "select id,article_category_id,user_id,article_img,article_title,edit_time,description,top,read_count from job_article \n" +
             "union all\n" +
-            "select id,article_category_id,user_id,article_img,article_title,edit_time,description,top from school_article \n" +
+            "select id,article_category_id,user_id,article_img,article_title,edit_time,description,top,read_count from school_article \n" +
             "union all\n" +
-            "select id,article_category_id,user_id,article_img,article_title,edit_time,description,top from company_article) as a\n" +
+            "select id,article_category_id,user_id,article_img,article_title,edit_time,description,top,read_count from company_article) as a\n" +
             "<where>" +
             " <if test=\"articleTitle!= null\">and article_title LIKE '%${articleTitle}%'</if> " +
             " <if test=\"articleCategory!= null and articleCategory.articleCategoryId!= null\">and article_category_id =#{articleCategory.articleCategoryId}</if> " +
@@ -30,7 +30,14 @@ public interface SearchMapper {
             " <if test=\"date != null\">and DATE_SUB(CURDATE(), INTERVAL #{date} DAY) <![CDATA[<=date(EDIT_TIME)]]></if>" +
 
             "</where>" +
-            "order by top DESC,edit_time DESC" +
+            " <choose>" +
+            " <when test=\"sort != null and sort!= ''\">" +
+            "     order by top desc,${sort} desc\n" +
+            " </when>" +
+            " <otherwise>" +
+            "     order by top desc,edit_time desc" +
+            " </otherwise>" +
+            " </choose>" +
             "</script>")
     @Results({
             @Result(id=true,column="id",property="id"),
@@ -40,6 +47,7 @@ public interface SearchMapper {
             @Result(column="edit_time",property="editTime"),
             @Result(column="article_img",property="articleImg"),
             @Result(column="description",property="description"),
+            @Result(column="read_count",property="readCount"),
             @Result(column="top",property="top")
     })
     public List<SearchDto> getAll(SearchDto searchDto);
@@ -47,17 +55,17 @@ public interface SearchMapper {
 
     @Select("<script> " +
             "SELECT count(1) FROM\n" +
-            "(select id,article_category_id,user_id,article_img,article_title,edit_time,description,top from lost_article \n" +
+            "(select id,article_category_id,user_id,article_img,article_title,edit_time,description,top,read_count from lost_article \n" +
             "union all\n" +
-            "select id,article_category_id,user_id,article_img,article_title,edit_time,description,top from second_article \n" +
+            "select id,article_category_id,user_id,article_img,article_title,edit_time,description,top,read_count from second_article \n" +
             "union all\n" +
-            "select id,article_category_id,user_id,article_img,article_title,edit_time,description,top from help_article \n" +
+            "select id,article_category_id,user_id,article_img,article_title,edit_time,description,top,read_count from help_article \n" +
             "union all\n" +
-            "select id,article_category_id,user_id,article_img,article_title,edit_time,description,top from job_article \n" +
+            "select id,article_category_id,user_id,article_img,article_title,edit_time,description,top,read_count from job_article \n" +
             "union all\n" +
-            "select id,article_category_id,user_id,article_img,article_title,edit_time,description,top from school_article \n" +
+            "select id,article_category_id,user_id,article_img,article_title,edit_time,description,top,read_count from school_article \n" +
             "union all\n" +
-            "select id,article_category_id,user_id,article_img,article_title,edit_time,description,top from company_article) as a\n" +
+            "select id,article_category_id,user_id,article_img,article_title,edit_time,description,top,read_count from company_article) as a\n" +
             "<where>" +
             " <if test=\"articleTitle!= null\">and article_title LIKE '%${articleTitle}%'</if> " +
             " <if test=\"articleCategory!= null and articleCategory.articleCategoryId!= null\">and article_category_id =#{articleCategory.articleCategoryId}</if> " +

@@ -37,6 +37,7 @@ public class SearchController {
     @GetMapping("/search")
     public String SearchPage(@RequestParam(name = "search") String search,
                              @RequestParam(name = "type",defaultValue = "all") String type,
+                             @RequestParam(name = "sort", required = false) String sort,
                              @RequestParam(name = "page",defaultValue = "1") Integer page,
                              @RequestParam(name = "date", required = false) Integer date,
                              Model model){
@@ -45,11 +46,13 @@ public class SearchController {
         model.addAttribute("searchCondition",search);
         model.addAttribute("typeCondition",type);
         model.addAttribute("dateCondition",date);
+        model.addAttribute("sortCondition",sort);
         if (type.equals("all")){
 //            搜索结果使用插件分页
             SearchDto searchDto = new SearchDto();
             searchDto.setArticleTitle(search);
             searchDto.setDate(date);
+            searchDto.setSort(sort);
             List<SearchDto> searchDtoList = searchService.getAll(searchDto);
             PageInfo<SearchDto> pageInfo = new PageInfo<>(searchDtoList);
             model.addAttribute("pageInfo",pageInfo);
@@ -60,6 +63,7 @@ public class SearchController {
         }else if (type.equals("1")){
             LostArticle lostArticle = new LostArticle();
             lostArticle.setArticleTitle(search);
+            lostArticle.setSort(sort);
             List<LostArticle> list = lostArticleService.getArticleList(lostArticle,date);
             PageInfo<LostArticle> pageInfo = new PageInfo<>(list);
             model.addAttribute("pageInfo",pageInfo);
@@ -69,6 +73,7 @@ public class SearchController {
         }else if (type.equals("2")){
             SecondArticle secondArticle = new SecondArticle();
             secondArticle.setArticleTitle(search);
+            secondArticle.setSort(sort);
             List<SecondArticle> list = secondArticleService.getArticleList(secondArticle,date,null,null);
             PageInfo<SecondArticle> pageInfo = new PageInfo<>(list);
             model.addAttribute("pageInfo",pageInfo);
@@ -78,6 +83,7 @@ public class SearchController {
         }else if (type.equals("3")){
             HelpArticle helpArticle = new HelpArticle();
             helpArticle.setArticleTitle(search);
+            helpArticle.setSort(sort);
             List<HelpArticle> list = helpArticleService.getArticleList(helpArticle,date);
             PageInfo<HelpArticle> pageInfo = new PageInfo<>(list);
             model.addAttribute("pageInfo",pageInfo);
@@ -87,6 +93,7 @@ public class SearchController {
         }else if (type.equals("4")){
             JobArticle jobArticle = new JobArticle();
             jobArticle.setArticleTitle(search);
+            jobArticle.setSort(sort);
             List<JobArticle> list = jobArticleService.getArticleList(jobArticle,date);
             PageInfo<JobArticle> pageInfo = new PageInfo<>(list);
             model.addAttribute("pageInfo",pageInfo);
@@ -96,6 +103,7 @@ public class SearchController {
         }else if (type.equals("5")){
             SchoolArticle schoolArticle = new SchoolArticle();
             schoolArticle.setArticleTitle(search);
+            schoolArticle.setSort(sort);
             List<SchoolArticle> list = schoolArticleService.getArticleList(schoolArticle,date);
             PageInfo<SchoolArticle> pageInfo = new PageInfo<>(list);
             model.addAttribute("pageInfo",pageInfo);
@@ -105,6 +113,7 @@ public class SearchController {
         }else if (type.equals("6")){
             CompanyArticle companyArticle = new CompanyArticle();
             companyArticle.setArticleTitle(search);
+            companyArticle.setSort(sort);
             List<CompanyArticle> list = companyArticleService.getArticleList(companyArticle,date);
             PageInfo<CompanyArticle> pageInfo = new PageInfo<>(list);
             model.addAttribute("pageInfo",pageInfo);

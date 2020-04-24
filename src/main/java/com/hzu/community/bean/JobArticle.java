@@ -23,6 +23,8 @@ public class JobArticle {
     private Salary salary;
     private Boolean top;
     private MultipartFile upload;
+    //    排序方式
+    private String sort;
 
     public MultipartFile getUpload() {
         return upload;
@@ -145,6 +147,14 @@ public class JobArticle {
 
     public void setEditTime(Date editTime) {
         this.editTime = editTime;
+    }
+
+    public String getSort() {
+        return sort;
+    }
+
+    public void setSort(String sort) {
+        this.sort = sort;
     }
 
     @Override

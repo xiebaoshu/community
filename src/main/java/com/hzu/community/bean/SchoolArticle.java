@@ -19,6 +19,8 @@ public class SchoolArticle {
     private Integer readCount;
     private Boolean top;
     private MultipartFile upload;
+    //    排序方式
+    private String sort;
 
     public MultipartFile getUpload() {
         return upload;
@@ -122,6 +124,14 @@ public class SchoolArticle {
 
     public void setEditTime(Date editTime) {
         this.editTime = editTime;
+    }
+
+    public String getSort() {
+        return sort;
+    }
+
+    public void setSort(String sort) {
+        this.sort = sort;
     }
 
     @Override

@@ -48,7 +48,11 @@
                                                               <input type="text" placeholder="￥" name="nextPrice" style="width: 100px" th:value="${nextPriceCondition}">
                                                               <i class="search link icon" onclick="document.condition.submit()"></i>
                                                           </div>
-
+                                                          <select class="ui dropdown" name="sort" onchange="document.condition.submit()">
+                                                              <option value="" >排序</option>
+                                                              <option value="edit_time" th:selected="${sortCondition}=='edit_time'">时间</option>
+                                                              <option value="read_count" th:selected="${sortCondition}=='read_count'">热度</option>
+                                                          </select>
                                                           <select class="ui dropdown" name="date" onchange="document.condition.submit()">
                                                               <option value="" >时间</option>
                                                               <option value="3" th:selected="${dateCondition}==3"><a href="#">三天内</a></option>
@@ -135,6 +139,10 @@
                                                               <i class="calendar icon"></i>
                                                               <span th:text="${#dates.format(article.editTime, 'yyyy-MM-dd')}">2020-2-27</span>
                                                           </div>
+                                                          <div class="item">
+                                                              <i class="eye icon"></i>
+                                                              <span th:text="${article.readCount}">阅读量</span>
+                                                          </div>
 
                                                       </div>
                                                   </div>
@@ -203,6 +211,10 @@
                                                               <i class="calendar icon"></i>
                                                               <span th:text="${#dates.format(article.editTime, 'yyyy-MM-dd')}">2020-2-27</span>
                                                           </div>
+                                                          <div class="item">
+                                                              <i class="eye icon"></i>
+                                                              <span th:text="${article.readCount}">阅读量</span>
+                                                          </div>
 
                                                       </div>
                                                   </div>
@@ -240,11 +252,11 @@
 
                               <div class="ui pagination  menu">
                                   <a class="item"
-                                     th:href="@{/2(page=${pageInfo.getFirstPage()},category=${categoryCondition},date=${dateCondition},search=${searchCondition},tag=${tagCondition},tagPar=${tagParCondition},prePrice=${prePriceCondition},nextPrice=${nextPriceCondition})}">
+                                     th:href="@{/2(page=${pageInfo.getFirstPage()},category=${categoryCondition},date=${dateCondition},sort=${sortCondition},search=${searchCondition},tag=${tagCondition},tagPar=${tagParCondition},prePrice=${prePriceCondition},nextPrice=${nextPriceCondition})}">
                                       首页
                                   </a>
                                   <a class="icon item"
-                                     th:href="@{/2(page=${pageInfo.getPrePage()},category=${categoryCondition},date=${dateCondition},search=${searchCondition},tag=${tagCondition},tagPar=${tagParCondition},prePrice=${prePriceCondition},nextPrice=${nextPriceCondition})}"
+                                     th:href="@{/2(page=${pageInfo.getPrePage()},category=${categoryCondition},date=${dateCondition},sort=${sortCondition},search=${searchCondition},tag=${tagCondition},tagPar=${tagParCondition},prePrice=${prePriceCondition},nextPrice=${nextPriceCondition})}"
                                      th:if="${pageInfo.hasPreviousPage}">
                                       <i class="left arrow icon"></i>
                                   </a>
@@ -252,18 +264,18 @@
                                      th:each="page:${pageInfo.getNavigatepageNums()}"
                                      th:text="${page}"
                                      th:class="${page}==${pageInfo.getPageNum()}?'active item':'item'"
-                                     th:href="@{/2(page=${page},category=${categoryCondition},date=${dateCondition},search=${searchCondition},tag=${tagCondition},tagPar=${tagParCondition},prePrice=${prePriceCondition},nextPrice=${nextPriceCondition})}">
+                                     th:href="@{/2(page=${page},category=${categoryCondition},date=${dateCondition},sort=${sortCondition},search=${searchCondition},tag=${tagCondition},tagPar=${tagParCondition},prePrice=${prePriceCondition},nextPrice=${nextPriceCondition})}">
                                       1
                                   </a>
 
 
                                   <a class="icon item"
-                                     th:href="@{/2(page=${pageInfo.getNextPage()},category=${categoryCondition},date=${dateCondition},search=${searchCondition},tag=${tagCondition},tagPar=${tagParCondition},prePrice=${prePriceCondition},nextPrice=${nextPriceCondition})}"
+                                     th:href="@{/2(page=${pageInfo.getNextPage()},category=${categoryCondition},date=${dateCondition},sort=${sortCondition},search=${searchCondition},tag=${tagCondition},tagPar=${tagParCondition},prePrice=${prePriceCondition},nextPrice=${nextPriceCondition})}"
                                      th:if="${pageInfo.hasNextPage}">
                                       <i class="right arrow icon"></i>
                                   </a>
                                   <a class="item"
-                                     th:href="@{/2(page=${pageInfo.getLastPage()},category=${categoryCondition},date=${dateCondition},search=${searchCondition},tag=${tagCondition},tagPar=${tagParCondition},prePrice=${prePriceCondition},nextPrice=${nextPriceCondition})}">
+                                     th:href="@{/2(page=${pageInfo.getLastPage()},category=${categoryCondition},date=${dateCondition},sort=${sortCondition},search=${searchCondition},tag=${tagCondition},tagPar=${tagParCondition},prePrice=${prePriceCondition},nextPrice=${nextPriceCondition})}">
                                       尾页
                                   </a>
                               </div>
@@ -291,7 +303,7 @@
                           <div class="ui teal segment">
                               <a href="#" target="_self" class="ui teal basic left pointing label m-margin-tb-tiny"
                                 th:each="category:${articleCategories}"
-                                 th:href="@{/2(category=${category.getArticleCategoryId()},date=${dateCondition},search=${searchCondition},tag=${tagCondition},tagPar=${tagParCondition},prePrice=${prePriceCondition},nextPrice=${nextPriceCondition})}"
+                                 th:href="@{/2(category=${category.getArticleCategoryId()},date=${dateCondition},sort=${sortCondition},search=${searchCondition},tag=${tagCondition},tagPar=${tagParCondition},prePrice=${prePriceCondition},nextPrice=${nextPriceCondition})}"
                                  th:class="${category.articleCategoryId}==${categoryCondition}?'ui red basic left pointing label m-margin-tb-tiny':'ui teal basic left pointing label m-margin-tb-tiny'"
                               >
                                   <span th:text="${category.articleCategoryName}">问题求助</span>
@@ -332,7 +344,7 @@
                                   <a  target="_self" class="ui teal basic left pointing label m-margin-tb-tiny"
                                      th:each="tag:${parTag.tagList}"
                                      th:text="${tag.name}"
-                                     th:href="@{/2(category=${categoryCondition},date=${dateCondition},search=${searchCondition},tag=${tag.name},tagPar=${parTag.id},prePrice=${prePriceCondition},nextPrice=${nextPriceCondition})}"
+                                     th:href="@{/2(category=${categoryCondition},date=${dateCondition},sort=${sortCondition},search=${searchCondition},tag=${tag.name},tagPar=${parTag.id},prePrice=${prePriceCondition},nextPrice=${nextPriceCondition})}"
                                      th:class="${tagCondition}==${tag.name}?'ui red basic left pointing label m-margin-tb-tiny':'ui teal basic left pointing label m-margin-tb-tiny'">
                                       java
                                   </a>
