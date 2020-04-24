@@ -22,4 +22,6 @@ public interface CommentService {
                                              @Param("parCategory") Integer parCategory);
     //    通过commentId获取评论
     public Comment findCommentById(@Param("commentId") Long commentId);
+
+    public int update(Comment comment);
 }

@@ -46,6 +46,11 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
+    public int update(Comment comment) {
+        return commentMapper.update(comment);
+    }
+
+    @Override
     @Transactional
     public boolean deleteComment(Comment comment) {
         try {

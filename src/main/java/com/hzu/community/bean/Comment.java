@@ -19,6 +19,7 @@ public class Comment {
     private List<Comment> commentList;
     private UserInfo replyUser;
     private boolean replyIsAdmin;
+    private Boolean top;
 
 
     public Integer getArticleParCategory() {
@@ -109,6 +110,14 @@ public class Comment {
 
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
+    }
+
+    public Boolean getTop() {
+        return top;
+    }
+
+    public void setTop(Boolean top) {
+        this.top = top;
     }
 
     @Override

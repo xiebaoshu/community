@@ -52,10 +52,25 @@ public class CommentController {
         model.addAttribute("commentList", commentList);
 
 //        用于判断当前评论是否属于自己，是否能操作
-
         UserInfo user = (UserInfo) request.getSession().getAttribute("user");
         model.addAttribute("user",user);
 
+        UserInfo articleOwner = new UserInfo();
+        if (parCategory.equals(1)){
+            articleOwner = lostArticleService.findArticleById(articleId).getUserInfo();
+        }else if (parCategory.equals(2)){
+            articleOwner = secondArticleService.findArticleById(articleId).getUserInfo();
+        }else if (parCategory.equals(3)){
+            articleOwner = helpArticleService.findArticleById(articleId).getUserInfo();
+        }else if (parCategory.equals(4)){
+            articleOwner = jobArticleService.findArticleById(articleId).getUserInfo();
+        }else if (parCategory.equals(5)){
+            articleOwner = schoolArticleService.findArticleById(articleId).getUserInfo();
+        }else if (parCategory.equals(6)){
+            articleOwner = companyArticleService.findArticleById(articleId).getUserInfo();
+        }
+//        用于判断文章是否属于我，能不能使用置顶操作
+        model.addAttribute("articleOwner",articleOwner);
         return "fragments :: commentList";
     }
 
@@ -137,6 +152,33 @@ public class CommentController {
         return modelmap;
 
     }
+//    设置评论置顶与否（前端ajax已传回top值）
+    @PostMapping("/{parCategory}/comment/top")
+    @ResponseBody
+    public Map<String,Object> top(HttpServletRequest request){
+        Map<String,Object> modelmap = new HashMap<>();
+        ObjectMapper mapper = new ObjectMapper();
+        Comment comment = null;
+        String commentStr = HttpServletRequestUtil.getString(request, "commentStr");
+        try {
+            comment = mapper.readValue(commentStr, Comment.class);
+        }catch (Exception e){
+            modelmap.put("success",false);
+            modelmap.put("msg",e.getMessage());
+            return modelmap;
+        }
+        try {
+            commentService.update(comment);
+        }catch (Exception e){
+            modelmap.put("success",false);
+            modelmap.put("msg",e.getMessage());
+            return modelmap;
+        }
+        modelmap.put("success",true);
+        return modelmap;
+    }
+
+
 
 //    获取评论和信息通知
     private void getCandN(HttpServletRequest request, Comment comment,Notification notification,Integer parCategory) {

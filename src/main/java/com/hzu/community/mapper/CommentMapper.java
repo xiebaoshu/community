@@ -2,6 +2,7 @@ package com.hzu.community.mapper;
 
 import com.hzu.community.bean.Comment;
 
+import com.hzu.community.bean.LostArticle;
 import jdk.nashorn.internal.objects.annotations.Where;
 import org.apache.ibatis.annotations.*;
 
@@ -34,7 +35,8 @@ public interface CommentMapper {
             " <if test=\"articleId != null\">and article_id = #{articleId}</if> " +
             " <if test=\"parCategory != null\">and article_par_category = #{parCategory}</if> " +
             "and parent_id is null"+
-            " </where> "+
+            " </where> " +
+            "order by top desc"+
             " </script> ")
     @Results({
             @Result(id=true,column="comment_id",property="commentId"),
@@ -43,6 +45,7 @@ public interface CommentMapper {
             @Result(column="content",property="content"),
             @Result(column="comment_id",property="commentList",many = @Many(select = "com.hzu.community.mapper.CommentMapper.findCommentReplyById")),
             @Result(column="is_admin",property="isAdmin"),
+            @Result(column="top",property="top"),
             @Result(column="create_time",property="createTime")
 
 
@@ -97,4 +100,14 @@ public interface CommentMapper {
             " <foreach collection='List' open='(' item='article' separator=',' close=')'> #{article.id}</foreach> "+
             " </script>" )
     public void batchDel(@Param("parId") Integer parId,  @Param( "List" ) List  List);
+
+    //    用于设置置顶
+    @Update("<script> " +
+            "update comment " +
+            " <set> " +
+            " <if test=\"top != null\"> top = #{top}</if> " +
+            " </set> " +
+            "where comment_id = #{commentId}" +
+            " </script> ")
+    public int update(Comment comment);
 }

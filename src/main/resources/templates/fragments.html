@@ -178,10 +178,11 @@
 
 
                 });
-
+                // 删除点击事件
                 $(".del").click(function () {
                     var msg = "您确定要删除该评论？";
                     if (confirm(msg)==true){
+                        // parCategory这个js变量定义在文章详情页
                         var comment = {};
                         var parentId = $(this).attr("parentId");
                         var url = "/"+parCategory+"/comment/del";
@@ -203,13 +204,60 @@
                             cache:false,
                             success:function (data) {
                                 if(data.success){
-
+                                    // articleId这个元素存在于文章详情页
                                     var commentUrl = "/"+parCategory+"/comment/"+$("#articleId").val();
                                     //局部刷新
                                     $('.comment-area').load(commentUrl);
 
                                 }else {
                                     alert('删除失败'+data.msg);
+                                }
+
+                            }
+
+                        });
+                    }
+
+
+                });
+                //置顶相关操作
+                $(".setTop").click(function () {
+                    if ($(this).attr("top")=="yes") {
+                        var msg = "您确定要置顶该评论？";
+                    }else {
+                        var msg = "您确定要取消置顶？";
+                    }
+
+                    if (confirm(msg)==true){
+                        var comment = {};
+                        // parCategory这个js变量定义在文章详情页
+                        var url = "/"+parCategory+"/comment/top";
+                        comment.commentId = $(this).attr("commentId");
+                        if ($(this).attr("top")=="yes") {
+                            comment.top = true;
+                        }else {
+                            comment.top = false;
+                        }
+
+
+                        var formData = new FormData();
+                        formData.append('commentStr',JSON.stringify(comment));
+                        $.ajax({
+                            url:url,
+                            type:'POST',
+                            data:formData,
+                            contentType:false,
+                            processData:false,
+                            cache:false,
+                            success:function (data) {
+                                if(data.success){
+                                    // articleId这个元素存在于文章详情页
+                                    var commentUrl = "/"+parCategory+"/comment/"+$("#articleId").val();
+                                    //局部刷新
+                                    $('.comment-area').load(commentUrl);
+
+                                }else {
+                                    alert('置顶失败'+data.msg);
                                 }
 
                             }
@@ -240,6 +288,9 @@
                     <div class="ui mini basic teal left pointing label m-padded-mini"
                          th:if="${coment.isAdmin()}">
                         博主</div>
+                    <div class="ui mini basic red left pointing label m-padded-mini"
+                         th:if="${coment.top}">
+                        置顶</div>
                     <div class="metadata">
                                 <span class="date"
                                       th:text="${#dates.format(coment.createTime,'yyyy-MM-dd HH:ss:dd')}">Yesterday at 12:30AM</span>
@@ -253,6 +304,14 @@
                            th:attr="parentId=${coment.commentId},replyUserId=${coment.user.userId}"
                            th:style="${session.user.permission}?'cursor:no-drop;'"
                         >回复</a>
+                        <a class="setTop"
+                           th:if="${user.userId}==${articleOwner.userId} and not ${coment.top}"
+                           th:attr="commentId=${coment.commentId},top='yes'"
+                        >置顶</a>
+                        <a class="setTop"
+                           th:if="${user.userId}==${articleOwner.userId} and  ${coment.top}"
+                           th:attr="commentId=${coment.commentId},top= 'no'"
+                        >取消置顶</a>
                         <a class="del"
                            th:if="${user.userId}==${coment.user.userId}"
                            th:attr="parentId=null,commentId=${coment.commentId}"
@@ -284,7 +343,8 @@
                                      th:if="${comments.replyIsAdmin}">博主</div>
                                 <div class="metadata">
                                         <span class="date"
-                                              th:text="${comments.createTime}">Just now</span>
+                                              th:text="${#dates.format(comments.createTime,'yyyy-MM-dd HH:ss:dd')}"
+                                              >Just now</span>
                                 </div>
                                 <div class="text"
                                      th:text="${comments.content}">
