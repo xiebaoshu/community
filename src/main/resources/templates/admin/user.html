@@ -80,7 +80,10 @@
                 <tbody>
                 <tr th:each="userInfo,iterStat : ${pageInfo.getList()}">
                     <td th:text="${iterStat.count}">1</td>
-                    <td th:text="${userInfo.userName}">用户名</td>
+                    <td>
+                        <a th:text="${userInfo.userName}" target="_blank"
+                           th:href="@{|/people/1/${userInfo.userId}|}">用户名</a>
+                    </td>
                     <td th:text="${userInfo.gender}">性别</td>
                     <td th:text="${userInfo.userType == 0} ? '学生':(${userInfo.userType == 1} ? '教师':(${userInfo.userType == 2} ? '企业':'管理员'))">类型</td>
                     <td th:text="${userInfo.userClass}">组织</td>

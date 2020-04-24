@@ -115,7 +115,10 @@
                 <tbody>
                 <tr th:each="article,iterStat : ${pageInfo.getList()}">
                     <td th:text="${iterStat.count}">1</td>
-                    <td th:text="${article.articleTitle}">刻意练习清单</td>
+                    <td>
+                        <a th:text="${article.articleTitle}" target="_blank"
+                        th:href="@{|/${article.articleCategory.parentId}/${article.id}|}">刻意练习清单</a>
+                    </td>
                     <td th:text="${article.articleCategory.articleCategoryName}">认知升</td>
                     <td th:text="${article.top} ? '是':'否'">是</td>
                     <td th:text="${#dates.format(article.editTime, 'yyyy-MM-dd')}">2017-10-02 09:45</td>
