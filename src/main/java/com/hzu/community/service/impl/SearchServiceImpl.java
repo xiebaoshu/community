@@ -22,4 +22,9 @@ public class SearchServiceImpl implements SearchService {
     public Integer getCount(SearchDto searchDto) {
         return searchMapper.getCount(searchDto);
     }
+
+    @Override
+    public List<SearchDto> getTOP3(SearchDto searchDto) {
+        return searchMapper.getTOP3(searchDto);
+    }
 }
