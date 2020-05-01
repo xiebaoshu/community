@@ -96,8 +96,15 @@
 
                             </div>
                             <div class="ui tab active" data-tab="add/default">
-                                <div class="ui cards">
-                                    <div class="card" th:each="nav:${navDefault}" style="margin-left: 20px;">
+
+                                <div class="ui cards" >
+                                    <div class="card" th:unless="${session.user}" style="margin-left: 20px;">
+                                        <div class="content">
+                                            <div>您还未登陆，请<a href="/login">登陆</a></div>
+                                        </div>
+                                    </div>
+
+                                    <div class="card" th:if="${session.user}" th:each="nav:${navDefault}" style="margin-left: 20px;">
                                         <div class="content">
                                             <img class="right floated  ui  circular image m-img" src="/static/images/user.jpg"
                                                  th:src="${nav.imgUrl}">
@@ -118,8 +125,16 @@
                                 </div>
                             </div>
 
-
-                            <div class="ui tab segment" data-tab="add/diy">
+                            <div class="ui tab" data-tab="add/diy" th:unless="${session.user}">
+                                <div class="ui cards">
+                                    <div class="card"  style="margin-left: 20px;">
+                                        <div class="content">
+                                            <div>您还未登陆，请<a href="/login">登陆</a></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="ui tab segment" data-tab="add/diy" th:if="${session.user}">
                                 <div class="ui grid">
                                     <div class="five wide column">
                                         <img class="ui  circular small image" src="/static/images/upload/ico128.png">
@@ -159,7 +174,17 @@
                                 <a class="item" data-tab="set/my">我的添加</a>
                                 <a class="item" data-tab="set/user">我</a>
                             </div>
-                            <div class="ui tab active segment" data-tab="set/diy">
+
+                            <div class="ui active tab" data-tab="set/diy" th:unless="${session.user}">
+                                <div class="ui cards">
+                                    <div class="card" style="margin-left: 20px;">
+                                        <div class="content">
+                                            <div>您还未登陆，请<a href="/login">登陆</a></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="ui tab active segment" data-tab="set/diy" th:if="${session.user}">
                                 <div class="ui form">
                                     <p style="color: teal">选择你需要的布局</p>
                                     <div class="inline fields">
@@ -180,10 +205,6 @@
                                     </div>
                                     <button class="ui button m-show-btn">确定</button>
 
-
-
-
-
                                 </div>
                             </div>
                             <div class="ui  tab" data-tab="set/my" id="my_set">
@@ -191,6 +212,7 @@
                             </div>
                             <div class="ui  tab" data-tab="set/user">
                                 <div class="ui cards">
+
                                     <div class="card" th:unless="${session.user}" style="margin-left: 20px;">
                                         <div class="content">
                                             <div>您还未登陆，请<a href="/login">登陆</a></div>
@@ -198,7 +220,7 @@
                                     </div>
                                     <div class="card" th:if="${session.user}"
                                           style="margin-left: 20px;">
-                                        <div class="content">
+                                        <div class="content" th:if="${session.user}">
                                             <img class="left floated  ui  circular image m-img" src="/static/images/user.jpg"
                                                  th:src="${session.user.userImg}">
                                             <div class="header" style="padding-top: 15px!important;"
@@ -207,6 +229,7 @@
                                             >退出登陆 </a>
 
                                         </div>
+
 
                                     </div>
                                 </div>

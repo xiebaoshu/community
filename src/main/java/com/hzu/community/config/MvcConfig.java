@@ -1,6 +1,7 @@
 package com.hzu.community.config;
 
 import com.hzu.community.HandlerInterceptor.*;
+import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,6 +25,8 @@ public class MvcConfig implements WebMvcConfigurer {
     private CompanyHandlerInterceptor companyHandlerInterceptor;
     @Autowired
     private CountHandlerInterceptor countHandlerInterceptor;
+    @Autowired
+    private NavHandlerInterceptor navHandlerInterceptor;
 
 
     /**
@@ -43,7 +46,7 @@ public class MvcConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
 //        addPathPatterns拦截哪些路径，excludePathPatterns排除哪些路径，登陆拦截器
         registry.addInterceptor(loginHandlerInterceptor).addPathPatterns("/**")
-                .excludePathPatterns("/","/static/**","/login","/nav","/nav/mySet","/register");
+                .excludePathPatterns("/","/static/**","/login","/nav/**","/register","/upload");
 //        管理员权限拦截器
         registry.addInterceptor(adminHandlerInterceptor).addPathPatterns("/admin/**")
                 .excludePathPatterns("/static/**");
@@ -55,6 +58,9 @@ public class MvcConfig implements WebMvcConfigurer {
                 .excludePathPatterns("/static/**");
         //文章统计拦截器
         registry.addInterceptor(countHandlerInterceptor).addPathPatterns("/1","/2","/3","/4","/5","/6","/people/**")
+                .excludePathPatterns("/static/**");
+        //导航拦截器
+        registry.addInterceptor(navHandlerInterceptor).addPathPatterns("/","/nav/**")
                 .excludePathPatterns("/static/**");
     }
 

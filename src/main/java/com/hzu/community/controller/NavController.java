@@ -210,7 +210,6 @@ public class NavController {
                     le = navService.diySave(nav,imageHolder);
                 }
 
-
                 if(le.getState() == NavEnum.SUCCESS.getState()){
                     modelMap.put("success",true);
 

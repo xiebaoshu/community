@@ -51,7 +51,7 @@ public class UserController {
             if (user.getUserType().equals(3)){
                 return "redirect:/admin/article";
             }else {
-                return "redirect:/1";
+                return "redirect:/";
             }
 
         }else{
@@ -77,7 +77,7 @@ public class UserController {
             if (user.getUserType().equals(3)){
                 return "redirect:/admin/article";
             }else {
-                return "redirect:/1";
+                return "redirect:/";
             }
 
         }else{

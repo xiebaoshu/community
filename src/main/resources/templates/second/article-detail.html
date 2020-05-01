@@ -181,7 +181,12 @@
 
         var comment = {};
         var url = $("#commentForm").attr("action");
-        comment.content = $('#input-content').val();
+        if ($('#input-content').val()=='') {
+            alert("请输入评论内容");
+            return false;
+        }else {
+            comment.content = $('#input-content').val();
+        }
         comment.articleId = $('#articleId').val();
         comment.parentComment = {
             commentId : $('#parentId').val()
