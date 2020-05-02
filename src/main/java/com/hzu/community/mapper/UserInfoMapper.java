@@ -28,13 +28,15 @@ public interface UserInfoMapper {
     @Options(useGeneratedKeys = true,keyProperty = "userId")
     @Insert("insert into user_info(user_account,user_password," +
             "user_name,gender,user_class," +
-            "user_type,description) " +
+            "user_type,description,user_img) " +
             "values(#{userAccount}," +
             "#{userPassword}," +
             "#{userName}," +
             "#{gender}," +
             "#{userClass}," +
-            "#{userType},#{description}" +
+            "#{userType}," +
+            "#{description}," +
+            "#{userImg}" +
 
             ")")
     public int register(UserInfo user);

@@ -14,6 +14,7 @@ import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.DigestUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -65,6 +66,9 @@ public class UserController {
                        HttpServletResponse response,
                        Model model)
     {
+//        spring自带md5加密
+        String md5 = DigestUtils.md5DigestAsHex(user.getUserPassword().getBytes());
+        user.setUserPassword(md5);
         List<UserInfo> list = userInfoService.login(user);
         if (list.size()>0){
             user =  list.get(0);
@@ -110,6 +114,9 @@ public class UserController {
             attributes.addFlashAttribute("message", "注册失败，该账号已存在");
         }else {
             UserEnum le;
+//            md5加密
+            String md5 = DigestUtils.md5DigestAsHex(user.getUserPassword().getBytes());
+            user.setUserPassword(md5);
             MultipartFile UserImg = user.getUpload();
             try {
                 if (UserImg.isEmpty()){

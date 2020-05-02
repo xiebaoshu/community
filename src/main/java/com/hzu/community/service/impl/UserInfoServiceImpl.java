@@ -92,13 +92,17 @@ public class UserInfoServiceImpl implements UserInfoService {
                  /*因为add方法中，开启了mybtis的useGeneratedKeys
                  所以成功插入后返回主键值到userId
                  该值作为更新图片url的参数*/
+            if (imageHolder == null) {
+//                如果没有图片则设置默认图片
+                user.setUserImg("/upload/xiaohuang.jpg");
+            }
             int insertNum = userInfoMapper.register(user);
 
             if (insertNum <= 0) {
                    /* Spring事务回滚机制是这样的：当所拦截的方法有指定异常抛出，事务才会自动进行回滚！
                         手动抛出异常,使事务回滚*/
                 throw new UserException("用户数据插入失败");
-            } else {
+            }else {
                 if (imageHolder != null) {
                     try {
 //                      对图片进行处理，并把url设置在文章中
@@ -131,10 +135,10 @@ public class UserInfoServiceImpl implements UserInfoService {
         try {
 //            判断是否需要处理图片
             if(imageHolder != null){
-//            若存在图片，则取出相应文章
+//            若存在图片，则取出相应用户
                UserInfo oldUser = userInfoMapper.findUserInfoById(user.getUserId());
-                if (oldUser.getUserImg()!= null){
-//                      根据文章的图片url删除本地下载的图片
+                if (oldUser.getUserImg()!= null && oldUser.getUserImg()!="/upload/xiaohuang.jpg"){
+//                      根据用户的图片url删除本地下载的图片
                     ImageUtil.deleteFileOrpath(oldUser.getUserImg());
                 }
                 addUserImg(user,imageHolder);

@@ -194,8 +194,8 @@ public class NavServiceImpl implements NavService {
             if (imageHolder != null) {
 //            若存在图片，则取出相应文章
                 Nav oldNav = navMapper.findDefaultById(nav);
-                if (oldNav.getImgUrl() != null) {
-//                      根据文章的图片url删除本地下载的图片
+                if (oldNav.getImgUrl() != null && oldNav.getImgUrl() !="/upload/ico128.png") {
+//                      根据导航的图片url删除本地下载的图片
                     ImageUtil.deleteFileOrpath(oldNav.getImgUrl());
                 }
 //                设置图片地址

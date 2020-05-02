@@ -30,16 +30,16 @@
                         <div class="text">账号</div>
                     </div>
                     <input type="text" name="userAccount"  placeholder="请输入账号"
-                           th:value="${user!=null}?${user.userAccount}">
+                           th:value="${session.user!=null}?${user.userAccount}">
                 </div>
             </div>
-            <div class="required field">
+            <div class="required field" th:unless="${session.user}">
                 <div class="ui left labeled input">
                     <div class="ui teal basic label">
                         <div class="text">密码</div>
                     </div>
-                    <input type="password" name="userPassword"  placeholder="请输入密码"
-                           th:value="${user!=null}?${user.userPassword}">
+
+                    <input type="password" name="userPassword"  placeholder="请输入密码" autocomplete="new-password">
                 </div>
             </div>
 
@@ -49,8 +49,9 @@
                         <div class="ui teal basic label">
                             <div class="text">姓名</div>
                         </div>
-                        <input type="text" name="userName"  placeholder="请输入姓名"
-                               th:value="${user!=null}?${user.userName}">
+
+                        <input type="text" name="userName"  placeholder="请输入姓名" autocomplete="new-password"
+                               th:value="${session.user!=null}?${user.userName}">
                     </div>
                 </div>
                 <div class="required field">
