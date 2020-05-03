@@ -24,7 +24,7 @@
         <form  class="ui form" enctype="multipart/form-data" method="post" th:action="${user}?@{/update}:@{/register}">
             <input type="hidden" name="userId" th:value="${user!=null}?${user.userId}">
 
-            <div class="required field">
+            <div class="required field" th:unless="${session.user}">
                 <div class="ui left labeled input">
                     <div class="ui teal basic label">
                         <div class="text">账号</div>
