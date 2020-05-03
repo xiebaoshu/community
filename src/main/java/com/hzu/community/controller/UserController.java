@@ -18,6 +18,7 @@ import org.springframework.util.DigestUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import sun.security.util.Password;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -202,6 +203,48 @@ public class UserController {
             return "redirect:/people/"+user.getUserId()+"/1";
 
         }
+
+    }
+
+    @GetMapping("/updatePassword")
+    public String updatePassword(Model model,
+                         @RequestParam(name = "userId") Integer userId,
+                         HttpServletRequest request) {
+        UserInfo user = (UserInfo)request.getSession().getAttribute("user");
+        if (!user.getUserId().equals(userId)){
+//            非法操作
+            throw new RuntimeException("请不要执行非法操作");
+        }else {
+            return "login/password-update";
+        }
+
+    }
+
+    @PostMapping("/updatePassword")
+    public String updatePost( @RequestParam(name = "userId") Integer userId,
+                              @RequestParam(name = "newPassword") String newPassword,
+                              @RequestParam(name = "oldPassword") String oldPassword,
+                             HttpServletRequest request,
+                             RedirectAttributes attributes) {
+
+        //            md5加密
+        String md5 = DigestUtils.md5DigestAsHex(oldPassword.getBytes());
+        UserInfo user = userInfoService.findUserInfoById(userId);
+        if (user.getUserPassword().equals(md5)){
+            newPassword = DigestUtils.md5DigestAsHex(newPassword.getBytes());
+            user.setUserPassword(newPassword);
+            try {
+                userInfoService.update(user,null);
+                attributes.addFlashAttribute("message", "密码更改成功");
+            }catch (Exception e){
+                attributes.addFlashAttribute("message", "修改失败");
+            }
+
+        }else {
+            attributes.addFlashAttribute("message", "原密码输入错误");
+        }
+        return "redirect:/people/"+userId+"/1";
+
 
     }
 
